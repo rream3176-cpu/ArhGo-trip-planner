@@ -47,7 +47,7 @@
       <input class="arhgo-input" type="email" id="email" placeholder="البريد الإلكتروني">
       <input class="arhgo-input" type="password" id="password" placeholder="كلمة المرور">
       <button class="btn btn-gradient" onclick="login()" data-flight-sound>تسجيل الدخول</button>
-      <a class="btn btn-ghost" href="signup.html" data-flight-sound style="margin-top:12px;">إنشاء حساب جديد</a>
+      <a class="btn btn-ghost" href="index.html" data-flight-sound style="margin-top:12px;">إنشاء حساب جديد</a>
       <div id="error" class="error"></div>
     </section>
   </main>
@@ -76,7 +76,7 @@
         window.ArhGo?.playFlightSound();
         const goHome = () => window.location.href = 'test.html';
         if (window.ArhGo?.delayedNavigate) {
-          window.ArhGo.delayedNavigate('test.html', 400);
+          window.ArhGo.delayedNavigate('index.html', 400);
         } else {
           setTimeout(goHome, 300);
         }
