@@ -81,19 +81,20 @@
 
       const user = { username, fullname, email, password };
       localStorage.setItem('user', JSON.stringify(user));
-      error.textContent = "";
+
+      // رسالة نجاح قبل الانتقال
+      error.style.color = 'lightgreen';
+      error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
+      
       showSuccess();
     }
 
     function showSuccess() {
       window.ArhGo?.playFlightSound();
-      if (window.ArhGo?.delayedNavigate) {
-        window.ArhGo.delayedNavigate('index.html', 500);
-      } else {
-        setTimeout(() => window.location.href = 'index.html', 500);
-      }
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 500);
     }
   </script>
 </body>
 </html>
-
