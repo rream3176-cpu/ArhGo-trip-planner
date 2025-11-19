@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo — المنصّة الذكية لتخطيط السفر</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+</head>
+<body class="page-hidden">
+  <nav class="arhgo-nav">
+    <div class="arhgo-logo">ArhGo</div>
+    <ul>
+      <li><a data-nav href="#home">الرئيسية</a></li>
+      <li><a data-nav href="#features">المزايا</a></li>
+      <li><a data-nav href="#planner">خطط رحلتك</a></li>
+      <li><a data-nav href="#destinations">الوجهات</a></li>
+      <li><a data-nav href="hotel.html">الفنادق</a></li>
+      <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
+      <li><a data-nav href="Restuarnt.html">مطاعم</a></li>
+  </ul>
+    <div class="stack">
+      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
+  </div>
+</nav>
+
+  <main class="page-shell">
+<section class="hero" id="home">
+      <div class="hero-grid">
+        <div class="hero-main">
+          <span class="pill"><span class="status-signal"></span> ArhGo — Nightflight Edition</span>
+          <h1>منصّة سفر نيون نصف ليلية تبهـر أي لجنة</h1>
+          <p>ArhGo تقدّم لك لوحة قيادة مظلمة، صوت إقلاع فوري، وخطط فخمة تُعرض كرحلة جوية خاصة في كل مرة.</p>
+          <div class="hero-highlights">
+            <div class="highlight-chip">
+              <em>✦</em> خطة أولى جاهزة خلال دقيقة واحدة
+            </div>
+            <div class="highlight-chip">
+              <em>⟲</em> مزاج السفر يتغير بلمسة واحدة
+            </div>
+          </div>
+          <div class="deco-line"></div>
+          <div class="hero-meta">
+            <div class="hero-meta-card">
+              <strong>Concierge ذكي</strong><br>جدولة صباح/ليل متوازنة
+            </div>
+            <div class="hero-meta-card">
+              <strong>تكامل فوري</strong><br>TripAdvisor · Google Places
+            </div>
+            <div class="hero-meta-card">
+              <strong>روابط قصيرة</strong><br>شارك كل خطة بنقرة
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-gradient" id="hero-cta" data-flight-sound>ابدأ التخطيط الآن</button>
+            <a class="btn btn-ghost" href="ai-trip.html" data-flight-sound>تجربة الذكاء الاصطناعي</a>
+          </div>
+          <div class="hero-controls">
+            <button class="sound-toggle" type="button" data-toggle-sound aria-pressed="true">
+              <span class="accent-chip">✈️</span>
+              <span data-sound-label>الصوت مفعل</span>
+            </button>
+            <div class="accent-chip">انطلق مع مؤثرات الإقلاع في كل صفحة</div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="scene-clouds">
+            <div class="scene-cloud"></div>
+            <div class="scene-cloud"></div>
+            <div class="scene-cloud"></div>
+          </div>
+          <div class="hero-sparkles">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <svg viewBox="0 0 320 200" class="hero-plane">
+            <path d="M20 120 Q 80 60 160 90 T 300 65" fill="none" stroke="rgba(31,216,255,0.55)" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 8"/>
+            <g class="plane">
+              <path d="M0 -6 L20 0 L0 6 Z" fill="#1fd8ff"/>
+              <rect x="4" y="-3" width="8" height="6" fill="#f6c168"/>
+            </g>
+          </svg>
+          <div class="hero-orbits">
+            <div class="orbit-ring"></div>
+            <div class="orbit-ring"></div>
+            <div class="orbit-ring"></div>
+          </div>
+          <div class="orb one"></div>
+          <div class="orb two"></div>
+          <div class="orb three"></div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span data-count="72">0</span>
+              وجهة جاهزة
+            </div>
+            <div class="hero-stat">
+              <span data-count="320">0</span>
+              خطة محفوظة
+            </div>
+            <div class="hero-stat">
+              <span data-count="18">0</span>
+              تكامل API
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="infinite-marquee" data-marquee>
+      <div class="marquee-track">
+        <span>AI Trip Builder</span>
+        <span>Interactive Map</span>
+        <span>Luxury Concierge</span>
+        <span>Realtime Weather</span>
+        <span>Shareable Links</span>
+      </div>
+    </div>
+
+    <section class="section aurora" id="signature">
+      <div class="section-header">
+        <h2 class="section-title">Neon Flight Deck</h2>
+        <p class="section-subtitle">ممر عرض فخم يختصر القصة أمام اللجنة: ضوء متدرج، صوت طائرة، ومحتوى يلمع بالبيانات.</p>
+      </div>
+      <div class="immersive-panels">
+        <article class="immersion-card">
+          <div class="accent-chip">360°</div>
+          <h3>غلاف سينمائي</h3>
+          <p>أضواء أورورا، أجرام طائرة، وبطاقات زجاجية تتحرك بنعومة حول المحتوى.</p>
+        </article>
+        <article class="immersion-card">
+          <div class="accent-chip">AI+</div>
+          <h3>ذكاء متكيف</h3>
+          <p>كل ضغطة تعيد توليد الخطة، تحفظ الاهتمامات، وتعرض التكلفة مباشرة.</p>
+        </article>
+        <article class="immersion-card">
+          <div class="accent-chip">Share</div>
+          <h3>روابط سريعة</h3>
+          <p>قرّب تجربتك من الواقع بإرسال روابط قصيرة للحجز أو مشاركة الملخّص.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section-header">
+        <h2 class="section-title">كل ما تحتاجه لرحلة فخمة</h2>
+        <p class="section-subtitle">منصة موحدة لتوليد الخطة، عرضها على الخريطة، اقتراح الحجوزات، ومشاركتها مع الأصدقاء برابط قصير.</p>
+      </div>
+      <div class="grid">
+        <article class="glass-card floating-card">
+          <div class="pill-small">1</div>
+          <h3>خطة يومية ذكية</h3>
+          <p>خوارزمية + ذكاء اصطناعي تولّد جدولًا متوازنًا للأيام والأماكن والأنشطة وفق اهتماماتك.</p>
+        </article>
+        <article class="glass-card floating-card" style="animation-delay:.3s">
+          <div class="pill-small">2</div>
+          <h3>خريطة تفاعلية</h3>
+          <p>ارتباط مباشر مع خرائط Mapbox/Google لعرض المسارات والمحطات مع تحديد المواقع الدقيقة.</p>
+        </article>
+        <article class="glass-card floating-card" style="animation-delay:.6s">
+          <div class="pill-small">3</div>
+          <h3>اقتراحات فندقية وغذائية</h3>
+          <p>تكامل مع TripAdvisor و Google Places لاقتراح فنادق، مطاعم، وأنشطة محلية موثوقة.</p>
+        </article>
+        <article class="glass-card floating-card" style="animation-delay:.9s">
+          <div class="pill-small">4</div>
+          <h3>حفظ ومشاركة</h3>
+          <p>حفظ خططك على حسابك مع توليد رابط قصير قابل للمشاركة فورًا مع الأصدقاء.</p>
+        </article>
+      </div>
+</section>
+
+    <section class="section" id="experience">
+      <div class="section-header">
+        <h2 class="section-title">رحلة المستخدم داخل المنصّة</h2>
+        <p class="section-subtitle">عرض مراحل استخدام المنصّة يساعدك في شرح المشروع خلال العرض التقديمي.</p>
+      </div>
+      <div class="experience-track">
+        <article class="experience-step">
+          <div class="badge badge-info">1</div>
+          <div>
+            <strong>تسجيل الدخول أو إنشاء حساب</strong>
+            <p>بطاقات زجاجية فاخرة مع صوت إقلاع لحظة الدخول.</p>
+          </div>
+        </article>
+        <article class="experience-step">
+          <div class="badge badge-info">2</div>
+          <div>
+            <strong>إدخال تفاصيل الرحلة</strong>
+            <p>نموذج غني بالحقول، تقدير تكلفة مباشر، وزر للحفظ أو الذكاء الاصطناعي.</p>
+          </div>
+        </article>
+        <article class="experience-step">
+          <div class="badge badge-info">3</div>
+          <div>
+            <strong>عرض الملخّص والخريطة</strong>
+            <p>صفحة ملخص مع عدّادات متحركة، خريطة Leaflet، وانتقال للطقس.</p>
+          </div>
+        </article>
+        <article class="experience-step">
+          <div class="badge badge-info">4</div>
+          <div>
+            <strong>خدمات مساندة</strong>
+            <p>حجز فنادق، رحلات، مطاعم، ومشاركة الخطة برابط قصير واحد.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="mood">
+      <div class="section-header">
+        <h2 class="section-title">مزاج السفر الخاص بك</h2>
+        <p class="section-subtitle">اختر مزاج الرحلة لنقترح صياغة بصرية وقصة قصيرة يمكنك استخدامها في العرض.</p>
+      </div>
+      <div class="mood-panel">
+        <div class="mood-controls">
+          <button type="button" class="active" data-mood="relax">نسيم المدن الساحلية</button>
+          <button type="button" data-mood="urban">نبض المدن العصرية</button>
+          <button type="button" data-mood="heritage">حكايات التاريخ</button>
+          <button type="button" data-mood="adventure">مغامرات طبيعية</button>
+        </div>
+        <div class="glass-card mood-details" id="mood-details">
+          <span class="pill" id="mood-label">مزاج مختار</span>
+          <h3 id="mood-title">عنوان المزاج</h3>
+          <p id="mood-text">سيظهر هنا وصف قصير يشرح رؤية هذا المزاج وكيف نقدمه في ArhGo.</p>
+          <ul id="mood-list"></ul>
+        </div>
+  </div>
+</section>
+
+    <section class="section" id="planner">
+      <div class="section-header">
+        <h2 class="section-title">صمّم رحلتك خلال دقيقة</h2>
+        <p class="section-subtitle">املأ التفاصيل، شاهد التكلفة التقديرية، احفظ خطتك أو شاركها، ثم انتقل إلى الملخص أو صفحة الذكاء الاصطناعي.</p>
+      </div>
+      <div class="split">
+        <form class="arhgo-form" id="trip-form">
+    <div class="field">
+            <label for="trip-name">اسمك</label>
+            <input class="arhgo-input" type="text" id="trip-name" placeholder="مثال: علي محمد">
+    </div>
+    <div class="field">
+            <label for="trip-email">البريد الإلكتروني</label>
+            <input class="arhgo-input" type="email" id="trip-email" placeholder="you@email.com">
+    </div>
+    <div class="field">
+            <label for="trip-country">الوجهة</label>
+            <select class="arhgo-select" id="trip-country">
+              <option value="فرنسا">فرنسا</option>
+              <option value="إيطاليا">إيطاليا</option>
+              <option value="اليابان">اليابان</option>
+              <option value="أستراليا">أستراليا</option>
+              <option value="إسبانيا">إسبانيا</option>
+              <option value="اليونان">اليونان</option>
+              <option value="تايلاند">تايلاند</option>
+              <option value="مصر">مصر</option>
+              <option value="سويسرا">سويسرا</option>
+              <option value="المغرب">المغرب</option>
+      </select>
+    </div>
+    <div class="field">
+            <label for="trip-days">عدد الأيام</label>
+            <input class="arhgo-input" type="number" id="trip-days" min="1" placeholder="5">
+    </div>
+    <div class="field">
+            <label for="trip-type">نوع الرحلة</label>
+            <input class="arhgo-input" type="text" id="trip-type" placeholder="مغامرة، رومانسية، اقتصادية...">
+    </div>
+    <div class="field">
+            <label for="trip-interests">اهتماماتك الرئيسية</label>
+            <input class="arhgo-input" type="text" id="trip-interests" placeholder="ثقافة، طعام، طبيعة...">
+    </div>
+    <div class="field">
+            <label for="trip-budget">الميزانية</label>
+            <input class="arhgo-input" type="text" id="trip-budget" placeholder="منخفضة، متوسطة، فاخرة">
+    </div>
+    <div class="field">
+            <label for="trip-things">أماكن مفضلة</label>
+            <input class="arhgo-input" type="text" id="trip-things" placeholder="متاحف، جبال، أسواق...">
+    </div>
+    <div class="field">
+            <label for="trip-notes">ملاحظات إضافية</label>
+            <textarea class="arhgo-textarea" id="trip-notes" placeholder="أي تفاصيل إضافية..."></textarea>
+          </div>
+          <div class="stack">
+            <button type="button" class="btn btn-gradient" id="create-trip-btn" data-flight-sound>ملخص الرحلة</button>
+            <button type="button" class="btn btn-ghost" id="ai-trip-btn" data-flight-sound>توليد بالذكاء الاصطناعي</button>
+            <button type="button" class="btn btn-ghost" id="save-plan-btn">حفظ خطتي</button>
+    </div>
+        </form>
+
+        <div class="glass-card glow-card">
+          <h3>ملخص سريع</h3>
+          <p>نحسب التكلفة التقديرية فورًا ونعرض رابط مشاركة قصير عند الحفظ.</p>
+          <div class="stats-grid">
+            <div class="stat-chip">
+              <span id="stat-days">0</span>
+              يوم الرحلة
+            </div>
+            <div class="stat-chip">
+              <span id="stat-budget">$0</span>
+              التكلفة التقديرية
+            </div>
+            <div class="stat-chip">
+              <span id="stat-country">—</span>
+              الوجهة
+            </div>
+          </div>
+          <hr style="border-color:rgba(255,255,255,0.08);margin:24px 0;">
+          <div>
+            <p class="plan-meta">رابط المشاركة:</p>
+            <p id="share-link" class="badge badge-info">سيظهر بعد الحفظ</p>
+            <p class="plan-meta" id="plan-status">جاهز للإنشاء ✨</p>
+          </div>
+        </div>
+  </div>
+</section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">خططي المحفوظة</h2>
+        <p class="section-subtitle">يمكنك تعديل الخطة لاحقًا أو نسخ الرابط القصير وإرساله.</p>
+      </div>
+      <div id="saved-plans-list" class="saved-plans"></div>
+    </section>
+
+    <section class="section split" id="destinations">
+      <div class="glass-card">
+        <h3>أفضل الوجهات الآن</h3>
+        <div id="destinations-tabs" class="stack"></div>
+        <div id="destinations-content" class="timeline" style="margin-top:18px;"></div>
+      </div>
+      <div class="map-preview">
+        <iframe title="ArhGo world map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8582251.092659855!2d16.2795226!3d46.32532945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b45bbb4694c1f1%3A0x8d26ab9dd98ec605!2sMediterranean%20Sea!5e0!3m2!1sen!2siq!4v1731812222000!5m2!1sen!2siq" loading="lazy"></iframe>
+  </div>
+</section>
+
+    <section class="section" id="blog">
+      <div class="section-header">
+        <h2 class="section-title">إلهام السفر</h2>
+        <p class="section-subtitle">محتوى مختار يمنحك أفكارًا حقيقية لكل نوع من الرحلات.</p>
+      </div>
+      <div class="blog-grid">
+        <a class="glass-card blog-card" href="story.html?topic=luxe" data-flight-sound>
+          <h3>شعور المدن الراقية</h3>
+          <p>صفحة فاخرة تنقل جو العشاء تحت الأضواء، مع جدول يومي قصير.</p>
+        </a>
+        <a class="glass-card blog-card" href="story.html?topic=adventure" data-flight-sound>
+          <h3>بوابة المغامرات</h3>
+          <p>سرد سريع لجبال سويسرا وتايلاند مع قوائم معدات جاهزة.</p>
+        </a>
+        <a class="glass-card blog-card" href="story.html?topic=culture" data-flight-sound>
+          <h3>رحلات ثقافية</h3>
+          <p>حكاية قصيرة عن قاهرة الليل ومراكش، مع أماكن لا تفوّت.</p>
+        </a>
+        <a class="glass-card blog-card" href="story.html?topic=budget" data-flight-sound>
+          <h3>سفر اقتصادي ذكي</h3>
+          <p>طريقة عرض البيانات لخفض التكاليف عبر واجهات ArhGo.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+<footer>
+    <p>ArhGo © 2025 — جميع الحقوق محفوظة</p>
+    <p>واجهات متصلة: <a href="hotel.html" data-flight-sound>فنادق</a> • <a href="flights.html" data-flight-sound>رحلات جوية</a> • <a href="Restuarnt.html" data-flight-sound>مطاعم</a></p>
+</footer>
+
+  <div id="toast" style="position:fixed;bottom:30px;right:30px;padding:16px 24px;border-radius:18px;background:rgba(5,23,45,0.9);color:#fff;box-shadow:var(--shadow-soft);opacity:0;transform:translateY(20px);transition:.4s;z-index:9999;"></div>
+
+<script>
+const moodData = {
+  relax: {
+    label: 'نسيم بحر',
+    title: 'نسيم المدن الساحلية',
+    text: 'ننسق الخطط بنبرة باستيل لكل من يحب الهدوء والأنشطة الخفيفة على الواجهة البحرية.',
+    bullets: ['فطور على الواجهة البحرية', 'جولة دراجات قصيرة', 'عشاء بموسيقى حية']
+  },
+  urban: {
+    label: 'نبض',
+    title: 'نبض المدن العصرية',
+    text: 'جدول سريع يعرض التنقل عبر المترو الذكي، المقاهي الإبداعية، ومساحات العمل الفنية.',
+    bullets: ['متحف رقمي', 'غداء على السطح', 'ليلة في حي الإضاءات']
+  },
+  heritage: {
+    label: 'تراث',
+    title: 'حكايات التاريخ',
+    text: 'نماذج محتوى مستوحاة من الكتب القديمة، مع مسارات المتاحف والأسواق الشعبية.',
+    bullets: ['زيارة مرشد محلي', 'ورشة خط عربي', 'خريطة آثار تفاعلية']
+  },
+  adventure: {
+    label: 'مغامرة',
+    title: 'مغامرات طبيعية',
+    text: 'مزيج من مسارات GPS، نصائح المعدات، ووقت للراحة حول النار في نهاية اليوم.',
+    bullets: ['مسار جبلي', 'جلسة باراشوت', 'مساء حول النار']
+  }
+};
+
+const moodButtons = document.querySelectorAll('[data-mood]');
+const moodTitle = document.getElementById('mood-title');
+const moodText = document.getElementById('mood-text');
+const moodList = document.getElementById('mood-list');
+const moodLabel = document.getElementById('mood-label');
+
+function setMood(key) {
+  const mood = moodData[key];
+  if (!mood) return;
+  moodButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.mood === key));
+  moodTitle.textContent = mood.title;
+  moodText.textContent = mood.text;
+  moodLabel.textContent = mood.label;
+  moodList.innerHTML = mood.bullets.map(item => `<li>${item}</li>`).join('');
+}
+
+setMood('relax');
+moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.dataset.mood)));
+
+const heroImages = [
+      'https://images.unsplash.com/photo-1502602898657-3e91760cbb34',
+      'https://images.unsplash.com/photo-1467269204594-9661b134dd2b',
+      'https://images.unsplash.com/photo-1505764706515-aa95265c5abc',
+      'https://images.unsplash.com/photo-1491553895911-0055eca6402d'
+    ];
+    let heroIndex = 0;
+    const heroEl = document.querySelector('.hero');
+    const cycleHero = () => {
+      heroIndex = (heroIndex + 1) % heroImages.length;
+      heroEl.style.backgroundImage = `linear-gradient(135deg, rgba(255,255,255,0.94), rgba(242,246,255,0.94)), url('${heroImages[heroIndex]}')`;
+      heroEl.style.backgroundSize = 'cover';
+      heroEl.style.backgroundPosition = 'center';
+    };
+    cycleHero();
+    setInterval(cycleHero, 6000);
+
+    document.getElementById('hero-cta').addEventListener('click', () => {
+      document.getElementById('planner').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    const createBtn = document.getElementById('create-trip-btn');
+    const aiBtn = document.getElementById('ai-trip-btn');
+    const saveBtn = document.getElementById('save-plan-btn');
+    const inputs = {
+      name: document.getElementById('trip-name'),
+      email: document.getElementById('trip-email'),
+      country: document.getElementById('trip-country'),
+      days: document.getElementById('trip-days'),
+      tripType: document.getElementById('trip-type'),
+      interests: document.getElementById('trip-interests'),
+      budget: document.getElementById('trip-budget'),
+      things: document.getElementById('trip-things'),
+      notes: document.getElementById('trip-notes')
+    };
+
+    const stats = {
+      days: document.getElementById('stat-days'),
+      budget: document.getElementById('stat-budget'),
+      country: document.getElementById('stat-country'),
+      link: document.getElementById('share-link'),
+      status: document.getElementById('plan-status')
+    };
+
+    const toast = document.getElementById('toast');
+    const showToast = (message) => {
+      toast.textContent = message;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+      }, 3000);
+    };
+
+    const calculateCost = (days, type) => {
+      const normalized = (type || '').toLowerCase();
+      let perDay = 120;
+      if (normalized.includes('اقتصادية') || normalized.includes('budget')) perDay = 60;
+      if (normalized.includes('فاخرة') || normalized.includes('lux')) perDay = 220;
+      return Math.max(1, days) * perDay;
+    };
+
+    const buildTripPayload = () => {
+      const days = parseInt(inputs.days.value, 10) || 1;
+      const tripType = inputs.tripType.value || 'متوسطة';
+      const country = inputs.country.value || 'غير محدد';
+      const payload = {
+        name: inputs.name.value || 'مستخدم',
+        email: inputs.email.value || '',
+        country,
+        days,
+        tripType,
+        interests: inputs.interests.value || '',
+        budget: inputs.budget.value || 'متوسطة',
+        things: inputs.things.value || '',
+        notes: inputs.notes.value || ''
+      };
+      payload.estimatedCost = calculateCost(days, tripType);
+      return payload;
+    };
+
+    const updateStats = (payload, shortLink = 'سيظهر بعد الحفظ') => {
+      stats.days.textContent = payload.days;
+      stats.country.textContent = payload.country;
+      stats.budget.textContent = `$${payload.estimatedCost}`;
+      stats.link.textContent = shortLink;
+      stats.status.textContent = `جاهز — ${payload.tripType}`;
+    };
+
+  createBtn.addEventListener('click', () => {
+      const payload = buildTripPayload();
+      updateStats(payload);
+      const url = `trip-summary.html?days=${payload.days}&type=${encodeURIComponent(payload.tripType)}&country=${encodeURIComponent(payload.country)}&cost=${payload.estimatedCost}`;
+      if (window.ArhGo?.delayedNavigate) {
+        window.ArhGo.delayedNavigate(url);
+      } else {
+        window.location.href = url;
+      }
+    });
+
+    aiBtn.addEventListener('click', () => {
+      const payload = buildTripPayload();
+      const aiUrl = `ai-trip.html?country=${encodeURIComponent(payload.country)}&days=${payload.days}&interests=${encodeURIComponent(payload.interests)}&budget=${encodeURIComponent(payload.budget)}&notes=${encodeURIComponent(payload.notes)}`;
+      if (window.ArhGo?.delayedNavigate) {
+        window.ArhGo.delayedNavigate(aiUrl);
+      } else {
+        window.location.href = aiUrl;
+      }
+    });
+
+    const STORAGE_KEY = 'arhgo-plans';
+    const getPlans = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const setPlans = (plans) => localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+
+    const renderPlans = () => {
+      const list = document.getElementById('saved-plans-list');
+      const plans = getPlans();
+      if (!plans.length) {
+        list.innerHTML = '<div class="saved-plan-card">لا توجد خطط محفوظة بعد.</div>';
+        return;
+      }
+      list.innerHTML = plans.map(plan => `
+        <article class="saved-plan-card">
+          <h4>${plan.country} — ${plan.days} أيام</h4>
+          <p class="plan-meta">${plan.tripType} • $${plan.estimatedCost}</p>
+          <p class="plan-meta">${plan.interests}</p>
+          <div class="badge badge-success">الرابط القصير</div>
+          <p class="plan-meta">${plan.link}</p>
+          <div class="stack">
+            <button class="btn btn-gradient" data-action="share" data-link="${plan.link}">نسخ الرابط</button>
+            <button class="btn btn-ghost" data-action="open" data-link="${plan.summaryUrl}">عرض الملخص</button>
+          </div>
+        </article>
+      `).join('');
+    };
+
+    saveBtn.addEventListener('click', () => {
+      const payload = buildTripPayload();
+      const shortCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+      const link = `https://arhgo.travel/r/${shortCode}`;
+      const summaryUrl = `trip-summary.html?days=${payload.days}&type=${encodeURIComponent(payload.tripType)}&country=${encodeURIComponent(payload.country)}&cost=${payload.estimatedCost}`;
+      const plan = { ...payload, link, summaryUrl, id: Date.now() };
+      const updated = [plan, ...getPlans()].slice(0, 6);
+      setPlans(updated);
+      updateStats(payload, link);
+      renderPlans();
+      showToast('تم حفظ الخطة مع رابط قصير ✨');
+    });
+
+    document.getElementById('saved-plans-list').addEventListener('click', (event) => {
+      const btn = event.target.closest('button');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const link = btn.dataset.link;
+      if (action === 'share' && link) {
+        navigator.clipboard?.writeText(link);
+        showToast('تم نسخ الرابط لمشاركتك');
+      }
+      if (action === 'open' && link) {
+        window.ArhGo?.delayedNavigate ? window.ArhGo.delayedNavigate(link) : window.location.href = link;
+      }
+    });
+
+    renderPlans();
+
+    const destinations = [
+      { name: 'فرنسا', tips: ['برج إيفل ليلاً', 'متحف اللوفر', 'كروز على نهر السين'] },
+      { name: 'اليابان', tips: ['كيوتو التاريخية', 'منطقة شيبويا', 'جبل فوجي'] },
+      { name: 'سويسرا', tips: ['قطار الألب', 'بحيرة لوسيرن', 'قمم زيرمات'] },
+      { name: 'مصر', tips: ['الأهرامات', 'خان الخليلي', 'رحلة نيلية'] }
+    ];
+
+    const tabs = document.getElementById('destinations-tabs');
+    const content = document.getElementById('destinations-content');
+
+    const renderDestination = (index) => {
+      const dest = destinations[index];
+      content.innerHTML = dest.tips.map(t => `<div class="timeline-step">${t}</div>`).join('');
+    };
+
+    destinations.forEach((dest, index) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-ghost';
+      btn.textContent = dest.name;
+      btn.addEventListener('click', () => renderDestination(index));
+      tabs.appendChild(btn);
+    });
+    renderDestination(0);
+
+    fetch('http://localhost:3033/flights')
+  .then(res => res.json())
+  .then(data => {
+        if (!Array.isArray(data) || !data.length) return;
+        showToast('تم تفعيل آخر تحديث لأسعار الرحلات ✈️');
+      })
+      .catch(() => {});
+</script>
+</body>
+</html>
+

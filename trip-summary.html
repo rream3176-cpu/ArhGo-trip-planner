@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | ملخص الرحلة</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="assets/js/arhgo.js" defer></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    #map {
+      height: 420px;
+      width: 100%;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow-soft);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .summary-card {
+      padding: 22px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+    }
+    .summary-card span {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <main class="page-shell">
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">ملخص خطتك</h2>
+        <p class="section-subtitle">اكتشف التكلفة، عدد الأيام، نوع الرحلة، وحرّك الخريطة للتعرّف على المسار التفاعلي.</p>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <p>الوجهة</p>
+          <span id="show-country">—</span>
+        </div>
+        <div class="summary-card">
+          <p>عدد الأيام</p>
+          <span id="show-days">0</span>
+        </div>
+        <div class="summary-card">
+          <p>نوع الرحلة</p>
+          <span id="show-type">—</span>
+        </div>
+        <div class="summary-card">
+          <p>التكلفة التقديرية</p>
+          <span id="show-cost">$0</span>
+        </div>
+      </div>
+      <div style="margin-top:30px" class="glass-card">
+        <div id="map"></div>
+      </div>
+      <div class="stack" style="margin-top:24px;justify-content:flex-end;">
+        <a class="btn btn-gradient" href="weather.html" id="weather-btn" data-flight-sound>حالة الطقس</a>
+        <a class="btn btn-ghost" href="test.html" data-flight-sound>العودة للرئيسية</a>
+      </div>
+    </section>
+  </main>
+
+  <audio id="flight-sound" src="https://www.soundjay.com/transport/airplane-flyby-01.mp3"></audio>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const country = params.get('country') || 'غير محدد';
+    const days = parseInt(params.get('days'), 10) || 1;
+    const type = params.get('type') || 'متوسطة';
+    const costParam = parseInt(params.get('cost'), 10) || 0;
+
+    document.getElementById('show-country').textContent = country;
+    document.getElementById('show-days').textContent = days;
+    document.getElementById('show-type').textContent = type;
+
+    const counter = document.getElementById('show-cost');
+    let current = 0;
+    const target = costParam || Math.round(days * 120);
+    const step = Math.ceil(target / 80);
+    function countUp() {
+      if (current < target) {
+        current += step;
+        counter.textContent = `$${current}`;
+        requestAnimationFrame(countUp);
+      } else {
+        counter.textContent = `$${target}`;
+      }
+    }
+    countUp();
+
+    document.getElementById('weather-btn').href = `weather.html?country=${encodeURIComponent(country)}`;
+
+    const flightAudio = document.getElementById('flight-sound');
+    flightAudio.play().catch(() => {});
+
+    const map = L.map('map').setView([30, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    async function showCountryOnMap(name) {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?country=${encodeURIComponent(name)}&format=json&limit=1`);
+        const data = await res.json();
+        if (data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+          map.setView([lat, lon], 6);
+          L.marker([lat, lon]).addTo(map).bindPopup(`<b>${name}</b><br>موقع وجهتك.`).openPopup();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    if (country !== 'غير محدد') showCountryOnMap(country);
+  </script>
+</body>
+</html>
+

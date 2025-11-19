@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | خطة الرحلة بالذكاء الاصطناعي</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+  <style>
+    .day-card {
+      border-radius: var(--radius-md);
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 18px;
+    }
+    .day-card h3 {
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+    #loading-banner {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 28px;
+      border-radius: 999px;
+      background: rgba(5, 23, 45, 0.9);
+      color: #fff;
+      box-shadow: var(--shadow-soft);
+      display: none;
+      z-index: 2000;
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <div id="loading-banner">جارٍ توليد الخطة ✨</div>
+  <main class="page-shell">
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">خطة رحلتك بالذكاء الاصطناعي</h2>
+        <p class="section-subtitle">نستخدم خوارزمية ArhGo + API خارجية لصنع جدول يومي مدهش مع توازن بين المزارات، الأطعمة، والأنشطة.</p>
+      </div>
+      <div class="split">
+        <article class="glass-card glow-card" id="trip-meta">
+          <h3>بيانات الرحلة</h3>
+          <p id="meta-country">الدولة: —</p>
+          <p id="meta-days">عدد الأيام: —</p>
+          <p id="meta-interests">الاهتمامات: —</p>
+          <p id="meta-budget">الميزانية: —</p>
+          <p id="meta-notes">الملاحظات: —</p>
+        </article>
+        <article class="glass-card">
+          <h3>نصائح AI</h3>
+          <p id="ai-hints">نقوم بتخصيص البرنامج بناءً على التوازن بين الثقافة، المغامرة، والاسترخاء.</p>
+          <button class="btn btn-gradient" onclick="refreshTrip()" style="margin-top:14px">إعادة التوليد</button>
+          <button class="btn btn-ghost" onclick="window.history.back()" data-flight-sound style="margin-top:10px">عودة</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">البرنامج اليومي</h2>
+        <p class="section-subtitle">سنقسم الرحلة حسب الأيام مع اقتراحات Morning/Afternoon/Night.</p>
+      </div>
+      <div id="trip-content"></div>
+    </section>
+  </main>
+<script>
+  const loading = document.getElementById('loading-banner');
+  const content = document.getElementById('trip-content');
+  const params = new URLSearchParams(window.location.search);
+
+  const meta = {
+    country: document.getElementById('meta-country'),
+    days: document.getElementById('meta-days'),
+    interests: document.getElementById('meta-interests'),
+    budget: document.getElementById('meta-budget'),
+    notes: document.getElementById('meta-notes'),
+    hints: document.getElementById('ai-hints')
+  };
+
+  const payload = {
+    country: params.get('country') || 'فرنسا',
+    days: parseInt(params.get('days'), 10) || 5,
+    interests: params.get('interests') || 'استكشاف عام',
+    budget: params.get('budget') || 'متوسطة',
+    notes: params.get('notes') || ''
+  };
+
+  meta.country.textContent = `الدولة: ${payload.country}`;
+  meta.days.textContent = `عدد الأيام: ${payload.days}`;
+  meta.interests.textContent = `الاهتمامات: ${payload.interests}`;
+  meta.budget.textContent = `الميزانية: ${payload.budget}`;
+  meta.notes.textContent = `ملاحظات: ${payload.notes || 'لا يوجد'}`;
+  meta.hints.textContent = `سنوازن بين ${payload.interests} وبميزانية ${payload.budget}.`;
+
+  async function generateTrip() {
+    loading.style.display = 'block';
+    content.innerHTML = '';
+
+    const prompt = `
+صمّم لي خطة سفر جذابة ومفصلة إلى ${payload.country}
+لمدة ${payload.days} أيام، وفق الميزانية (${payload.budget})
+واهتمامات المسافر: ${payload.interests}
+
+أريد الخطة بهذا التنسيق:
+
+اليوم 1:
+- Morning: ...
+- Afternoon: ...
+- Night: ...
+- أفضل مطعم لهذا اليوم + متوسط الكلفة.
+- نصيحة مهمة.
+
+اليوم 2:
+(نفس التنسيق)
+    `;
+
+    try {
+      // ⬇⬇⬇ أهم تعديل: API بدون مفتاح ⬇⬇⬇
+      const res = await fetch("https://apifreellm.com/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: prompt
+        })
+      });
+
+      const data = await res.json();
+      const text = data.reply || data.response || "";
+
+      // تقسيم الخطة حسب الأيام
+      const titles = text.match(/اليوم\s*\d+/g);
+      const days = text.split(/اليوم\s*\d+/g);
+
+      if (!titles || days.length <= 1) {
+        content.innerHTML = "<div class='glass-card'>❗ لم يتم العثور على خطة مناسبة.</div>";
+        return;
+      }
+
+      for (let i = 1; i < days.length; i++) {
+        const clean = days[i].trim().replace(/\n+/g, "<br>");
+        const card = document.createElement("article");
+        card.className = "day-card";
+        card.innerHTML = `
+          <h3>${titles[i - 1]}</h3>
+          <p>${clean}</p>
+        `;
+        content.appendChild(card);
+      }
+
+    } catch (err) {
+      console.error(err);
+      content.innerHTML = "<div class='glass-card'>⚠️ حدث خطأ أثناء طلب الخطة.</div>";
+    }
+
+    loading.style.display = 'none';
+  }
+
+  function refreshTrip() {
+    generateTrip();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    generateTrip();
+  });
+</script>
+
+</body>
+</html>

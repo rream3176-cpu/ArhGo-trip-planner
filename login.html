@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>ArhGo | تسجيل الدخول</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+  <style>
+    .auth-shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px 16px;
+    }
+    .auth-card {
+      width: min(420px, 96vw);
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      background: rgba(3, 11, 35, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow-elevated);
+      text-align: center;
+    }
+    .auth-card h2 {
+      margin-bottom: 12px;
+    }
+    .auth-card p {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .auth-card input {
+      margin-bottom: 16px;
+    }
+    .auth-card .error {
+      min-height: 22px;
+      color: var(--danger);
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <main class="auth-shell">
+    <section class="auth-card glass-card">
+      <span class="pill">ArhGo HQ</span>
+      <h2>مرحبًا بعودتك</h2>
+      <p>سجّل دخولك لحفظ خطط السفر ومزامنتها مع كل الأجهزة.</p>
+      <input class="arhgo-input" type="email" id="email" placeholder="البريد الإلكتروني">
+      <input class="arhgo-input" type="password" id="password" placeholder="كلمة المرور">
+      <button class="btn btn-gradient" onclick="login()" data-flight-sound>تسجيل الدخول</button>
+      <a class="btn btn-ghost" href="signup.html" data-flight-sound style="margin-top:12px;">إنشاء حساب جديد</a>
+      <div id="error" class="error"></div>
+    </section>
+  </main>
+
+  <script>
+    function login() {
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value.trim();
+      const error = document.getElementById('error');
+      const userData = localStorage.getItem('user');
+
+      if (!email || !password) {
+        error.textContent = "يرجى إدخال بيانات الدخول كاملة.";
+        return;
+      }
+      if (!userData) {
+        error.textContent = "لا يوجد حساب محفوظ، أنشئ حسابًا جديدًا.";
+        return;
+      }
+
+      const user = JSON.parse(userData);
+      const match = user.email.trim().toLowerCase() === email && user.password.trim() === password;
+
+      if (match) {
+        localStorage.setItem('loggedIn', user.username);
+        window.ArhGo?.playFlightSound();
+        const goHome = () => window.location.href = 'test.html';
+        if (window.ArhGo?.delayedNavigate) {
+          window.ArhGo.delayedNavigate('test.html', 400);
+        } else {
+          setTimeout(goHome, 300);
+        }
+      } else {
+        error.textContent = "بيانات الدخول غير صحيحة.";
+      }
+    }
+  </script>
+</body>
+</html>
+

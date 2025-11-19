@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | قصة الإلهام</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+</head>
+<body class="page-hidden">
+  <main class="page-shell">
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" id="story-heading">تفاصيل القصة</h2>
+        <p class="section-subtitle" id="story-subtitle">صفحة مصغّرة تعرض محتوى مرتّب لكل بطاقة إلهام.</p>
+      </div>
+      <article class="glass-card glow-card" id="story-hero">
+        <span class="pill" id="story-label">ArhGo Story</span>
+        <h1 id="story-title">عنوان القصة</h1>
+        <p id="story-lede">سيتم تحميل وصف فخم يعكس جو الرحلة.</p>
+        <div class="stats-grid" id="story-meta"></div>
+      </article>
+      <div class="grid" id="story-sections"></div>
+      <div class="stack" style="justify-content:flex-end;margin-top:24px;">
+        <a class="btn btn-ghost" href="test.html#blog" data-flight-sound>العودة إلى الإلهام</a>
+        <a class="btn btn-gradient" href="test.html" data-flight-sound>الرئيسية</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const stories = {
+      luxe: {
+        heading: 'شعور المدن الراقية',
+        subtitle: 'نستخدم صورًا ناعمة وأطباق ميشلان لتقديم رحلة مدن مترفة.',
+        label: 'Luxe Chapter',
+        meta: ['باريس × روما', '4 أيام', 'ميزانية عالية'],
+        sections: [
+          {
+            title: 'صباح الذهب الوردي',
+            text: 'نقترح تصوير الواجهات التاريخية عند لحظة الشروق، مع قهوة مختصة يتم حجزها مسبقًا من خلال API المطاعم.'
+          },
+          {
+            title: 'مساء العشاء السري',
+            text: 'تُستخدم بطاقات ArhGo لحجز مطعم سري قابل للمشاركة عبر الرابط القصير، مع خريطة تعرض موقع العشاء فقط لمن يتلقى الرابط.'
+          },
+          {
+            title: 'تفاصيل العرض',
+            text: 'يمكنك أن تذكر في العرض التقديمي كيف يتم تلوين الجدول بالأبيض والذهبي وأن كل مهمة تُنفَّذ بضغطة زر.'
+          }
+        ]
+      },
+      adventure: {
+        heading: 'بوابة المغامرات',
+        subtitle: 'صفحة حيوية مليئة بخطوط GPS وملاحظات السلامة.',
+        label: 'Adventure Pulse',
+        meta: ['سويسرا × تايلاند', '5 أيام', 'مستوى نشاط مرتفع'],
+        sections: [
+          {
+            title: 'صعود الجرف',
+            text: 'نستخدم واجهة الخريطة في ArhGo لعرض المسار الجبلي وتفاصيل الارتفاع وإشعارات الطقس اللحظية.'
+          },
+          {
+            title: 'تجهيزات المعدات',
+            text: 'تبويب جانبي يقترح الملابس والمعدات ويتيح مشاركتها مع الفريق في لحظة واحدة.'
+          },
+          {
+            title: 'خاتمة المغامرة',
+            text: 'نذكّر بأن الخطة تحفظ تلقائيًا في الحساب ويمكن إعادة تشغيلها لأي وجهة مشابهة.'
+          }
+        ]
+      },
+      culture: {
+        heading: 'رحلات ثقافية',
+        subtitle: 'أسلوب حكائي مع اقتباسات، أسواق قديمة، وهوامش معرفية.',
+        label: 'Culture Tale',
+        meta: ['القاهرة × مراكش', '3 أيام', 'تراث وأطعمة'],
+        sections: [
+          {
+            title: 'حارة القصبة',
+            text: 'جدول اليوم يضم سوق خان الخليلي في الصباح، مع إضافة روابط للمتاجر المحلية عبر الخريطة.'
+          },
+          {
+            title: 'حلقة الحكواتي',
+            text: 'صفحة القصة تقترح فقرة قصيرة يمكن قراءتها للجنة لتعطي انطباعًا قصصيًا مميّزًا.'
+          },
+          {
+            title: 'دروس مستفادة',
+            text: 'نوصي بذكر كيف تساعد المنصّة في اكتشاف الفعاليات الثقافية فور صدورها عبر التكامل مع Google Places.'
+          }
+        ]
+      },
+      budget: {
+        heading: 'سفر اقتصادي ذكي',
+        subtitle: 'عرض بيانات مبسّط يربط بين تكلفة اليوم والخيارات البديلة.',
+        label: 'Smart Saver',
+        meta: ['أي مدينة', 'ميزانية محدودة', 'تخفيض 35%'],
+        sections: [
+          {
+            title: 'لوحة التكلفة',
+            text: 'المخطط الدائري يوضح توزيع المصاريف، ويمكن نسخه مباشرة للعرض التقديمي.'
+          },
+          {
+            title: 'بدائل سريعة',
+            text: 'كل نشاط يقترح بديلين أو ثلاثة بنقرة واحدة، وتظهر الأسعار بجانبها لحظيًا.'
+          },
+          {
+            title: 'خاتمة اقتصادية',
+            text: 'تذكير بأن مشاركة الخطة مع الأصدقاء تضمن شفافية المصاريف وتشجع على السفر الجماعي.'
+          }
+        ]
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const topic = params.get('topic') || 'luxe';
+    const story = stories[topic] || stories.luxe;
+
+    const headingEl = document.getElementById('story-heading');
+    const subtitleEl = document.getElementById('story-subtitle');
+    const labelEl = document.getElementById('story-label');
+    const titleEl = document.getElementById('story-title');
+    const ledeEl = document.getElementById('story-lede');
+    const metaContainer = document.getElementById('story-meta');
+    const sectionsContainer = document.getElementById('story-sections');
+
+    headingEl.textContent = story.heading;
+    subtitleEl.textContent = story.subtitle;
+    labelEl.textContent = story.label;
+    titleEl.textContent = story.heading;
+    ledeEl.textContent = story.subtitle;
+    metaContainer.innerHTML = story.meta.map(item => `<div class="stat-chip">${item}</div>`).join('');
+    sectionsContainer.innerHTML = story.sections.map(sec => `
+      <article class="glass-card">
+        <h3>${sec.title}</h3>
+        <p>${sec.text}</p>
+      </article>
+    `).join('');
+  </script>
+</body>
+</html>
+

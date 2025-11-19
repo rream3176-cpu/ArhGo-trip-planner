@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | البحث عن رحلات</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+  <style>
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .flight-card {
+      padding: 20px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow-soft);
+    }
+    .flight-card h3 {
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <main class="page-shell">
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">رحلات جوية بالذكاء</h2>
+        <p class="section-subtitle">ابحث عن الرحلات حسب المدن والتاريخ، واستقبل النتائج من خادم ArhGo المحلي.</p>
+      </div>
+      <div class="glass-card">
+        <div class="form-grid">
+          <input class="arhgo-input" type="text" id="from" placeholder="من (مثال: بغداد)">
+          <input class="arhgo-input" type="text" id="to" placeholder="إلى (مثال: إسطنبول)">
+          <input class="arhgo-input" type="date" id="date">
+        </div>
+        <div class="stack" style="margin-top:18px;justify-content:flex-end;">
+          <button class="btn btn-gradient" id="searchFlights">بحث عن الرحلات</button>
+          <a class="btn btn-ghost" href="test.html" data-flight-sound>عودة للرئيسية</a>
+        </div>
+      </div>
+      <div id="flights" class="section" style="padding:0;margin-top:30px;">✈️ أدخل الوجهات والتاريخ واضغط بحث</div>
+    </section>
+  </main>
+
+  <script>
+    const flightsDiv = document.getElementById('flights');
+    document.getElementById('searchFlights').addEventListener('click', async () => {
+      const from = document.getElementById('from').value.trim();
+      const to = document.getElementById('to').value.trim();
+      const date = document.getElementById('date').value;
+      if (!from || !to || !date) {
+        flightsDiv.innerHTML = "<div class='glass-card'>الرجاء إدخال جميع الحقول.</div>";
+        return;
+      }
+      flightsDiv.innerHTML = "<div class='glass-card'>⏳ جاري البحث عن الرحلات...</div>";
+      try {
+        const res = await fetch('http://localhost:5002/get-flights', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ from, to, date })
+        });
+        const data = await res.json();
+        if (data.flights && data.flights.length > 0) {
+          flightsDiv.innerHTML = data.flights.map(buildFlightCard).join('');
+        } else {
+          flightsDiv.innerHTML = "<div class='glass-card'>🚫 لا توجد رحلات متوفرة.</div>";
+        }
+      } catch (err) {
+        flightsDiv.innerHTML = "<div class='glass-card'>حدث خطأ أثناء الاتصال بالسيرفر.</div>";
+        console.error(err);
+      }
+    });
+
+    const buildFlightCard = (flight) => `
+      <article class="flight-card">
+        <h3>${flight.from_city} → ${flight.to_city}</h3>
+        <p>التاريخ: ${flight.flight_date?.split('T')[0] || 'غير محدد'}</p>
+        <p>السعر: $${flight.price || '--'}</p>
+        <p>الفئة: ${flight.flight_class || 'غير محددة'}</p>
+        <p>الشركة: ${flight.airline || '—'}</p>
+      </article>
+    `;
+  </script>
+</body>
+</html>
+

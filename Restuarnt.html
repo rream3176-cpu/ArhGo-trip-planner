@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | اقتراح المطاعم</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="assets/js/arhgo.js" defer></script>
+  <style>
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .filters select, .filters input {
+      min-width: 160px;
+    }
+    .restaurant-card {
+      padding: 20px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow-soft);
+    }
+    .restaurant-card h3 {
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+    .badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .map-modal, .booking-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 2000;
+    }
+    .map-box, .booking-box {
+      width: min(520px, 95vw);
+      background: rgba(3,11,35,0.95);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 24px;
+      box-shadow: var(--shadow-elevated);
+    }
+    #map {
+      width: 100%;
+      height: 360px;
+      border-radius: var(--radius-md);
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <main class="page-shell">
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">اقتراح المطاعم</h2>
+        <p class="section-subtitle">فلترة ذكية حسب نوع الزيارة، الميزانية، ونوعية الطعام باستخدام خادم ArhGo.</p>
+      </div>
+      <div class="glass-card">
+        <div class="filters">
+          <select class="arhgo-select" id="visitType">
+            <option value="">نوع الزيارة</option>
+            <option value="family">عائلية</option>
+            <option value="single">فردية</option>
+          </select>
+          <input class="arhgo-input" type="number" id="budget" min="1" placeholder="الميزانية ($)">
+          <select class="arhgo-select" id="foodType">
+            <option value="">نوع الأكل</option>
+            <option value="arabic">شرقي</option>
+            <option value="western">غربي</option>
+            <option value="seafood">بحري</option>
+            <option value="asian">آسيوي</option>
+            <option value="fastfood">وجبات سريعة</option>
+          </select>
+        </div>
+        <div class="stack" style="margin-top:16px;justify-content:flex-end;">
+          <button class="btn btn-gradient" id="searchBtn">بحث عن مطاعم</button>
+          <a class="btn btn-ghost" href="test.html" data-flight-sound>عودة</a>
+        </div>
+      </div>
+      <div id="list" class="grid" style="margin-top:28px;"></div>
+      <div id="empty" class="glass-card" style="display:none;">لم يتم العثور على نتائج. جرّب تغيير الفلاتر.</div>
+    </section>
+  </main>
+
+  <div id="mapModal" class="map-modal">
+    <div class="map-box">
+      <button class="btn btn-ghost" id="closeMap" style="margin-bottom:12px;">إغلاق</button>
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <div id="bookingModal" class="booking-modal">
+    <div class="booking-box">
+      <h3>احجز طاولتك</h3>
+      <input class="arhgo-input" id="bookName" type="text" placeholder="الاسم الكامل">
+      <input class="arhgo-input" id="bookPhone" type="tel" placeholder="رقم الهاتف">
+      <input class="arhgo-input" id="bookPeople" type="number" min="1" placeholder="عدد الأشخاص">
+      <input class="arhgo-input" id="bookDate" type="datetime-local">
+      <button class="btn btn-gradient" id="confirmBooking" style="margin-top:12px;">تأكيد الحجز</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const list = $('list');
+    const empty = $('empty');
+    let map, marker;
+    let currentBookingId = null;
+
+    const stars = (rating) => '★'.repeat(Math.floor(rating)) + (rating % 1 ? '☆' : '');
+    const isOpen = (hours) => {
+      const h = new Date().getHours();
+      const open = hours.open;
+      let close = hours.close === 0 ? 24 : hours.close;
+      return open < close ? h >= open && h < close : h >= open || h < close;
+    };
+
+    function renderList(data) {
+      if (!data.length) {
+        list.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+      list.innerHTML = data.map(item => `
+        <article class="restaurant-card">
+          <h3>${item.name}</h3>
+          <p>${item.desc}</p>
+          <div class="badges">
+            <span class="badge badge-info">${stars(item.rating)} (${item.rating.toFixed(1)})</span>
+            <span class="badge ${isOpen(item.hours) ? 'badge-success' : ''}">
+              ${isOpen(item.hours) ? 'مفتوح الآن' : 'مغلق'}
+            </span>
+          </div>
+          <div class="stack" style="margin-top:14px;">
+            <button class="btn btn-ghost" onclick="showMap(${item.lat},${item.lng},'${item.name}')">عرض على الخريطة</button>
+            <button class="btn btn-gradient" onclick="openBooking(${item.id})">احجز الآن</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    async function applyFilters() {
+      list.innerHTML = "<div class='glass-card'>⏳ جاري جلب المطاعم...</div>";
+      empty.style.display = 'none';
+      try {
+        const res = await fetch('http://localhost:3080/api/restaurants', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            visit: $('visitType').value,
+            food: $('foodType').value,
+            budget: parseFloat($('budget').value) || undefined
+          })
+        });
+        const data = await res.json();
+        if (data.error || !Array.isArray(data)) throw new Error(data.error || 'البيانات غير صحيحة');
+        renderList(data);
+      } catch (err) {
+        console.error(err);
+        list.innerHTML = '';
+        empty.style.display = 'block';
+        empty.textContent = 'حدث خطأ أثناء جلب المطاعم. تأكد من أن السيرفر يعمل.';
+      }
+    }
+
+    window.showMap = (lat, lng, name) => {
+      $('mapModal').style.display = 'flex';
+      setTimeout(() => {
+        if (!map) {
+          map = L.map('map').setView([lat, lng], 14);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+          marker = L.marker([lat, lng]).addTo(map).bindPopup(name).openPopup();
+        } else {
+          map.invalidateSize();
+          map.setView([lat, lng], 14);
+          marker.setLatLng([lat, lng]).setPopupContent(name).openPopup();
+        }
+      }, 150);
+    };
+
+    $('closeMap').addEventListener('click', () => $('mapModal').style.display = 'none');
+    window.openBooking = (id) => {
+      currentBookingId = id;
+      $('bookingModal').style.display = 'flex';
+    };
+    $('bookingModal').addEventListener('click', (e) => {
+      if (e.target.id === 'bookingModal') $('bookingModal').style.display = 'none';
+    });
+    $('mapModal').addEventListener('click', (e) => {
+      if (e.target.id === 'mapModal') $('mapModal').style.display = 'none';
+    });
+    $('confirmBooking').addEventListener('click', () => {
+      const name = $('bookName').value.trim();
+      const phone = $('bookPhone').value.trim();
+      const people = $('bookPeople').value.trim();
+      const date = $('bookDate').value.trim();
+      if (!name || !phone || !people || !date) {
+        alert('يرجى ملء جميع الحقول');
+        return;
+      }
+      alert(`تم حجز طاولة بنجاح.\nالاسم: ${name}\nعدد الأشخاص: ${people}\nالتاريخ: ${date}`);
+      $('bookingModal').style.display = 'none';
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', applyFilters);
+  </script>
+</body>
+</html>
+
