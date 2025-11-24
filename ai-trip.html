@@ -40,7 +40,8 @@
     <section class="section">
       <div class="section-header">
         <h2 class="section-title">خطة رحلتك بالذكاء الاصطناعي</h2>
-        <p class="section-subtitle">نستخدم خوارزمية ArhGo + API خارجية لصنع جدول يومي مدهش مع توازن بين المزارات، الأطعمة، والأنشطة.</p>
+        <p class="section-subtitle">نستخدم <strong>Hugging Face</strong> - منصة ذكاء اصطناعي مفتوحة المصدر - لتوليد خطة سفر متكاملة ومفصلة مع توازن بين المزارات، الأطعمة، والأنشطة.</p>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-top: 8px;">🤖 الموقع المستخدم: <a href="https://huggingface.co" target="_blank" style="color: var(--primary);">Hugging Face</a> - منصة ذكاء اصطناعي مجانية لا تحتاج مفتاح API</p>
       </div>
       <div class="split">
         <article class="glass-card glow-card" id="trip-meta">
@@ -99,66 +100,319 @@
 
   async function generateTrip() {
     loading.style.display = 'block';
-    content.innerHTML = '';
+    content.innerHTML = '<div class="glass-card"><p>جارٍ توليد خطة سفر ذكية ومتكاملة بالذكاء الاصطناعي...</p></div>';
 
-    const prompt = `
-صمّم لي خطة سفر جذابة ومفصلة إلى ${payload.country}
-لمدة ${payload.days} أيام، وفق الميزانية (${payload.budget})
-واهتمامات المسافر: ${payload.interests}
+    // بناء prompt محسّن ومفصّل للذكاء الاصطناعي
+    const systemPrompt = `أنت مستشار سفر محترف ومتخصص في منصة ArhGo. مهمتك إنشاء خطة سفر متكاملة ومفصلة بناءً على المعلومات المقدمة. 
 
-أريد الخطة بهذا التنسيق:
+المتطلبات الأساسية:
+1. استخدم معلومات حقيقية ومحدثة عن الوجهات، المطاعم الشهيرة، الأماكن السياحية، وأسعار تقريبية واقعية
+2. قدم تفاصيل دقيقة عن كل مكان وكل نشاط
+3. اقترح مطاعم حقيقية مع أسماء محددة وأسعار تقريبية
+4. أضف نصائح عملية ومفيدة لكل يوم
+5. وازن بين الأنشطة الثقافية، الترفيهية، والمغامرة حسب الاهتمامات
+6. راعِ الميزانية المحددة في اختيار الأماكن والمطاعم`;
+
+    const userPrompt = `صمّم لي خطة سفر متكاملة ومفصلة إلى ${payload.country} لمدة ${payload.days} أيام.
+
+📋 معلومات الرحلة:
+- الوجهة: ${payload.country}
+- عدد الأيام: ${payload.days}
+- الميزانية: ${payload.budget}
+- الاهتمامات: ${payload.interests}
+${payload.notes ? `- ملاحظات إضافية: ${payload.notes}` : ''}
+
+📝 التنسيق المطلوب (يجب أن يكون لكل يوم من ${payload.days} أيام):
 
 اليوم 1:
-- Morning: ...
-- Afternoon: ...
-- Night: ...
-- أفضل مطعم لهذا اليوم + متوسط الكلفة.
-- نصيحة مهمة.
+🌅 الصباح (Morning):
+- [نشاط صباحي محدد مع تفاصيل كاملة]
+- [مكان للزيارة حقيقي ومشهور مع وصف تفصيلي]
+- [معلومات عملية: أوقات العمل، التكلفة، المدة المتوقعة]
 
-اليوم 2:
-(نفس التنسيق)
-    `;
+🌆 بعد الظهر (Afternoon):
+- [نشاط بعد الظهر محدد مع تفاصيل]
+- [مكان للزيارة مع وصف تفصيلي]
+- [نشاط إضافي مناسب للاهتمامات: ${payload.interests}]
 
-    try {
-      // ⬇⬇⬇ أهم تعديل: API بدون مفتاح ⬇⬇⬇
-      const res = await fetch("https://apifreellm.com/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: prompt
-        })
-      });
+🌙 المساء (Night):
+- [نشاط مسائي مناسب]
+- [مطعم مقترح حقيقي مع اسمه الكامل]
+- [نوع الطعام المقدم]
+- [💰 السعر التقريبي بالدولار للشخص الواحد]
+- [نصيحة حول الحجز أو الوقت المناسب]
 
-      const data = await res.json();
-      const text = data.reply || data.response || "";
+💡 نصيحة مهمة لهذا اليوم:
+[نصيحة عملية ومفيدة تتعلق باليوم والوجهة والميزانية]
 
-      // تقسيم الخطة حسب الأيام
-      const titles = text.match(/اليوم\s*\d+/g);
-      const days = text.split(/اليوم\s*\d+/g);
+🚗 معلومات النقل (اختياري):
+[اقتراحات حول التنقل بين الأماكن]
 
-      if (!titles || days.length <= 1) {
-        content.innerHTML = "<div class='glass-card'>❗ لم يتم العثور على خطة مناسبة.</div>";
-        return;
+(كرر نفس التنسيق لكل يوم من ${payload.days} أيام)
+
+⚠️ متطلبات مهمة:
+- استخدم أسماء أماكن حقيقية ومشهورة في ${payload.country}
+- استخدم أسماء مطاعم حقيقية معروفة
+- قدم أسعار واقعية مناسبة للميزانية: ${payload.budget}
+- راعِ الاهتمامات: ${payload.interests}
+- اجعل الخطة متنوعة ومتوازنة بين الثقافة والمغامرة والاسترخاء
+- أضف تفاصيل عملية مثل أوقات الزيارة المثالية، مدة كل نشاط، ونصائح للحصول على أفضل تجربة`;
+
+    // استخدام Hugging Face Inference API - لا يحتاج مفتاح API
+    // Hugging Face: https://huggingface.co - منصة ذكاء اصطناعي مفتوحة المصدر
+    let generatedText = '';
+    let lastError = null;
+
+    // قائمة بنماذج Hugging Face المجانية (لا تحتاج مفتاح API)
+    const hfModels = [
+      {
+        name: 'mistralai/Mistral-7B-Instruct-v0.1',
+        display: 'Mistral AI'
+      },
+      {
+        name: 'meta-llama/Llama-2-7b-chat-hf',
+        display: 'Meta Llama'
+      },
+      {
+        name: 'google/flan-t5-xxl',
+        display: 'Google Flan'
+      },
+      {
+        name: 'bigscience/bloom-7b1',
+        display: 'BLOOM'
       }
+    ];
 
-      for (let i = 1; i < days.length; i++) {
-        const clean = days[i].trim().replace(/\n+/g, "<br>");
-        const card = document.createElement("article");
-        card.className = "day-card";
-        card.innerHTML = `
-          <h3>${titles[i - 1]}</h3>
-          <p>${clean}</p>
-        `;
-        content.appendChild(card);
+    // تحديث رسالة التحميل
+    content.innerHTML = '<div class="glass-card"><p>🔄 جارٍ الاتصال بـ Hugging Face للذكاء الاصطناعي...</p></div>';
+
+    // محاولة استخدام Hugging Face (لا يحتاج مفتاح API)
+    for (let i = 0; i < hfModels.length; i++) {
+      const model = hfModels[i];
+      try {
+        content.innerHTML = `<div class="glass-card"><p>🤖 جارٍ توليد الخطة باستخدام ${model.display}... (${i + 1}/${hfModels.length})</p><p style="font-size: 0.85rem; color: var(--muted); margin-top: 8px;">⏳ قد يستغرق هذا بضع ثوانٍ...</p></div>`;
+        
+        const fullPrompt = `${systemPrompt}\n\n${userPrompt}`;
+        
+        const res = await Promise.race([
+          fetch(`https://api-inference.huggingface.co/models/${model.name}`, {
+            method: "POST",
+            headers: { 
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              inputs: fullPrompt,
+              parameters: { 
+                max_new_tokens: 3000, 
+                temperature: 0.7, 
+                top_p: 0.9, 
+                return_full_text: false,
+                do_sample: true
+              }
+            })
+          }),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 45000))
+        ]);
+
+        if (res.ok) {
+          const data = await res.json();
+          
+          // معالجة أشكال مختلفة من الاستجابة
+          if (Array.isArray(data) && data[0]?.generated_text) {
+            generatedText = data[0].generated_text;
+            console.log(`✅ نجح استخدام النموذج: ${model.display}`, generatedText.substring(0, 100));
+            break;
+          } else if (data.generated_text) {
+            generatedText = data.generated_text;
+            console.log(`✅ نجح استخدام النموذج: ${model.display}`, generatedText.substring(0, 100));
+            break;
+          } else if (data[0]?.summary_text) {
+            generatedText = data[0].summary_text;
+            console.log(`✅ نجح استخدام النموذج: ${model.display}`);
+            break;
+          } else if (res.status === 503) {
+            // النموذج قيد التحميل، انتظر قليلاً
+            console.log(`⏳ النموذج ${model.display} قيد التحميل، انتظر 10 ثوانٍ...`);
+            await new Promise(resolve => setTimeout(resolve, 10000));
+            // حاول مرة أخرى
+            const retryRes = await fetch(`https://api-inference.huggingface.co/models/${model.name}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                inputs: fullPrompt,
+                parameters: { 
+                  max_new_tokens: 3000, 
+                  temperature: 0.7, 
+                  top_p: 0.9, 
+                  return_full_text: false
+                }
+              })
+            });
+            
+            if (retryRes.ok) {
+              const retryData = await retryRes.json();
+              if (Array.isArray(retryData) && retryData[0]?.generated_text) {
+                generatedText = retryData[0].generated_text;
+                console.log(`✅ نجح بعد إعادة المحاولة: ${model.display}`);
+                break;
+              } else if (retryData.generated_text) {
+                generatedText = retryData.generated_text;
+                console.log(`✅ نجح بعد إعادة المحاولة: ${model.display}`);
+                break;
+              }
+            }
+          } else {
+            console.log(`⚠️ النموذج ${model.display} لم يولد محتوى`, data);
+            lastError = `النموذج ${model.display} لم يولد محتوى`;
+          }
+        } else {
+          const errorData = await res.json().catch(() => ({}));
+          const errorMsg = errorData.error || `خطأ ${res.status}`;
+          console.log(`❌ النموذج ${model.display} فشل:`, res.status, errorData);
+          lastError = typeof errorMsg === 'string' ? errorMsg : errorMsg.message || `خطأ ${res.status}`;
+          
+          if (res.status === 503) {
+            // النموذج قيد التحميل، جرب النموذج التالي
+            continue;
+          }
+        }
+      } catch (err) {
+        console.log(`❌ خطأ في النموذج ${model.display}:`, err.message);
+        lastError = err.message;
+        continue;
       }
-
-    } catch (err) {
-      console.error(err);
-      content.innerHTML = "<div class='glass-card'>⚠️ حدث خطأ أثناء طلب الخطة.</div>";
     }
 
+    // معالجة النص المولد من الذكاء الاصطناعي
+    if (generatedText && generatedText.trim().length > 100) {
+      const text = generatedText.trim();
+      
+      // تقسيم الخطة حسب الأيام - أنماط متعددة
+      let days = [];
+      const patterns = [
+        /اليوم\s*(\d+)[:：\s]/gi,
+        /Day\s*(\d+)[:：\s]/gi,
+        /اليوم\s*(\d+)\s*[-\u2013\u2014]/gi
+      ];
+      
+      let foundPattern = null;
+      for (const pattern of patterns) {
+        const matches = [...text.matchAll(pattern)];
+        if (matches.length > 0) {
+          foundPattern = pattern;
+          break;
+        }
+      }
+      
+      if (foundPattern) {
+        days = text.split(foundPattern);
+      } else {
+        // إذا لم نجد نمط واضح، نقسم حسب الأرقام
+        days = text.split(/(?=اليوم\s*\d+|Day\s*\d+)/i);
+      }
+      
+      if (days.length >= 2) {
+        content.innerHTML = '';
+        
+        // معالجة كل يوم
+        for (let i = 0; i < days.length; i++) {
+          let dayContent = days[i];
+          let dayNum = '';
+          
+          // استخراج رقم اليوم
+          const dayMatch = dayContent.match(/(?:اليوم|Day)\s*(\d+)/i);
+          if (dayMatch) {
+            dayNum = `اليوم ${dayMatch[1]}`;
+            dayContent = dayContent.replace(/(?:اليوم|Day)\s*\d+[:：\s-]*/i, '').trim();
+          } else if (i > 0 && /^\d+/.test(dayContent)) {
+            // إذا كان العنصر الأول رقم فقط
+            dayNum = `اليوم ${dayContent.match(/^\d+/)[0]}`;
+            dayContent = dayContent.replace(/^\d+[:：\s-]*/, '').trim();
+          }
+          
+          if (!dayNum || !dayContent.trim() || dayContent.length < 50) continue;
+          
+          // تنظيف وتنسيق المحتوى
+          const cleanContent = dayContent
+            .trim()
+            .replace(/\n{3,}/g, '\n\n')
+            .replace(/\n/g, '<br>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/🌅/g, '<strong>🌅 الصباح:</strong>')
+            .replace(/🌆/g, '<strong>🌆 بعد الظهر:</strong>')
+            .replace(/🌙/g, '<strong>🌙 المساء:</strong>')
+            .replace(/💡/g, '<strong>💡 نصيحة:</strong>')
+            .replace(/🚗/g, '<strong>🚗 النقل:</strong>')
+            .replace(/💰/g, '<strong>💰</strong>')
+            .replace(/📋/g, '<strong>📋</strong>')
+            .replace(/⚠️/g, '<strong>⚠️</strong>');
+          
+          const card = document.createElement("article");
+          card.className = "day-card glass-card";
+          card.innerHTML = `
+            <h3>${dayNum}</h3>
+            <div style="line-height: 1.8; color: var(--text);">${cleanContent}</div>
+          `;
+          content.appendChild(card);
+        }
+        
+        if (content.children.length > 0) {
+          loading.style.display = 'none';
+          return;
+        }
+      } else {
+        // إذا لم نتمكن من تقسيم الأيام، اعرض النص كاملاً
+        const cleanContent = text
+          .replace(/\n{3,}/g, '\n\n')
+          .replace(/\n/g, '<br>')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/🌅/g, '<strong>🌅 الصباح:</strong>')
+          .replace(/🌆/g, '<strong>🌆 بعد الظهر:</strong>')
+          .replace(/🌙/g, '<strong>🌙 المساء:</strong>')
+          .replace(/💡/g, '<strong>💡 نصيحة:</strong>');
+        
+        const card = document.createElement("article");
+        card.className = "day-card glass-card";
+        card.innerHTML = `
+          <h3>خطة السفر المتكاملة</h3>
+          <div style="line-height: 1.8; color: var(--text);">${cleanContent}</div>
+        `;
+        content.innerHTML = '';
+        content.appendChild(card);
+        loading.style.display = 'none';
+        return;
+      }
+    }
+
+    // إذا فشل الذكاء الاصطناعي في توليد الخطة
+    if (!generatedText || generatedText.trim().length < 100) {
+      const errorDetails = lastError ? `<br><small style="color: var(--muted);">الخطأ: ${lastError}</small>` : '';
+      content.innerHTML = `
+        <div class="glass-card" style="text-align: center; padding: 40px;">
+          <h3 style="color: var(--primary); margin-bottom: 16px;">⚠️ لم يتم توليد الخطة</h3>
+          <p style="margin-bottom: 20px; color: var(--text);">
+            عذراً، لم يتمكن الذكاء الاصطناعي من توليد الخطة في الوقت الحالي.
+            ${errorDetails}
+            <br><br>
+            <strong>الحلول المقترحة:</strong>
+            <br>1. تحقق من اتصالك بالإنترنت
+            <br>2. انتظر قليلاً ثم اضغط "إعادة المحاولة"
+            <br>3. افتح Console (F12) لرؤية تفاصيل الخطأ
+          </p>
+          <button class="btn btn-gradient" onclick="generateTrip()" style="margin-top: 14px;">
+            🔄 إعادة المحاولة
+          </button>
+          <button class="btn btn-ghost" onclick="window.location.reload()" style="margin-top: 10px; margin-left: 10px;">
+            🔃 إعادة تحميل الصفحة
+          </button>
+        </div>
+      `;
+      loading.style.display = 'none';
+      return;
+    }
+    
     loading.style.display = 'none';
   }
 
