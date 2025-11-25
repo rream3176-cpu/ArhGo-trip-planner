@@ -157,6 +157,199 @@
     updateSoundToggleButtons();
   });
 
+  // ============================================
+  // تحسينات فخمة ومبهرة - Scroll Animations
+  // ============================================
+  
+  const setupScrollReveal = () => {
+    const revealElements = document.querySelectorAll('.scroll-reveal, .hero-stat, .saved-plan-card, .blog-card, .immersion-card');
+    
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('revealed');
+          }, index * 100);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => {
+      el.classList.add('scroll-reveal');
+      revealObserver.observe(el);
+    });
+  };
+
+  // Parallax Effect
+  const setupParallax = () => {
+    const parallaxElements = document.querySelectorAll('.parallax-element, .hero-main-image');
+    
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      
+      parallaxElements.forEach(el => {
+        const speed = el.dataset.speed || 0.5;
+        const yPos = -(scrolled * speed);
+        el.style.transform = `translateY(${yPos}px)`;
+      });
+    });
+  };
+
+  // Magnetic Hover Effect
+  const setupMagneticHover = () => {
+    const magneticElements = document.querySelectorAll('.btn, .card-luxury, .magnetic-hover');
+    
+    magneticElements.forEach(el => {
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        el.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+      });
+      
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'translate(0, 0)';
+      });
+    });
+  };
+
+  // Navbar Scroll Effect
+  const setupNavbarScroll = () => {
+    const navbar = document.querySelector('.arhgo-nav');
+    if (!navbar) return;
+    
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 100) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    });
+  };
+
+  // Add Ripple Effect to Buttons
+  const setupRippleEffect = () => {
+    const buttons = document.querySelectorAll('.btn-ripple, .btn');
+    
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+        
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+  };
+
+  // Add Glow Effect on Scroll
+  const setupGlowEffects = () => {
+    const glowElements = document.querySelectorAll('.glow-effect, .btn-gradient, .hero');
+    
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      
+      glowElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const elementTop = rect.top + scrolled;
+        const elementCenter = elementTop + rect.height / 2;
+        const distanceFromCenter = Math.abs(scrolled + windowHeight / 2 - elementCenter);
+        const maxDistance = windowHeight;
+        const intensity = Math.max(0, 1 - distanceFromCenter / maxDistance);
+        
+        el.style.setProperty('--glow-intensity', intensity);
+      });
+    });
+  };
+
+  // Text Reveal Animation
+  const setupTextReveal = () => {
+    const textElements = document.querySelectorAll('.text-reveal');
+    
+    textElements.forEach(el => {
+      const text = el.textContent;
+      el.innerHTML = '';
+      text.split('').forEach((char, index) => {
+        const span = document.createElement('span');
+        span.textContent = char === ' ' ? '\u00A0' : char;
+        span.style.animationDelay = `${index * 0.05}s`;
+        el.appendChild(span);
+      });
+    });
+  };
+
+  // Enhanced Image Loading
+  const setupImageLoading = () => {
+    const images = document.querySelectorAll('img[data-src]');
+    
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.classList.add('loaded');
+          imageObserver.unobserve(img);
+        }
+      });
+    });
+    
+    images.forEach(img => imageObserver.observe(img));
+  };
+
+  // Smooth Scroll for Anchor Links
+  const setupSmoothScroll = () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#' || !href) return;
+        
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  };
+
+  // Initialize all enhancements
+  document.addEventListener('DOMContentLoaded', () => {
+    setupScrollReveal();
+    setupParallax();
+    setupMagneticHover();
+    setupNavbarScroll();
+    setupRippleEffect();
+    setupGlowEffects();
+    setupTextReveal();
+    setupImageLoading();
+    setupSmoothScroll();
+  });
+
   window.ArhGo = {
     playFlightSound,
     delayedNavigate,
@@ -164,4 +357,3 @@
     isSoundEnabled: () => soundEnabled
   };
 })();
-

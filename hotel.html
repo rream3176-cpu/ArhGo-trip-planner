@@ -15,8 +15,8 @@
     .hotel-card {
       border-radius: var(--radius-md);
       padding: 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #ffffff;
+      border: 1px solid rgba(74, 144, 226, 0.2);
       box-shadow: var(--shadow-soft);
     }
     .hotel-card h3 {
@@ -35,34 +35,50 @@
     }
     .modal-content {
       width: min(480px, 95vw);
-      background: rgba(3, 11, 35, 0.95);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(242, 244, 247, 0.95));
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(74, 144, 226, 0.3);
       padding: 30px;
       box-shadow: var(--shadow-elevated);
     }
   </style>
 </head>
 <body class="page-hidden">
+  <nav class="arhgo-nav">
+    <div class="arhgo-logo">ArhGo</div>
+    <ul>
+      <li><a data-nav href="index.html#home" data-translate="nav.home">الرئيسية</a></li>
+      <li><a data-nav href="index.html#features" data-translate="nav.features">المزايا</a></li>
+      <li><a data-nav href="index.html#planner" data-translate="nav.planner">خطط رحلتك</a></li>
+      <li><a data-nav href="index.html#destinations" data-translate="nav.destinations">الوجهات</a></li>
+      <li><a data-nav href="hotel.html" data-translate="nav.hotels">الفنادق</a></li>
+      <li><a data-nav href="ticket-booking.html" data-translate="nav.flights">حجز الرحلات</a></li>
+      <li><a data-nav href="Restuarnt.html" data-translate="nav.restaurants">مطاعم</a></li>
+    </ul>
+    <div class="stack">
+      <a class="btn btn-ghost" href="login.html" data-flight-sound data-translate="nav.login">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound data-translate="nav.signup">إنشاء حساب</a>
+    </div>
+  </nav>
   <main class="page-shell">
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title">حجز الفنادق الذكي</h2>
-        <p class="section-subtitle">أدخل وجهتك وميزانيتك لنقترح عليك أفضل الفنادق عبر تكامل TripAdvisor/Google Places.</p>
+        <h2 class="section-title" data-translate="hotels.title">حجز الفنادق الذكي</h2>
+        <p class="section-subtitle" data-translate="hotels.subtitle">أدخل وجهتك وميزانيتك لنقترح عليك أفضل الفنادق عبر تكامل TripAdvisor/Google Places.</p>
       </div>
       <div class="glass-card">
         <div class="search-panel">
-          <input class="arhgo-input" id="destination" type="text" placeholder="الدولة أو المدينة">
+          <input class="arhgo-input" id="destination" type="text" data-translate-placeholder="hotels.destinationPlaceholder" placeholder="الدولة أو المدينة">
           <select class="arhgo-select" id="budget">
-            <option value="">الميزانية</option>
-            <option value="منخفضة">منخفضة</option>
-            <option value="متوسطة">متوسطة</option>
-            <option value="عالية">عالية</option>
+            <option value="" data-translate="hotels.budget">الميزانية</option>
+            <option value="منخفضة" data-translate="hotels.budgetLow">منخفضة</option>
+            <option value="متوسطة" data-translate="hotels.budgetMedium">متوسطة</option>
+            <option value="عالية" data-translate="hotels.budgetHigh">عالية</option>
           </select>
         </div>
         <div class="stack" style="margin-top:18px;justify-content:flex-end;">
-          <button class="btn btn-gradient" id="searchBtn">بحث</button>
-          <a class="btn btn-ghost" href="test.html" data-flight-sound>عودة للرئيسية</a>
+          <button class="btn btn-gradient" id="searchBtn" data-translate="hotels.search">بحث</button>
+          <a class="btn btn-ghost" href="index.html" data-flight-sound data-translate="hotels.back">عودة للرئيسية</a>
         </div>
       </div>
       <div id="hotelsContainer" class="grid" style="margin-top:30px;"></div>
@@ -71,42 +87,42 @@
 
   <div class="modal" id="bookingModal">
     <div class="modal-content">
-      <button class="btn btn-ghost" id="closeModal" style="position:absolute;top:10px;left:10px;">إغلاق</button>
-      <h3 style="margin-top:0;">تفاصيل الحجز</h3>
+      <button class="btn btn-ghost" id="closeModal" style="position:absolute;top:10px;left:10px;" data-translate="common.close">إغلاق</button>
+      <h3 style="margin-top:0;" data-translate="hotels.bookingDetails">تفاصيل الحجز</h3>
       <form id="bookingForm">
         <label class="field">
-          <span>اسم الفندق</span>
+          <span data-translate="hotels.hotelName">اسم الفندق</span>
           <input class="arhgo-input" type="text" id="hotelName" readonly>
         </label>
         <label class="field">
-          <span>اسم المستخدم</span>
+          <span data-translate="hotels.userName">اسم المستخدم</span>
           <input class="arhgo-input" type="text" id="userName" required>
         </label>
         <label class="field">
-          <span>عدد الغرف</span>
+          <span data-translate="hotels.rooms">عدد الغرف</span>
           <input class="arhgo-input" type="number" id="rooms" min="1" value="1">
         </label>
         <label class="field">
-          <span>عدد الأشخاص</span>
+          <span data-translate="hotels.guests">عدد الأشخاص</span>
           <input class="arhgo-input" type="number" id="guests" min="1" value="1">
         </label>
         <label class="field">
-          <span>تاريخ الوصول</span>
+          <span data-translate="hotels.checkin">تاريخ الوصول</span>
           <input class="arhgo-input" type="date" id="checkin" required>
         </label>
         <label class="field">
-          <span>تاريخ المغادرة</span>
+          <span data-translate="hotels.checkout">تاريخ المغادرة</span>
           <input class="arhgo-input" type="date" id="checkout" required>
         </label>
         <label class="field">
-          <span>طريقة الدفع</span>
+          <span data-translate="hotels.payment">طريقة الدفع</span>
           <select class="arhgo-select" id="payment">
-            <option value="نقداً">نقداً عند الوصول</option>
-            <option value="بطاقة">بطاقة مصرفية</option>
+            <option value="نقداً" data-translate="hotels.paymentCash">نقداً عند الوصول</option>
+            <option value="بطاقة" data-translate="hotels.paymentCard">بطاقة مصرفية</option>
           </select>
         </label>
-        <button class="btn btn-gradient" type="submit" style="margin-top:16px;">تأكيد الحجز</button>
-        <div id="successMessage" class="badge badge-success" style="margin-top:12px;display:none;">تم تأكيد الحجز ✅</div>
+        <button class="btn btn-gradient" type="submit" style="margin-top:16px;" data-translate="hotels.confirm">تأكيد الحجز</button>
+        <div id="successMessage" class="badge badge-success" style="margin-top:12px;display:none;" data-translate="hotels.success">تم تأكيد الحجز ✅</div>
       </form>
     </div>
   </div>

@@ -7,24 +7,57 @@
   <script src="assets/js/arhgo.js" defer></script>
   <style>
     body {
-      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+      background: linear-gradient(135deg, #0A1C2E 0%, #0F1722 30%, #8EA2B6 60%, #C9B27A 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 100vh;
     }
+    
+    html {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
     .auth-shell {
       min-height: 100vh;
       display: grid;
       place-items: center;
       padding: 40px 16px;
-      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+      position: relative;
+      z-index: 1;
     }
+    
     .auth-card {
       width: min(420px, 96vw);
       padding: 48px;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 249, 250, 0.95));
-      border: 3px solid rgba(30, 58, 95, 0.15);
-      box-shadow: var(--shadow-card), 0 0 0 2px rgba(255, 255, 255, 0.9) inset, 0 0 60px rgba(192, 192, 192, 0.1);
+      border-radius: 24px;
+      background: rgba(242, 244, 247, 0.95);
+      border: 2px solid rgba(201, 178, 122, 0.3);
+      box-shadow: 
+        0 20px 60px rgba(10, 28, 46, 0.3),
+        0 0 40px rgba(201, 178, 122, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
       text-align: center;
       backdrop-filter: blur(20px) saturate(180%);
+      color: var(--text);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .auth-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 30px 80px rgba(10, 28, 46, 0.4),
+        0 0 60px rgba(201, 178, 122, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border-color: rgba(201, 178, 122, 0.5);
     }
     .auth-card h2 {
       margin-bottom: 12px;
@@ -59,6 +92,12 @@
       flex-direction: column;
       align-items: center;
       gap: 12px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
     }
     .auth-logo img {
       width: 140px;
@@ -95,19 +134,171 @@
       </div>
       <h2>مرحبًا بعودتك</h2>
       <p>سجّل دخولك لحفظ خطط السفر ومزامنتها مع كل الأجهزة.</p>
-      <input class="arhgo-input" type="email" id="email" placeholder="البريد الإلكتروني">
-      <input class="arhgo-input" type="password" id="password" placeholder="كلمة المرور">
-      <button class="btn btn-gradient" onclick="login()" data-flight-sound>تسجيل الدخول</button>
-      <a class="btn btn-ghost" href="signup.html" data-flight-sound style="margin-top:12px;">إنشاء حساب جديد</a>
-      <div id="error" class="error"></div>
+      
+      <form class="auth-form" id="loginForm" onsubmit="event.preventDefault(); login();">
+        <div class="form-group">
+          <label for="email">البريد الإلكتروني</label>
+          <input class="arhgo-input" type="email" id="email" name="email" placeholder="البريد الإلكتروني" required>
+        </div>
+        <div class="form-group">
+          <label for="password">كلمة المرور</label>
+          <input class="arhgo-input" type="password" id="password" name="password" placeholder="كلمة المرور" required>
+        </div>
+        <button type="submit" class="btn btn-gradient" data-flight-sound>تسجيل الدخول</button>
+        <a class="btn btn-ghost" href="signup.html" data-flight-sound style="margin-top:12px;">إنشاء حساب جديد</a>
+        <div id="error" class="error"></div>
+      </form>
     </section>
   </main>
 
+  <style>
+    /* تأثير الغيوم المحسّن */
+    .clouds-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      overflow: hidden;
+    }
+    
+    .clouds-overlay.active {
+      opacity: 1;
+    }
+    
+    .cloud {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 100px;
+      opacity: 0;
+      filter: blur(2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      animation: cloudFloat 5s ease-in-out forwards;
+    }
+    
+    .cloud::before,
+    .cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 100px;
+      filter: blur(1px);
+    }
+    
+    .cloud::before {
+      width: 60px;
+      height: 60px;
+      top: -30px;
+      left: 15px;
+    }
+    
+    .cloud::after {
+      width: 70px;
+      height: 70px;
+      top: -40px;
+      right: 15px;
+    }
+    
+    @keyframes cloudFloat {
+      0% {
+        transform: translateY(calc(100vh + 50px)) translateX(0) scale(0.3);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.9;
+      }
+      50% {
+        transform: translateY(50vh) translateX(10px) scale(1);
+        opacity: 0.95;
+      }
+      85% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-150px) translateX(20px) scale(1.2);
+        opacity: 0;
+      }
+    }
+    
+    /* تحسين الفورم */
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .form-group label {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    
+  </style>
+  
+  <div class="clouds-overlay" id="cloudsOverlay"></div>
+
   <script>
+    function createClouds() {
+      const overlay = document.getElementById('cloudsOverlay');
+      overlay.innerHTML = '';
+      overlay.classList.add('active');
+      
+      // إنشاء غيوم مرتبة ومنظمة
+      const cloudPositions = [
+        { left: '10%', delay: 0, size: 120 },
+        { left: '25%', delay: 0.3, size: 100 },
+        { left: '40%', delay: 0.6, size: 140 },
+        { left: '55%', delay: 0.9, size: 110 },
+        { left: '70%', delay: 1.2, size: 130 },
+        { left: '85%', delay: 1.5, size: 105 },
+        { left: '15%', delay: 1.8, size: 115 },
+        { left: '30%', delay: 2.1, size: 125 },
+        { left: '45%', delay: 2.4, size: 135 },
+        { left: '60%', delay: 2.7, size: 100 },
+        { left: '75%', delay: 3.0, size: 120 },
+        { left: '20%', delay: 3.3, size: 110 },
+        { left: '35%', delay: 3.6, size: 140 },
+        { left: '50%', delay: 3.9, size: 115 },
+        { left: '65%', delay: 4.2, size: 125 }
+      ];
+      
+      cloudPositions.forEach((pos, i) => {
+        const cloud = document.createElement('div');
+        cloud.className = 'cloud';
+        cloud.style.width = pos.size + 'px';
+        cloud.style.height = (pos.size * 0.6) + 'px';
+        cloud.style.left = pos.left;
+        cloud.style.animationDelay = pos.delay + 's';
+        cloud.style.animationDuration = '5s';
+        overlay.appendChild(cloud);
+      });
+      
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+          overlay.innerHTML = '';
+        }, 500);
+      }, 5000);
+    }
+    
     function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
       const password = document.getElementById('password').value.trim();
       const error = document.getElementById('error');
+      error.textContent = '';
+      error.style.color = '';
+      
       const userData = localStorage.getItem('user');
 
       if (!email || !password) {
@@ -127,13 +318,30 @@
 
       if (match) {
         localStorage.setItem('loggedIn', user.username);
-        error.style.color = 'lightgreen';
+        error.style.color = '#10B981';
         error.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
-        window.ArhGo?.playFlightSound();
-
+        
+        // تشغيل الموسيقى
+        try {
+          if (window.ArhGo && window.ArhGo.playFlightSound) {
+            window.ArhGo.playFlightSound();
+          } else {
+            // محاولة تشغيل الصوت مباشرة
+            const audio = new Audio('https://www.soundjay.com/transport/airplane-flyby-01.mp3');
+            audio.volume = 0.6;
+            audio.play().catch(() => {});
+          }
+        } catch (e) {
+          console.log('Sound error:', e);
+        }
+        
+        // إظهار الغيوم
+        createClouds();
+        
+        // الانتقال بعد 5 ثواني
         setTimeout(() => {
           window.location.href = 'index.html';
-        }, 500);
+        }, 5000);
       } else {
         error.style.color = 'var(--danger)';
         error.textContent = "بيانات الدخول غير صحيحة.";

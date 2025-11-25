@@ -8,16 +8,32 @@
   <script src="assets/js/arhgo.js" defer></script>
 </head>
 <body class="page-hidden">
+  <nav class="arhgo-nav">
+    <div class="arhgo-logo">ArhGo</div>
+    <ul>
+      <li><a data-nav href="index.html#home">الرئيسية</a></li>
+      <li><a data-nav href="index.html#features">المزايا</a></li>
+      <li><a data-nav href="index.html#planner">خطط رحلتك</a></li>
+      <li><a data-nav href="index.html#destinations">الوجهات</a></li>
+      <li><a data-nav href="hotel.html">الفنادق</a></li>
+      <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
+      <li><a data-nav href="Restuarnt.html">مطاعم</a></li>
+    </ul>
+    <div class="stack">
+      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
+    </div>
+  </nav>
   <main class="page-shell">
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title" id="story-heading">تفاصيل القصة</h2>
-        <p class="section-subtitle" id="story-subtitle">صفحة مصغّرة تعرض محتوى مرتّب لكل بطاقة إلهام.</p>
+        <h2 class="section-title" id="story-heading" translate="yes">تفاصيل القصة</h2>
+        <p class="section-subtitle" id="story-subtitle" translate="yes">صفحة مصغّرة تعرض محتوى مرتّب لكل بطاقة إلهام.</p>
       </div>
       <article class="glass-card glow-card" id="story-hero">
-        <span class="pill" id="story-label">ArhGo Story</span>
-        <h1 id="story-title">عنوان القصة</h1>
-        <p id="story-lede">سيتم تحميل وصف فخم يعكس جو الرحلة.</p>
+        <span class="pill" id="story-label" translate="yes">ArhGo Story</span>
+        <h1 id="story-title" translate="yes">عنوان القصة</h1>
+        <p id="story-lede" translate="yes">سيتم تحميل وصف فخم يعكس جو الرحلة.</p>
         <div class="stats-grid" id="story-meta"></div>
       </article>
       <div class="grid" id="story-sections"></div>
@@ -125,17 +141,32 @@
     const sectionsContainer = document.getElementById('story-sections');
 
     headingEl.textContent = story.heading;
+    headingEl.setAttribute('translate', 'yes');
     subtitleEl.textContent = story.subtitle;
+    subtitleEl.setAttribute('translate', 'yes');
     labelEl.textContent = story.label;
+    labelEl.setAttribute('translate', 'yes');
     titleEl.textContent = story.heading;
+    titleEl.setAttribute('translate', 'yes');
     ledeEl.textContent = story.subtitle;
-    metaContainer.innerHTML = story.meta.map(item => `<div class="stat-chip">${item}</div>`).join('');
+    ledeEl.setAttribute('translate', 'yes');
+    metaContainer.innerHTML = story.meta.map(item => `<div class="stat-chip" translate="yes">${item}</div>`).join('');
     sectionsContainer.innerHTML = story.sections.map(sec => `
       <article class="glass-card">
-        <h3>${sec.title}</h3>
-        <p>${sec.text}</p>
+        <h3 translate="yes">${sec.title}</h3>
+        <p translate="yes">${sec.text}</p>
       </article>
     `).join('');
+    
+    // Force Google Translate to re-translate
+    setTimeout(() => {
+      if (window.google && window.google.translate) {
+        const select = document.querySelector('.goog-te-combo');
+        if (select && select.value) {
+          select.dispatchEvent(new Event('change'));
+        }
+      }
+    }, 500);
   </script>
 </body>
 </html>

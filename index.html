@@ -11,17 +11,17 @@
   <nav class="arhgo-nav">
     <div class="arhgo-logo">ArhGo</div>
     <ul>
-      <li><a data-nav href="#home">الرئيسية</a></li>
-      <li><a data-nav href="#features">المزايا</a></li>
-      <li><a data-nav href="#planner">خطط رحلتك</a></li>
-      <li><a data-nav href="#destinations">الوجهات</a></li>
-      <li><a data-nav href="hotel.html">الفنادق</a></li>
-      <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
-      <li><a data-nav href="Restuarnt.html">مطاعم</a></li>
+      <li><a data-nav href="#home" data-translate="nav.home">الرئيسية</a></li>
+      <li><a data-nav href="#features" data-translate="nav.features">المزايا</a></li>
+      <li><a data-nav href="#planner" data-translate="nav.planner">خطط رحلتك</a></li>
+      <li><a data-nav href="#destinations" data-translate="nav.destinations">الوجهات</a></li>
+      <li><a data-nav href="hotel.html" data-translate="nav.hotels">الفنادق</a></li>
+      <li><a data-nav href="ticket-booking.html" data-translate="nav.flights">حجز الرحلات</a></li>
+      <li><a data-nav href="Restuarnt.html" data-translate="nav.restaurants">مطاعم</a></li>
   </ul>
     <div class="stack">
-      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
-      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
+      <a class="btn btn-ghost" href="login.html" data-flight-sound data-translate="nav.login">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound data-translate="nav.signup">إنشاء حساب</a>
   </div>
 </nav>
 
@@ -30,49 +30,44 @@
       <div class="hero-grid">
         <div class="hero-main">
           <span class="pill"><span class="status-signal"></span> ArhGo — Nightflight Edition</span>
-          <h1>منصّة ذكية لتخطيط رحلاتك بكل سهولة</h1>
-          <p>ArhGo تقدّم لك لوحة قيادة مظلمة، صوت إقلاع فوري، وخطط فخمة تُعرض كرحلة جوية خاصة في كل مرة.</p>
+          <h1 data-translate="hero.title">منصّة ذكية لتخطيط رحلاتك بكل سهولة</h1>
+          <p data-translate="hero.subtitle">ArhGo تقدّم لك لوحة قيادة مظلمة، صوت إقلاع فوري، وخطط فخمة تُعرض كرحلة جوية خاصة في كل مرة.</p>
           <div class="hero-highlights">
             <div class="highlight-chip">
-              <em>✦</em> خطة أولى جاهزة خلال دقيقة واحدة
+              <em>✦</em> <span data-translate="hero.highlight1">خطة أولى جاهزة خلال دقيقة واحدة</span>
             </div>
             <div class="highlight-chip">
-              <em>⟲</em> مزاج السفر يتغير بلمسة واحدة
+              <em>⟲</em> <span data-translate="hero.highlight2">مزاج السفر يتغير بلمسة واحدة</span>
             </div>
           </div>
           <div class="deco-line"></div>
           <div class="hero-meta">
             <div class="hero-meta-card">
-              <strong>Concierge ذكي</strong><br>جدولة صباح/ليل متوازنة
+              <strong data-translate="hero.meta1.title">Concierge ذكي</strong><br><span data-translate="hero.meta1.desc">جدولة صباح/ليل متوازنة</span>
             </div>
             <div class="hero-meta-card">
-              <strong>تكامل فوري</strong><br>TripAdvisor · Google Places
+              <strong data-translate="hero.meta2.title">تكامل فوري</strong><br><span data-translate="hero.meta2.desc">TripAdvisor · Google Places</span>
             </div>
             <div class="hero-meta-card">
-              <strong>روابط قصيرة</strong><br>شارك كل خطة بنقرة
+              <strong data-translate="hero.meta3.title">روابط قصيرة</strong><br><span data-translate="hero.meta3.desc">شارك كل خطة بنقرة</span>
             </div>
           </div>
           <div class="hero-actions">
-            <button class="btn btn-gradient" id="hero-cta" data-flight-sound>ابدأ التخطيط الآن</button>
-            <a class="btn btn-ghost" href="ai-trip.html" data-flight-sound>تجربة الذكاء الاصطناعي</a>
+            <button class="btn btn-gradient" id="hero-cta" data-flight-sound data-translate="hero.cta">ابدأ التخطيط الآن</button>
+            <a class="btn btn-ghost" href="ai-trip.html" data-flight-sound data-translate="hero.ai">تجربة الذكاء الاصطناعي</a>
           </div>
           <div class="hero-controls">
             <button class="sound-toggle" type="button" data-toggle-sound aria-pressed="true">
               <span class="accent-chip">✈️</span>
-              <span data-sound-label>الصوت مفعل</span>
+              <span data-sound-label data-translate="hero.sound.on">الصوت مفعل</span>
             </button>
-            <div class="accent-chip">انطلق مع مؤثرات الإقلاع في كل صفحة</div>
+            <div class="accent-chip" data-translate="hero.sound.desc">انطلق مع مؤثرات الإقلاع في كل صفحة</div>
           </div>
         </div>
         <div class="hero-visual">
           <div class="hero-image-wrapper">
             <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&h=800&fit=crop&q=90" alt="Travel Planning" class="hero-main-image" />
             <div class="hero-image-overlay"></div>
-          </div>
-          <div class="scene-clouds">
-            <div class="scene-cloud"></div>
-            <div class="scene-cloud"></div>
-            <div class="scene-cloud"></div>
           </div>
           <div class="hero-sparkles">
             <span></span>
@@ -98,15 +93,15 @@
           <div class="hero-stats">
             <div class="hero-stat">
               <span data-count="72">0</span>
-              وجهة جاهزة
+              <span data-translate="stats.destinations">وجهة جاهزة</span>
             </div>
             <div class="hero-stat">
               <span data-count="320">0</span>
-              خطة محفوظة
+              <span data-translate="stats.plans">خطة محفوظة</span>
             </div>
             <div class="hero-stat">
               <span data-count="18">0</span>
-              تكامل API
+              <span data-translate="stats.api">تكامل API</span>
             </div>
           </div>
         </div>
@@ -125,8 +120,8 @@
 
     <section class="section aurora" id="signature">
       <div class="section-header">
-        <h2 class="section-title">Neon Flight Deck</h2>
-        <p class="section-subtitle">ممر عرض فخم يختصر القصة أمام اللجنة: ضوء متدرج، صوت طائرة، ومحتوى يلمع بالبيانات.</p>
+        <h2 class="section-title" data-translate="sections.signature.title">Neon Flight Deck</h2>
+        <p class="section-subtitle" data-translate="sections.signature.subtitle">ممر عرض فخم يختصر القصة أمام اللجنة: ضوء متدرج، صوت طائرة، ومحتوى يلمع بالبيانات.</p>
       </div>
       <div class="immersive-panels">
         <article class="immersion-card">
@@ -134,32 +129,32 @@
             <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop&q=90" alt="Cinematic Experience" />
           </div>
           <div class="accent-chip">360°</div>
-          <h3>غلاف سينمائي</h3>
-          <p>أضواء أورورا، أجرام طائرة، وبطاقات زجاجية تتحرك بنعومة حول المحتوى.</p>
+          <h3 data-translate="sections.signature.card1.title">غلاف سينمائي</h3>
+          <p data-translate="sections.signature.card1.desc">أضواء أورورا، أجرام طائرة، وبطاقات زجاجية تتحرك بنعومة حول المحتوى.</p>
         </article>
         <article class="immersion-card">
           <div class="card-image-wrapper">
             <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=600&fit=crop&q=90" alt="AI Intelligence" />
           </div>
           <div class="accent-chip">AI+</div>
-          <h3>ذكاء متكيف</h3>
-          <p>كل ضغطة تعيد توليد الخطة، تحفظ الاهتمامات، وتعرض التكلفة مباشرة.</p>
+          <h3 data-translate="sections.signature.card2.title">ذكاء متكيف</h3>
+          <p data-translate="sections.signature.card2.desc">كل ضغطة تعيد توليد الخطة، تحفظ الاهتمامات، وتعرض التكلفة مباشرة.</p>
         </article>
         <article class="immersion-card">
           <div class="card-image-wrapper">
             <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&q=90" alt="Share Links" />
           </div>
           <div class="accent-chip">Share</div>
-          <h3>روابط سريعة</h3>
-          <p>قرّب تجربتك من الواقع بإرسال روابط قصيرة للحجز أو مشاركة الملخّص.</p>
+          <h3 data-translate="sections.signature.card3.title">روابط سريعة</h3>
+          <p data-translate="sections.signature.card3.desc">قرّب تجربتك من الواقع بإرسال روابط قصيرة للحجز أو مشاركة الملخّص.</p>
         </article>
       </div>
     </section>
 
     <section class="section" id="features">
       <div class="section-header">
-        <h2 class="section-title">كل ما تحتاجه لرحلة فخمة</h2>
-        <p class="section-subtitle">منصة موحدة لتوليد الخطة، عرضها على الخريطة، اقتراح الحجوزات، ومشاركتها مع الأصدقاء برابط قصير.</p>
+        <h2 class="section-title" data-translate="sections.features.title">كل ما تحتاجه لرحلة فخمة</h2>
+        <p class="section-subtitle" data-translate="sections.features.subtitle">منصة موحدة لتوليد الخطة، عرضها على الخريطة، اقتراح الحجوزات، ومشاركتها مع الأصدقاء برابط قصير.</p>
       </div>
       <div class="grid">
         <article class="glass-card floating-card">
@@ -167,40 +162,40 @@
             <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&q=90" alt="Smart Daily Plan" />
           </div>
           <div class="pill-small">1</div>
-          <h3>خطة يومية ذكية</h3>
-          <p>خوارزمية + ذكاء اصطناعي تولّد جدولًا متوازنًا للأيام والأماكن والأنشطة وفق اهتماماتك.</p>
+          <h3 data-translate="sections.features.card1.title">خطة يومية ذكية</h3>
+          <p data-translate="sections.features.card1.desc">خوارزمية + ذكاء اصطناعي تولّد جدولًا متوازنًا للأيام والأماكن والأنشطة وفق اهتماماتك.</p>
         </article>
         <article class="glass-card floating-card" style="animation-delay:.3s">
           <div class="feature-image-wrapper">
             <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=600&fit=crop&q=90" alt="Interactive Map" />
           </div>
           <div class="pill-small">2</div>
-          <h3>خريطة تفاعلية</h3>
-          <p>ارتباط مباشر مع خرائط Mapbox/Google لعرض المسارات والمحطات مع تحديد المواقع الدقيقة.</p>
+          <h3 data-translate="sections.features.card2.title">خريطة تفاعلية</h3>
+          <p data-translate="sections.features.card2.desc">ارتباط مباشر مع خرائط Mapbox/Google لعرض المسارات والمحطات مع تحديد المواقع الدقيقة.</p>
         </article>
         <article class="glass-card floating-card" style="animation-delay:.6s">
           <div class="feature-image-wrapper">
             <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&q=90" alt="Hotels & Restaurants" />
           </div>
           <div class="pill-small">3</div>
-          <h3>اقتراحات فندقية وغذائية</h3>
-          <p>تكامل مع TripAdvisor و Google Places لاقتراح فنادق، مطاعم، وأنشطة محلية موثوقة.</p>
+          <h3 data-translate="sections.features.card3.title">اقتراحات فندقية وغذائية</h3>
+          <p data-translate="sections.features.card3.desc">تكامل مع TripAdvisor و Google Places لاقتراح فنادق، مطاعم، وأنشطة محلية موثوقة.</p>
         </article>
         <article class="glass-card floating-card" style="animation-delay:.9s">
           <div class="feature-image-wrapper">
             <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&h=600&fit=crop&q=90" alt="Save & Share" />
           </div>
           <div class="pill-small">4</div>
-          <h3>حفظ ومشاركة</h3>
-          <p>حفظ خططك على حسابك مع توليد رابط قصير قابل للمشاركة فورًا مع الأصدقاء.</p>
+          <h3 data-translate="sections.features.card4.title">حفظ ومشاركة</h3>
+          <p data-translate="sections.features.card4.desc">حفظ خططك على حسابك مع توليد رابط قصير قابل للمشاركة فورًا مع الأصدقاء.</p>
         </article>
       </div>
 </section>
 
     <section class="section" id="experience">
       <div class="section-header">
-        <h2 class="section-title">رحلة المستخدم داخل المنصّة</h2>
-        <p class="section-subtitle">عرض مراحل استخدام المنصّة يساعدك في شرح المشروع خلال العرض التقديمي.</p>
+        <h2 class="section-title" data-translate="sections.experience.title">رحلة المستخدم داخل المنصّة</h2>
+        <p class="section-subtitle" data-translate="sections.experience.subtitle">عرض مراحل استخدام المنصّة يساعدك في شرح المشروع خلال العرض التقديمي.</p>
       </div>
       <div class="experience-track">
         <article class="experience-step">
@@ -209,8 +204,8 @@
           </div>
           <div class="badge badge-info">1</div>
           <div>
-            <strong>تسجيل الدخول أو إنشاء حساب</strong>
-            <p>بطاقات زجاجية فاخرة مع صوت إقلاع لحظة الدخول.</p>
+            <strong data-translate="sections.experience.step1.title">تسجيل الدخول أو إنشاء حساب</strong>
+            <p data-translate="sections.experience.step1.desc">بطاقات زجاجية فاخرة مع صوت إقلاع لحظة الدخول.</p>
           </div>
         </article>
         <article class="experience-step">
@@ -219,8 +214,8 @@
           </div>
           <div class="badge badge-info">2</div>
           <div>
-            <strong>إدخال تفاصيل الرحلة</strong>
-            <p>نموذج غني بالحقول، تقدير تكلفة مباشر، وزر للحفظ أو الذكاء الاصطناعي.</p>
+            <strong data-translate="sections.experience.step2.title">إدخال تفاصيل الرحلة</strong>
+            <p data-translate="sections.experience.step2.desc">نموذج غني بالحقول، تقدير تكلفة مباشر، وزر للحفظ أو الذكاء الاصطناعي.</p>
           </div>
         </article>
         <article class="experience-step">
@@ -229,8 +224,8 @@
           </div>
           <div class="badge badge-info">3</div>
           <div>
-            <strong>عرض الملخّص والخريطة</strong>
-            <p>صفحة ملخص مع عدّادات متحركة، خريطة Leaflet، وانتقال للطقس.</p>
+            <strong data-translate="sections.experience.step3.title">عرض الملخّص والخريطة</strong>
+            <p data-translate="sections.experience.step3.desc">صفحة ملخص مع عدّادات متحركة، خريطة Leaflet، وانتقال للطقس.</p>
           </div>
         </article>
         <article class="experience-step">
@@ -239,8 +234,8 @@
           </div>
           <div class="badge badge-info">4</div>
           <div>
-            <strong>خدمات مساندة</strong>
-            <p>حجز فنادق، رحلات، مطاعم، ومشاركة الخطة برابط قصير واحد.</p>
+            <strong data-translate="sections.experience.step4.title">خدمات مساندة</strong>
+            <p data-translate="sections.experience.step4.desc">حجز فنادق، رحلات، مطاعم، ومشاركة الخطة برابط قصير واحد.</p>
           </div>
         </article>
       </div>
@@ -248,23 +243,23 @@
 
     <section class="section" id="mood">
       <div class="section-header">
-        <h2 class="section-title">مزاج السفر الخاص بك</h2>
-        <p class="section-subtitle">اختر مزاج الرحلة لنقترح صياغة بصرية وقصة قصيرة يمكنك استخدامها في العرض.</p>
+        <h2 class="section-title" data-translate="sections.mood.title">مزاج السفر الخاص بك</h2>
+        <p class="section-subtitle" data-translate="sections.mood.subtitle">اختر مزاج الرحلة لنقترح صياغة بصرية وقصة قصيرة يمكنك استخدامها في العرض.</p>
       </div>
       <div class="mood-panel">
         <div class="mood-controls">
-          <button type="button" class="active" data-mood="relax">نسيم المدن الساحلية</button>
-          <button type="button" data-mood="urban">نبض المدن العصرية</button>
-          <button type="button" data-mood="heritage">حكايات التاريخ</button>
-          <button type="button" data-mood="adventure">مغامرات طبيعية</button>
+          <button type="button" class="active" data-mood="relax" data-translate="sections.mood.relax">نسيم المدن الساحلية</button>
+          <button type="button" data-mood="urban" data-translate="sections.mood.urban">نبض المدن العصرية</button>
+          <button type="button" data-mood="heritage" data-translate="sections.mood.heritage">حكايات التاريخ</button>
+          <button type="button" data-mood="adventure" data-translate="sections.mood.adventure">مغامرات طبيعية</button>
         </div>
         <div class="glass-card mood-details" id="mood-details">
           <div class="mood-image-wrapper">
             <img id="mood-image" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop&q=90" alt="Travel Mood" />
           </div>
-          <span class="pill" id="mood-label">مزاج مختار</span>
-          <h3 id="mood-title">عنوان المزاج</h3>
-          <p id="mood-text">سيظهر هنا وصف قصير يشرح رؤية هذا المزاج وكيف نقدمه في ArhGo.</p>
+          <span class="pill" id="mood-label" translate="yes">مزاج مختار</span>
+          <h3 id="mood-title" translate="yes">عنوان المزاج</h3>
+          <p id="mood-text" translate="yes">سيظهر هنا وصف قصير يشرح رؤية هذا المزاج وكيف نقدمه في ArhGo.</p>
           <ul id="mood-list"></ul>
         </div>
   </div>
@@ -272,23 +267,23 @@
 
     <section class="section" id="planner">
       <div class="section-header">
-        <h2 class="section-title">صمّم رحلتك خلال دقيقة</h2>
-        <p class="section-subtitle">املأ التفاصيل، شاهد التكلفة التقديرية، احفظ خطتك أو شاركها، ثم انتقل إلى الملخص أو صفحة الذكاء الاصطناعي.</p>
+        <h2 class="section-title" data-translate="sections.planner.title">صمّم رحلتك خلال دقيقة</h2>
+        <p class="section-subtitle" data-translate="sections.planner.subtitle">املأ التفاصيل، شاهد التكلفة التقديرية، احفظ خطتك أو شاركها، ثم انتقل إلى الملخص أو صفحة الذكاء الاصطناعي.</p>
       </div>
       <div class="split">
         <form class="arhgo-form" id="trip-form">
     <div class="field">
-            <label for="trip-name">اسمك</label>
-            <input class="arhgo-input" type="text" id="trip-name" placeholder="مثال: علي محمد">
+            <label for="trip-name" data-translate="form.name">اسمك</label>
+            <input class="arhgo-input" type="text" id="trip-name" data-translate-placeholder="form.namePlaceholder" placeholder="مثال: علي محمد">
     </div>
     <div class="field">
-            <label for="trip-email">البريد الإلكتروني</label>
+            <label for="trip-email" data-translate="form.email">البريد الإلكتروني</label>
             <input class="arhgo-input" type="email" id="trip-email" placeholder="you@email.com">
     </div>
     <div class="field">
-            <label for="trip-country">الوجهة</label>
+            <label for="trip-country" data-translate="form.destination">الوجهة</label>
             <select class="arhgo-select" id="trip-country">
-              <option value="">اختر الوجهة...</option>
+              <option value="" data-translate="form.selectDestination">اختر الوجهة...</option>
               <option value="فرنسا">🇫🇷 فرنسا</option>
               <option value="إيطاليا">🇮🇹 إيطاليا</option>
               <option value="اليابان">🇯🇵 اليابان</option>
@@ -327,58 +322,58 @@
       </select>
     </div>
     <div class="field">
-            <label for="trip-days">عدد الأيام</label>
+            <label for="trip-days" data-translate="form.days">عدد الأيام</label>
             <input class="arhgo-input" type="number" id="trip-days" min="1" placeholder="5">
     </div>
     <div class="field">
-            <label for="trip-type">نوع الرحلة</label>
-            <input class="arhgo-input" type="text" id="trip-type" placeholder="مغامرة، رومانسية، اقتصادية...">
+            <label for="trip-type" data-translate="form.type">نوع الرحلة</label>
+            <input class="arhgo-input" type="text" id="trip-type" data-translate-placeholder="form.typePlaceholder" placeholder="مغامرة، رومانسية، اقتصادية...">
     </div>
     <div class="field">
-            <label for="trip-interests">اهتماماتك الرئيسية</label>
-            <input class="arhgo-input" type="text" id="trip-interests" placeholder="ثقافة، طعام، طبيعة...">
+            <label for="trip-interests" data-translate="form.interests">اهتماماتك الرئيسية</label>
+            <input class="arhgo-input" type="text" id="trip-interests" data-translate-placeholder="form.interestsPlaceholder" placeholder="ثقافة، طعام، طبيعة...">
     </div>
     <div class="field">
-            <label for="trip-budget">الميزانية</label>
-            <input class="arhgo-input" type="text" id="trip-budget" placeholder="منخفضة، متوسطة، فاخرة">
+            <label for="trip-budget" data-translate="form.budget">الميزانية</label>
+            <input class="arhgo-input" type="text" id="trip-budget" data-translate-placeholder="form.budgetPlaceholder" placeholder="منخفضة، متوسطة، فاخرة">
     </div>
     <div class="field">
-            <label for="trip-things">أماكن مفضلة</label>
-            <input class="arhgo-input" type="text" id="trip-things" placeholder="متاحف، جبال، أسواق...">
+            <label for="trip-things" data-translate="form.places">أماكن مفضلة</label>
+            <input class="arhgo-input" type="text" id="trip-things" data-translate-placeholder="form.placesPlaceholder" placeholder="متاحف، جبال، أسواق...">
     </div>
     <div class="field">
-            <label for="trip-notes">ملاحظات إضافية</label>
-            <textarea class="arhgo-textarea" id="trip-notes" placeholder="أي تفاصيل إضافية..."></textarea>
+            <label for="trip-notes" data-translate="form.notes">ملاحظات إضافية</label>
+            <textarea class="arhgo-textarea" id="trip-notes" data-translate-placeholder="form.notesPlaceholder" placeholder="أي تفاصيل إضافية..."></textarea>
           </div>
           <div class="stack">
-            <button type="button" class="btn btn-gradient" id="create-trip-btn" data-flight-sound>ملخص الرحلة</button>
-            <button type="button" class="btn btn-ghost" id="ai-trip-btn" data-flight-sound>توليد بالذكاء الاصطناعي</button>
-            <button type="button" class="btn btn-ghost" id="save-plan-btn">حفظ خطتي</button>
+            <button type="button" class="btn btn-gradient" id="create-trip-btn" data-flight-sound data-translate="form.summary">ملخص الرحلة</button>
+            <button type="button" class="btn btn-ghost" id="ai-trip-btn" data-flight-sound data-translate="form.ai">توليد بالذكاء الاصطناعي</button>
+            <button type="button" class="btn btn-ghost" id="save-plan-btn" data-translate="form.save">حفظ خطتي</button>
     </div>
         </form>
 
         <div class="glass-card glow-card">
-          <h3>ملخص سريع</h3>
-          <p>نحسب التكلفة التقديرية فورًا ونعرض رابط مشاركة قصير عند الحفظ.</p>
+          <h3 data-translate="summary.title">ملخص سريع</h3>
+          <p data-translate="summary.desc">نحسب التكلفة التقديرية فورًا ونعرض رابط مشاركة قصير عند الحفظ.</p>
           <div class="stats-grid">
             <div class="stat-chip">
               <span id="stat-days">0</span>
-              يوم الرحلة
+              <span data-translate="summary.days">يوم الرحلة</span>
             </div>
             <div class="stat-chip">
               <span id="stat-budget">$0</span>
-              التكلفة التقديرية
+              <span data-translate="summary.cost">التكلفة التقديرية</span>
             </div>
             <div class="stat-chip">
               <span id="stat-country">—</span>
-              الوجهة
+              <span data-translate="summary.destination">الوجهة</span>
             </div>
           </div>
           <hr style="border-color:rgba(255,255,255,0.08);margin:24px 0;">
           <div>
-            <p class="plan-meta">رابط المشاركة:</p>
-            <p id="share-link" class="badge badge-info">سيظهر بعد الحفظ</p>
-            <p class="plan-meta" id="plan-status">جاهز للإنشاء ✨</p>
+            <p class="plan-meta" data-translate="summary.shareLink">رابط المشاركة:</p>
+            <p id="share-link" class="badge badge-info" data-translate="summary.shareLinkPlaceholder">سيظهر بعد الحفظ</p>
+            <p class="plan-meta" id="plan-status" data-translate="summary.ready">جاهز للإنشاء ✨</p>
           </div>
         </div>
   </div>
@@ -386,15 +381,15 @@
 
     <section class="section" id="saved-plans">
       <div class="section-header">
-        <h2 class="section-title">خططي المحفوظة</h2>
-        <p class="section-subtitle">يمكنك تعديل الخطة لاحقًا أو نسخ الرابط القصير وإرساله.</p>
+        <h2 class="section-title" data-translate="sections.saved.title">خططي المحفوظة</h2>
+        <p class="section-subtitle" data-translate="sections.saved.subtitle">يمكنك تعديل الخطة لاحقًا أو نسخ الرابط القصير وإرساله.</p>
       </div>
       <div id="saved-plans-list" class="saved-plans"></div>
     </section>
 
     <section class="section split" id="destinations">
       <div class="glass-card">
-        <h3>أفضل الوجهات الآن</h3>
+        <h3 data-translate="sections.destinations.title">أفضل الوجهات الآن</h3>
         <div id="destinations-tabs" class="stack"></div>
         <div id="destinations-content" class="timeline" style="margin-top:18px;"></div>
       </div>
@@ -405,45 +400,45 @@
 
     <section class="section" id="blog">
       <div class="section-header">
-        <h2 class="section-title">إلهام السفر</h2>
-        <p class="section-subtitle">محتوى مختار يمنحك أفكارًا حقيقية لكل نوع من الرحلات.</p>
+        <h2 class="section-title" data-translate="sections.blog.title">إلهام السفر</h2>
+        <p class="section-subtitle" data-translate="sections.blog.subtitle">محتوى مختار يمنحك أفكارًا حقيقية لكل نوع من الرحلات.</p>
       </div>
       <div class="blog-grid">
         <a class="glass-card blog-card" href="story.html?topic=luxe" data-flight-sound>
           <div class="blog-image-wrapper">
             <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=800&h=500&fit=crop&q=90" alt="شعور المدن الراقية" />
           </div>
-          <h3>شعور المدن الراقية</h3>
-          <p>صفحة فاخرة تنقل جو العشاء تحت الأضواء، مع جدول يومي قصير.</p>
+          <h3 data-translate="sections.blog.card1.title">شعور المدن الراقية</h3>
+          <p data-translate="sections.blog.card1.desc">صفحة فاخرة تنقل جو العشاء تحت الأضواء، مع جدول يومي قصير.</p>
         </a>
         <a class="glass-card blog-card" href="story.html?topic=adventure" data-flight-sound>
           <div class="blog-image-wrapper">
             <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&h=500&fit=crop&q=90" alt="بوابة المغامرات" />
           </div>
-          <h3>بوابة المغامرات</h3>
-          <p>سرد سريع لجبال سويسرا وتايلاند مع قوائم معدات جاهزة.</p>
+          <h3 data-translate="sections.blog.card2.title">بوابة المغامرات</h3>
+          <p data-translate="sections.blog.card2.desc">سرد سريع لجبال سويسرا وتايلاند مع قوائم معدات جاهزة.</p>
         </a>
         <a class="glass-card blog-card" href="story.html?topic=culture" data-flight-sound>
           <div class="blog-image-wrapper">
             <img src="https://img.freepik.com/premium-photo/three-friends-are-exploring-ancient-egyptian-temple-they-are-all-wearing-casual-clothes-carrying-backpacks_14117-197281.jpg" alt="رحلات ثقافية" />
           </div>
-          <h3>رحلات ثقافية</h3>
-          <p>حكاية قصيرة عن قاهرة الليل ومراكش، مع أماكن لا تفوّت.</p>
+          <h3 data-translate="sections.blog.card3.title">رحلات ثقافية</h3>
+          <p data-translate="sections.blog.card3.desc">حكاية قصيرة عن قاهرة الليل ومراكش، مع أماكن لا تفوّت.</p>
         </a>
         <a class="glass-card blog-card" href="story.html?topic=budget" data-flight-sound>
           <div class="blog-image-wrapper">
             <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&h=500&fit=crop&q=90" alt="سفر اقتصادي ذكي" />
           </div>
-          <h3>سفر اقتصادي ذكي</h3>
-          <p>طريقة عرض البيانات لخفض التكاليف عبر واجهات ArhGo.</p>
+          <h3 data-translate="sections.blog.card4.title">سفر اقتصادي ذكي</h3>
+          <p data-translate="sections.blog.card4.desc">طريقة عرض البيانات لخفض التكاليف عبر واجهات ArhGo.</p>
         </a>
       </div>
     </section>
   </main>
 
 <footer>
-    <p>ArhGo © 2025 — جميع الحقوق محفوظة</p>
-    <p>واجهات متصلة: <a href="hotel.html" data-flight-sound>فنادق</a> • <a href="flights.html" data-flight-sound>رحلات جوية</a> • <a href="Restuarnt.html" data-flight-sound>مطاعم</a></p>
+    <p data-translate="footer.copyright">ArhGo © 2025 — جميع الحقوق محفوظة</p>
+    <p data-translate="footer.connected">واجهات متصلة: <a href="hotel.html" data-flight-sound data-translate="footer.hotels">فنادق</a> • <a href="flights.html" data-flight-sound data-translate="footer.flights">رحلات جوية</a> • <a href="Restuarnt.html" data-flight-sound data-translate="footer.restaurants">مطاعم</a></p>
 </footer>
 
   <div id="toast" style="position:fixed;bottom:30px;right:30px;padding:16px 24px;border-radius:18px;background:linear-gradient(135deg, rgba(30,58,95,0.95), rgba(26,46,74,0.95));color:#fff;box-shadow:0 20px 60px rgba(192,192,192,0.3);opacity:0;transform:translateY(20px);transition:.4s;z-index:9999;border:2px solid rgba(192,192,192,0.4);"></div>
@@ -492,9 +487,12 @@ function setMood(key) {
   if (!mood) return;
   moodButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.mood === key));
   moodTitle.textContent = mood.title;
+  moodTitle.setAttribute('translate', 'yes');
   moodText.textContent = mood.text;
+  moodText.setAttribute('translate', 'yes');
   moodLabel.textContent = mood.label;
-  moodList.innerHTML = mood.bullets.map(item => `<li>${item}</li>`).join('');
+  moodLabel.setAttribute('translate', 'yes');
+  moodList.innerHTML = mood.bullets.map(item => `<li translate="yes">${item}</li>`).join('');
   if (moodImage && mood.image) {
     moodImage.src = mood.image;
   }
@@ -503,7 +501,11 @@ function setMood(key) {
 setMood('relax');
 moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.dataset.mood)));
 
-const heroImages = [
+    // لإضافة صورة خلفية للـ hero، ضع مسار الصورة هنا:
+    // انسخ الصورة إلى مجلد assets/images/ ثم استخدم المسار التالي:
+    const heroBackgroundImage = 'assets/images/photo_2025-11-25_18-20-52.jpg'; // إذا كانت الصورة في مكان آخر، غيّر المسار هنا
+    
+    const heroImages = [
       'https://images.unsplash.com/photo-1502602898657-3e91760cbb34',
       'https://images.unsplash.com/photo-1467269204594-9661b134dd2b',
       'https://images.unsplash.com/photo-1505764706515-aa95265c5abc',
@@ -511,14 +513,25 @@ const heroImages = [
     ];
     let heroIndex = 0;
     const heroEl = document.querySelector('.hero');
-    const cycleHero = () => {
-      heroIndex = (heroIndex + 1) % heroImages.length;
-      heroEl.style.backgroundImage = `linear-gradient(135deg, rgba(255,255,255,0.96), rgba(248,249,250,0.96)), url('${heroImages[heroIndex]}')`;
-      heroEl.style.backgroundSize = 'cover';
-      heroEl.style.backgroundPosition = 'center';
-    };
-    cycleHero();
-    setInterval(cycleHero, 6000);
+    
+    // إذا كانت هناك صورة محددة، استخدمها
+    if (heroBackgroundImage) {
+      // إنشاء div منفصل للصورة الخلفية مع تأثيرات
+      const bgDiv = document.createElement('div');
+      bgDiv.className = 'hero-bg-image';
+      bgDiv.style.backgroundImage = `url('${heroBackgroundImage}')`;
+      heroEl.insertBefore(bgDiv, heroEl.firstChild);
+    } else {
+      // إذا لم تكن هناك صورة، استخدم الصور الافتراضية
+      const cycleHero = () => {
+        heroIndex = (heroIndex + 1) % heroImages.length;
+        heroEl.style.backgroundImage = `url('${heroImages[heroIndex]}')`;
+        heroEl.style.backgroundSize = 'cover';
+        heroEl.style.backgroundPosition = 'center';
+      };
+      cycleHero();
+      setInterval(cycleHero, 6000);
+    }
 
     document.getElementById('hero-cta').addEventListener('click', () => {
       document.getElementById('planner').scrollIntoView({ behavior: 'smooth' });
@@ -622,22 +635,23 @@ const heroImages = [
       const list = document.getElementById('saved-plans-list');
       const plans = getPlans();
       if (!plans.length) {
-        list.innerHTML = '<div class="saved-plan-card">لا توجد خطط محفوظة بعد.</div>';
+        list.innerHTML = '<div class="saved-plan-card" translate="yes">لا توجد خطط محفوظة بعد.</div>';
         return;
       }
       list.innerHTML = plans.map(plan => `
-        <article class="saved-plan-card">
-          <h4>${plan.country} — ${plan.days} أيام</h4>
-          <p class="plan-meta">${plan.tripType} • $${plan.estimatedCost}</p>
-          <p class="plan-meta">${plan.interests}</p>
-          <div class="badge badge-success">الرابط القصير</div>
+        <article class="saved-plan-card" translate="yes">
+          <h4 translate="yes">${plan.country} — ${plan.days} <span translate="yes">أيام</span></h4>
+          <p class="plan-meta" translate="yes">${plan.tripType} • $${plan.estimatedCost}</p>
+          <p class="plan-meta" translate="yes">${plan.interests}</p>
+          <div class="badge badge-success" translate="yes">الرابط القصير</div>
           <p class="plan-meta">${plan.link}</p>
           <div class="stack">
-            <button class="btn btn-gradient" data-action="share" data-link="${plan.link}">نسخ الرابط</button>
-            <button class="btn btn-ghost" data-action="open" data-link="${plan.summaryUrl}">عرض الملخص</button>
+            <button class="btn btn-gradient" data-action="share" data-link="${plan.link}" translate="yes">نسخ الرابط</button>
+            <button class="btn btn-ghost" data-action="open" data-link="${plan.summaryUrl}" translate="yes">عرض الملخص</button>
           </div>
         </article>
       `).join('');
+      
     };
 
     saveBtn.addEventListener('click', () => {
@@ -681,12 +695,14 @@ const heroImages = [
 
     const renderDestination = (index) => {
       const dest = destinations[index];
-      content.innerHTML = dest.tips.map(t => `<div class="timeline-step">${t}</div>`).join('');
+      content.innerHTML = dest.tips.map(t => `<div class="timeline-step" translate="yes">${t}</div>`).join('');
+      
     };
 
     destinations.forEach((dest, index) => {
       const btn = document.createElement('button');
       btn.className = 'btn btn-ghost';
+      btn.setAttribute('translate', 'yes');
       btn.textContent = dest.name;
       btn.addEventListener('click', () => renderDestination(index));
       tabs.appendChild(btn);
@@ -701,6 +717,19 @@ const heroImages = [
       })
       .catch(() => {});
 </script>
+  <!-- زر ترجمة متعدد اللغات -->
+  <div id="google_translate_element"></div>
+
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ar',
+        includedLanguages: 'af,sq,am,ar,hy,az,eu,be,bn,bg,ca,ceb,ny,zh-CN,zh-TW,hr,cs,da,nl,en,eo,et,tl,fi,fr,gl,ka,de,el,gu,ht,ha,haw,iw,hi,hmn,hu,is,ig,id,ga,it,ja,jw,kn,kk,km,ko,ku,ky,lo,la,lv,lt,lb,mk,mg,ms,ml,mt,mi,mr,mn,my,né,no,fa,pl,pt,pa,ro,ru,sm,gd,sr,st,si,sk,sl,so,es,su,sw,sv,tg,ta,te,th,tr,uk,ur,uz,vi,cy,xh,yi,yo,zu',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
 
