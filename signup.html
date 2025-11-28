@@ -291,6 +291,145 @@
   <div class="clouds-overlay" id="cloudsOverlay"></div>
 
   <script>
+    function playFlightSoundEffect() {
+      console.log('Attempting to play flight sound...');
+      
+      // محاولة 1: استخدام ArhGo API
+      if (window.ArhGo && typeof window.ArhGo.playFlightSound === 'function') {
+        try {
+          window.ArhGo.playFlightSound();
+          console.log('Using ArhGo API');
+        } catch (e) {
+          console.log('ArhGo API failed:', e);
+        }
+      }
+      
+      // محاولة 2: إنشاء موسيقى لطيفة باستخدام Web Audio API (يعمل دائماً)
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // إنشاء موسيقى لطيفة وناعمة جداً
+        const createGentleMusic = () => {
+          const duration = 3.5; // 3.5 ثانية
+          const sampleRate = audioContext.sampleRate;
+          const buffer = audioContext.createBuffer(2, sampleRate * duration, sampleRate); // Stereo
+          const leftChannel = buffer.getChannelData(0);
+          const rightChannel = buffer.getChannelData(1);
+          
+          // نغمات موسيقية لطيفة وناعمة (C major chord - أعلى وأكثر لطفاً)
+          const noteC = 261.63; // C4
+          const noteE = 329.63; // E4
+          const noteG = 392.00; // G4
+          const noteC2 = 523.25; // C5
+          const noteE2 = 659.25; // E5 (أعلى وأكثر لطفاً)
+          const noteG2 = 783.99; // G5
+          
+          for (let i = 0; i < buffer.length; i++) {
+            const t = i / sampleRate;
+            const progress = t / duration;
+            
+            // لحن لطيف ومتغير (melody progression)
+            let melodyNote = noteC;
+            if (progress < 0.3) {
+              melodyNote = noteC;
+            } else if (progress < 0.6) {
+              melodyNote = noteE;
+            } else {
+              melodyNote = noteG;
+            }
+            
+            // نغمات متناسقة لطيفة جداً (C major chord - أكثر نعومة)
+            const wave1 = Math.sin(2 * Math.PI * noteC * t) * 0.15;
+            const wave2 = Math.sin(2 * Math.PI * noteE * t) * 0.13;
+            const wave3 = Math.sin(2 * Math.PI * noteG * t) * 0.11;
+            const wave4 = Math.sin(2 * Math.PI * noteC2 * t) * 0.10;
+            
+            // نغمات عالية لطيفة جداً
+            const wave5 = Math.sin(2 * Math.PI * noteE2 * t) * 0.08;
+            const wave6 = Math.sin(2 * Math.PI * noteG2 * t) * 0.06;
+            
+            // لحن متحرك لطيف جداً (أكثر نعومة)
+            const melody = Math.sin(2 * Math.PI * melodyNote * t) * (0.08 + Math.sin(t * 1.2) * 0.015);
+            
+            // إضافة harmonics لطيفة وناعمة جداً
+            const harmonic1 = Math.sin(2 * Math.PI * noteC * 2 * t) * 0.04;
+            const harmonic2 = Math.sin(2 * Math.PI * noteE * 2 * t) * 0.03;
+            const harmonic3 = Math.sin(2 * Math.PI * noteG * 2 * t) * 0.02;
+            
+            // موجة خلفية ناعمة جداً
+            const background = Math.sin(2 * Math.PI * (noteC * 0.5) * t) * 0.025;
+            
+            // دمج جميع النغمات بشكل لطيف جداً
+            const sound = wave1 + wave2 + wave3 + wave4 + wave5 + wave6 + 
+                         melody + harmonic1 + harmonic2 + harmonic3 + background;
+            
+            // Envelope - fade in/out سلس جداً (أكثر نعومة)
+            let envelope = 1;
+            if (progress < 0.25) {
+              envelope = Math.pow(progress / 0.25, 0.3); // Fade in ناعم جداً
+            } else if (progress > 0.75) {
+              envelope = Math.pow((1 - progress) / 0.25, 0.3); // Fade out ناعم جداً
+            }
+            
+            const finalSound = sound * envelope * 0.65;
+            
+            // Stereo effect لطيف
+            const pan = Math.sin(progress * Math.PI * 0.5) * 0.08;
+            leftChannel[i] = finalSound * (0.92 - pan);
+            rightChannel[i] = finalSound * (0.92 + pan);
+          }
+          
+          return buffer;
+        };
+        
+        const buffer = createGentleMusic();
+        const source = audioContext.createBufferSource();
+        const gainNode = audioContext.createGain();
+        const lowpass = audioContext.createBiquadFilter();
+        
+        // Lowpass filter لموسيقى لطيفة وناعمة جداً
+        lowpass.type = 'lowpass';
+        lowpass.frequency.value = 5500; // أكثر نعومة
+        lowpass.Q.value = 0.4; // أكثر لطفاً
+        
+        source.buffer = buffer;
+        source.connect(lowpass);
+        lowpass.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // Volume envelope - fade in/out لطيف (صوت أعلى)
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.8, audioContext.currentTime + 0.4);
+        gainNode.gain.setValueAtTime(0.8, audioContext.currentTime + 3.0);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 3.5);
+        
+        source.start(audioContext.currentTime);
+        source.stop(audioContext.currentTime + 3.5);
+        
+        console.log('Gentle music playing');
+        
+      } catch (e) {
+        console.log('Web Audio API failed:', e);
+        
+        // محاولة 3: استخدام Audio object مع رابط مباشر
+        try {
+          const audio = new Audio();
+          audio.volume = 0.7;
+          
+          // استخدام رابط من CDN موثوق
+          audio.src = 'https://actions.google.com/sounds/v1/transportation/airplane_flyby.ogg';
+          
+          audio.play().then(() => {
+            console.log('Direct audio playing');
+          }).catch(err => {
+            console.log('Direct audio failed:', err);
+          });
+        } catch (e2) {
+          console.log('All sound methods failed');
+        }
+      }
+    }
+    
     function createClouds() {
       const overlay = document.getElementById('cloudsOverlay');
       overlay.innerHTML = '';
@@ -404,18 +543,7 @@
       error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
       
       // تشغيل الموسيقى
-      try {
-        if (window.ArhGo && window.ArhGo.playFlightSound) {
-          window.ArhGo.playFlightSound();
-        } else {
-          // محاولة تشغيل الصوت مباشرة
-          const audio = new Audio('https://www.soundjay.com/transport/airplane-flyby-01.mp3');
-          audio.volume = 0.6;
-          audio.play().catch(() => {});
-        }
-      } catch (e) {
-        console.log('Sound error:', e);
-      }
+      playFlightSoundEffect();
       
       // إظهار الغيوم
       createClouds();

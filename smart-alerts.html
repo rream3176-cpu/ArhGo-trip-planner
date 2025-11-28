@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | تنبيهات ذكية</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0A1C2E 0%, #0F1722 30%, #8EA2B6 60%, #C9B27A 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .alerts-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .alerts-header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #fff;
+    }
+    
+    .alerts-header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #C9B27A, #8EA2B6, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .alert-card {
+      background: rgba(242, 244, 247, 0.95);
+      border-radius: 24px;
+      padding: 32px;
+      border: 2px solid rgba(201, 178, 122, 0.3);
+      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
+      backdrop-filter: blur(20px);
+      margin-bottom: 24px;
+      transition: transform 0.3s ease;
+    }
+    
+    .alert-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .alert-card.weather {
+      border-right: 6px solid #3B82F6;
+    }
+    
+    .alert-card.price {
+      border-right: 6px solid #10B981;
+    }
+    
+    .alert-card.safety {
+      border-right: 6px solid #EF4444;
+    }
+    
+    .alert-card.flight {
+      border-right: 6px solid #F59E0B;
+    }
+    
+    .alert-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+    
+    .notification-badge {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(239, 68, 68, 0.95);
+      color: #fff;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      display: none;
+      animation: slideInRight 0.3s ease;
+    }
+    
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .notification-badge.show {
+      display: block;
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <nav class="arhgo-nav">
+    <div class="arhgo-logo">ArhGo</div>
+    <ul>
+      <li><a data-nav href="index.html">الرئيسية</a></li>
+      <li><a data-nav href="analytics.html">التحليلات</a></li>
+      <li><a data-nav href="price-comparison.html">مقارنة الأسعار</a></li>
+    </ul>
+  </nav>
+
+  <div class="notification-badge" id="notificationBadge">
+    <strong>🔔 تنبيه جديد!</strong>
+    <div id="notificationText"></div>
+  </div>
+
+  <main class="alerts-container">
+    <div class="alerts-header">
+      <h1>تنبيهات ذكية</h1>
+      <p style="font-size: 1.3rem; color: rgba(255,255,255,0.9); margin-bottom: 20px;">
+        تنبيهات فورية للطقس، الأسعار، الأمان، وتأخير الرحلات
+      </p>
+    </div>
+
+    <div id="alertsList">
+      <!-- سيتم ملؤها بالتنبيهات -->
+    </div>
+  </main>
+
+  <script>
+    // محاكاة التنبيهات الذكية
+    const smartAlerts = [
+      {
+        type: 'weather',
+        icon: '🌤️',
+        title: 'تنبيه الطقس',
+        description: 'الطقس في دبي: مشمس 28°C - مثالي للسفر!',
+        time: 'منذ 5 دقائق',
+        priority: 'info'
+      },
+      {
+        type: 'price',
+        icon: '💰',
+        title: 'انخفاض في الأسعار',
+        description: 'انخفض سعر رحلة باريس بنسبة 15%! الآن $450 بدلاً من $530',
+        time: 'منذ ساعة',
+        priority: 'success'
+      },
+      {
+        type: 'flight',
+        icon: '✈️',
+        title: 'تحديث الرحلة',
+        description: 'رحلة رقم EK215 إلى دبي: متأخرة 30 دقيقة. وقت الإقلاع الجديد: 14:30',
+        time: 'منذ ساعتين',
+        priority: 'warning'
+      },
+      {
+        type: 'safety',
+        icon: '🛡️',
+        title: 'نصائح أمنية',
+        description: 'تذكير: تأكد من وجود تأمين سفر صالح وتصريح السفر',
+        time: 'منذ 3 ساعات',
+        priority: 'info'
+      }
+    ];
+
+    // عرض التنبيهات
+    function displayAlerts() {
+      const list = document.getElementById('alertsList');
+      
+      list.innerHTML = smartAlerts.map(alert => `
+        <div class="alert-card ${alert.type}">
+          <div class="alert-icon">${alert.icon}</div>
+          <h3 style="color: #0A1C2E; margin-bottom: 12px;">${alert.title}</h3>
+          <p style="color: #666; margin-bottom: 16px; line-height: 1.6;">${alert.description}</p>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #999; font-size: 0.9rem;">${alert.time}</span>
+            <button class="btn btn-ghost" onclick="dismissAlert('${alert.type}')">✓ تمت القراءة</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // إخفاء تنبيه
+    function dismissAlert(type) {
+      const index = smartAlerts.findIndex(a => a.type === type);
+      if (index > -1) {
+        smartAlerts.splice(index, 1);
+        displayAlerts();
+      }
+    }
+
+    // محاكاة تنبيه جديد
+    function simulateNewAlert() {
+      const newAlert = {
+        type: 'price',
+        icon: '💰',
+        title: 'عرض خاص جديد!',
+        description: 'عرض محدود: خصم 20% على فنادق باريس لفترة محدودة',
+        time: 'الآن',
+        priority: 'success'
+      };
+      
+      smartAlerts.unshift(newAlert);
+      displayAlerts();
+      
+      // إظهار إشعار
+      showNotification(newAlert.description);
+    }
+
+    // إظهار إشعار
+    function showNotification(text) {
+      const badge = document.getElementById('notificationBadge');
+      const textEl = document.getElementById('notificationText');
+      textEl.textContent = text;
+      badge.classList.add('show');
+      
+      setTimeout(() => {
+        badge.classList.remove('show');
+      }, 5000);
+    }
+
+    // محاكاة تنبيهات الطقس
+    function checkWeatherAlerts() {
+      // في التطبيق الحقيقي، استخدم API للطقس
+      const weatherConditions = ['مشمس', 'غائم', 'ممطر', 'عاصف'];
+      const randomWeather = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
+      
+      if (randomWeather === 'ممطر' || randomWeather === 'عاصف') {
+        const alert = {
+          type: 'weather',
+          icon: '⚠️',
+          title: 'تحذير طقس',
+          description: `الطقس في وجهتك: ${randomWeather} - يرجى مراجعة خططك`,
+          time: 'الآن',
+          priority: 'warning'
+        };
+        
+        smartAlerts.unshift(alert);
+        displayAlerts();
+        showNotification(alert.description);
+      }
+    }
+
+    // تهيئة الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+      displayAlerts();
+      
+      // محاكاة تنبيهات جديدة كل 30 ثانية
+      setInterval(() => {
+        if (Math.random() > 0.7) {
+          simulateNewAlert();
+        }
+      }, 30000);
+      
+      // فحص تنبيهات الطقس كل دقيقة
+      setInterval(checkWeatherAlerts, 60000);
+    });
+  </script>
+</body>
+</html>
+

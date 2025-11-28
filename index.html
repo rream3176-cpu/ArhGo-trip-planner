@@ -6,6 +6,8 @@
   <title>ArhGo — المنصّة الذكية لتخطيط السفر</title>
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
+  <script src="assets/js/countries-database.js"></script>
+  <script src="assets/js/smart-country-suggestor.js"></script>
 </head>
 <body class="page-hidden">
   <nav class="arhgo-nav">
@@ -18,6 +20,10 @@
       <li><a data-nav href="hotel.html" data-translate="nav.hotels">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html" data-translate="nav.flights">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html" data-translate="nav.restaurants">مطاعم</a></li>
+      <li><a data-nav href="analytics.html">التحليلات</a></li>
+      <li><a data-nav href="budget-manager.html">إدارة الميزانية</a></li>
+      <li><a data-nav href="price-comparison.html">مقارنة الأسعار</a></li>
+      <li><a data-nav href="smart-alerts.html">التنبيهات</a></li>
   </ul>
     <div class="stack">
       <a class="btn btn-ghost" href="login.html" data-flight-sound data-translate="nav.login">تسجيل الدخول</a>
@@ -54,7 +60,8 @@
           </div>
           <div class="hero-actions">
             <button class="btn btn-gradient" id="hero-cta" data-flight-sound data-translate="hero.cta">ابدأ التخطيط الآن</button>
-            <a class="btn btn-ghost" href="ai-trip.html" data-flight-sound data-translate="hero.ai">تجربة الذكاء الاصطناعي</a>
+            <a class="btn btn-ghost" href="smart-planner.html" data-flight-sound data-translate="hero.ai">مولد خطط ذكي</a>
+            <a class="btn btn-ghost" href="analytics.html" data-flight-sound>لوحة التحليلات</a>
           </div>
           <div class="hero-controls">
             <button class="sound-toggle" type="button" data-toggle-sound aria-pressed="true">
@@ -110,10 +117,13 @@
 
     <div class="infinite-marquee" data-marquee>
       <div class="marquee-track">
-        <span>AI Trip Builder</span>
+        <span>Smart Trip Generator</span>
+        <span>Advanced Analytics</span>
+        <span>Price Comparison</span>
+        <span>Budget Manager</span>
+        <span>Smart Recommendations</span>
         <span>Interactive Map</span>
-        <span>Luxury Concierge</span>
-        <span>Realtime Weather</span>
+        <span>Real-time Alerts</span>
         <span>Shareable Links</span>
       </div>
     </div>
@@ -134,11 +144,11 @@
         </article>
         <article class="immersion-card">
           <div class="card-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=600&fit=crop&q=90" alt="AI Intelligence" />
+            <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=600&fit=crop&q=90" alt="Smart Algorithm" />
           </div>
-          <div class="accent-chip">AI+</div>
-          <h3 data-translate="sections.signature.card2.title">ذكاء متكيف</h3>
-          <p data-translate="sections.signature.card2.desc">كل ضغطة تعيد توليد الخطة، تحفظ الاهتمامات، وتعرض التكلفة مباشرة.</p>
+          <div class="accent-chip">Algorithm+</div>
+          <h3 data-translate="sections.signature.card2.title">خوارزمية ذكية</h3>
+          <p data-translate="sections.signature.card2.desc">خوارزمية متقدمة لتوليد الخطط، تحفظ الاهتمامات، وتعرض التكلفة مباشرة.</p>
         </article>
         <article class="immersion-card">
           <div class="card-image-wrapper">
@@ -163,7 +173,7 @@
           </div>
           <div class="pill-small">1</div>
           <h3 data-translate="sections.features.card1.title">خطة يومية ذكية</h3>
-          <p data-translate="sections.features.card1.desc">خوارزمية + ذكاء اصطناعي تولّد جدولًا متوازنًا للأيام والأماكن والأنشطة وفق اهتماماتك.</p>
+          <p data-translate="sections.features.card1.desc">خوارزمية متقدمة تولّد جدولًا متوازنًا للأيام والأماكن والأنشطة وفق اهتماماتك.</p>
         </article>
         <article class="glass-card floating-card" style="animation-delay:.3s">
           <div class="feature-image-wrapper">
@@ -215,7 +225,7 @@
           <div class="badge badge-info">2</div>
           <div>
             <strong data-translate="sections.experience.step2.title">إدخال تفاصيل الرحلة</strong>
-            <p data-translate="sections.experience.step2.desc">نموذج غني بالحقول، تقدير تكلفة مباشر، وزر للحفظ أو الذكاء الاصطناعي.</p>
+            <p data-translate="sections.experience.step2.desc">نموذج غني بالحقول، تقدير تكلفة مباشر، وزر للحفظ أو المولد الذكي.</p>
           </div>
         </article>
         <article class="experience-step">
@@ -268,22 +278,108 @@
     <section class="section" id="planner">
       <div class="section-header">
         <h2 class="section-title" data-translate="sections.planner.title">صمّم رحلتك خلال دقيقة</h2>
-        <p class="section-subtitle" data-translate="sections.planner.subtitle">املأ التفاصيل، شاهد التكلفة التقديرية، احفظ خطتك أو شاركها، ثم انتقل إلى الملخص أو صفحة الذكاء الاصطناعي.</p>
+        <p class="section-subtitle" data-translate="sections.planner.subtitle">املأ التفاصيل، شاهد التكلفة التقديرية، احفظ خطتك أو شاركها، ثم انتقل إلى الملخص أو المولد الذكي.</p>
       </div>
-      <div class="split">
-        <form class="arhgo-form" id="trip-form">
+      <div class="split" style="position: relative; z-index: 10;">
+        <form class="arhgo-form" id="trip-form" style="position: relative; z-index: 10;">
     <div class="field">
-            <label for="trip-name" data-translate="form.name">اسمك</label>
-            <input class="arhgo-input" type="text" id="trip-name" data-translate-placeholder="form.namePlaceholder" placeholder="مثال: علي محمد">
+            <label for="trip-name" style="font-size: 1.1rem; font-weight: 600;">👤 اسمك</label>
+            <input class="arhgo-input" type="text" id="trip-name" placeholder="مثال: علي محمد" style="font-size: 1.1rem; padding: 14px;">
     </div>
+    
     <div class="field">
-            <label for="trip-email" data-translate="form.email">البريد الإلكتروني</label>
-            <input class="arhgo-input" type="email" id="trip-email" placeholder="you@email.com">
+            <label for="trip-weather" style="font-size: 1.1rem; font-weight: 600;">🌤️ الجو المفضل</label>
+            <select class="arhgo-select" id="trip-weather" style="font-size: 1.1rem; padding: 14px;">
+              <option value="">اختر الجو المفضل...</option>
+              <option value="دافئ">☀️ دافئ</option>
+              <option value="معتدل">🌤️ معتدل</option>
+              <option value="بارد">❄️ بارد</option>
+              <option value="حار">🔥 حار</option>
+            </select>
     </div>
+    
     <div class="field">
-            <label for="trip-country" data-translate="form.destination">الوجهة</label>
-            <select class="arhgo-select" id="trip-country">
-              <option value="" data-translate="form.selectDestination">اختر الوجهة...</option>
+            <label for="trip-scenery" style="font-size: 1.1rem; font-weight: 600;">🏞️ المنظر المفضل</label>
+            <select class="arhgo-select" id="trip-scenery" style="font-size: 1.1rem; padding: 14px;">
+              <option value="">اختر المنظر المفضل...</option>
+              <option value="مدينة">🏙️ مدينة</option>
+              <option value="بحر">🏖️ بحر</option>
+              <option value="طبيعة">🌲 طبيعة</option>
+              <option value="جبال">⛰️ جبال</option>
+              <option value="صحراء">🏜️ صحراء</option>
+              <option value="تاريخ">🏛️ تاريخ</option>
+            </select>
+    </div>
+    
+    <div class="field">
+            <label for="trip-type" style="font-size: 1.1rem; font-weight: 600;">🎯 نوع الرحلة</label>
+            <select class="arhgo-select" id="trip-type" style="font-size: 1.1rem; padding: 14px;">
+              <option value="">اختر نوع الرحلة...</option>
+              <option value="ثقافي">🎨 ثقافي</option>
+              <option value="مغامرة">🧗 مغامرة</option>
+              <option value="رومانسي">💕 رومانسي</option>
+              <option value="تسوق">🛍️ تسوق</option>
+              <option value="طعام">🍽️ طعام</option>
+              <option value="تاريخ">📜 تاريخ</option>
+              <option value="ترفيه">🎮 ترفيه</option>
+              <option value="عوائل">👨‍👩‍👧‍👦 عوائل</option>
+              <option value="طلاب">🎓 طلاب</option>
+              <option value="بحر">🏖️ بحر</option>
+              <option value="طبيعة">🌲 طبيعة</option>
+            </select>
+    </div>
+    
+    <div class="field">
+            <label for="trip-interests" style="font-size: 1.1rem; font-weight: 600;">❤️ اهتماماتك الرئيسية</label>
+            <select class="arhgo-select" id="trip-interests" multiple style="font-size: 1.1rem; padding: 14px; min-height: 100px;">
+              <option value="ثقافة">🎭 ثقافة</option>
+              <option value="تاريخ">🏛️ تاريخ</option>
+              <option value="طعام">🍜 طعام</option>
+              <option value="طبيعة">🌳 طبيعة</option>
+              <option value="بحر">🌊 بحر</option>
+              <option value="تسوق">🛒 تسوق</option>
+              <option value="مغامرة">⛰️ مغامرة</option>
+              <option value="فن">🎨 فن</option>
+              <option value="رياضة">⚽ رياضة</option>
+              <option value="استرخاء">🧘 استرخاء</option>
+            </select>
+            <small style="color: #666; font-size: 0.9rem;">اضغط Ctrl/Cmd لاختيار أكثر من واحد</small>
+    </div>
+    
+    <div class="field">
+            <label for="trip-budget" style="font-size: 1.1rem; font-weight: 600;">💰 الميزانية</label>
+            <select class="arhgo-select" id="trip-budget" style="font-size: 1.1rem; padding: 14px;">
+              <option value="">اختر الميزانية...</option>
+              <option value="low">💵 منخفضة (اقتصادية)</option>
+              <option value="medium">💶 متوسطة</option>
+              <option value="high">💎 فاخرة</option>
+            </select>
+    </div>
+    
+    <div class="field">
+            <label for="trip-people" style="font-size: 1.1rem; font-weight: 600;">👥 عدد الأشخاص</label>
+            <input class="arhgo-input" type="number" id="trip-people" min="1" placeholder="مثال: 2" style="font-size: 1.1rem; padding: 14px;">
+    </div>
+    
+    <div class="field">
+            <label for="trip-days" style="font-size: 1.1rem; font-weight: 600;">📅 عدد الأيام</label>
+            <input class="arhgo-input" type="number" id="trip-days" min="1" placeholder="مثال: 5" style="font-size: 1.1rem; padding: 14px;">
+    </div>
+    
+    <div class="field" style="background: rgba(201, 178, 122, 0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(201, 178, 122, 0.3); margin: 20px 0;">
+            <label style="font-size: 1.1rem; font-weight: 700; color: #0A1C2E; margin-bottom: 12px; display: block;">✨ الدولة المقترحة (ذكية)</label>
+            <div id="suggested-country" style="font-size: 1.3rem; font-weight: 700; color: #C9B27A; margin: 12px 0; min-height: 40px; display: flex; align-items: center; gap: 12px;">
+              <span id="suggested-country-name">املأ الحقول أعلاه للحصول على اقتراح ذكي</span>
+            </div>
+            <button type="button" class="btn btn-ghost" id="use-suggested-btn" onclick="useSuggestedCountry()" style="width: 100%; margin-top: 12px; display: none;">
+              ✓ استخدم هذا الاقتراح
+            </button>
+    </div>
+    
+    <div class="field">
+            <label for="trip-country" style="font-size: 1.1rem; font-weight: 600;">🌍 الوجهة (اختياري)</label>
+            <select class="arhgo-select" id="trip-country" style="font-size: 1.1rem; padding: 14px;">
+              <option value="" data-translate="form.selectDestination">أو اختر يدوياً...</option>
               <option value="فرنسا">🇫🇷 فرنسا</option>
               <option value="إيطاليا">🇮🇹 إيطاليا</option>
               <option value="اليابان">🇯🇵 اليابان</option>
@@ -321,38 +417,25 @@
               <option value="الفلبين">🇵🇭 الفلبين</option>
       </select>
     </div>
+    
     <div class="field">
-            <label for="trip-days" data-translate="form.days">عدد الأيام</label>
-            <input class="arhgo-input" type="number" id="trip-days" min="1" placeholder="5">
+            <label for="trip-email" style="font-size: 1.1rem; font-weight: 600;">📧 البريد الإلكتروني (اختياري)</label>
+            <input class="arhgo-input" type="email" id="trip-email" placeholder="you@email.com" style="font-size: 1.1rem; padding: 14px;">
     </div>
+    
     <div class="field">
-            <label for="trip-type" data-translate="form.type">نوع الرحلة</label>
-            <input class="arhgo-input" type="text" id="trip-type" data-translate-placeholder="form.typePlaceholder" placeholder="مغامرة، رومانسية، اقتصادية...">
+            <label for="trip-notes" style="font-size: 1.1rem; font-weight: 600;">📝 ملاحظات إضافية (اختياري)</label>
+            <textarea class="arhgo-textarea" id="trip-notes" placeholder="أي تفاصيل إضافية..." style="font-size: 1.1rem; padding: 14px; min-height: 100px;"></textarea>
     </div>
-    <div class="field">
-            <label for="trip-interests" data-translate="form.interests">اهتماماتك الرئيسية</label>
-            <input class="arhgo-input" type="text" id="trip-interests" data-translate-placeholder="form.interestsPlaceholder" placeholder="ثقافة، طعام، طبيعة...">
-    </div>
-    <div class="field">
-            <label for="trip-budget" data-translate="form.budget">الميزانية</label>
-            <input class="arhgo-input" type="text" id="trip-budget" data-translate-placeholder="form.budgetPlaceholder" placeholder="منخفضة، متوسطة، فاخرة">
-    </div>
-    <div class="field">
-            <label for="trip-things" data-translate="form.places">أماكن مفضلة</label>
-            <input class="arhgo-input" type="text" id="trip-things" data-translate-placeholder="form.placesPlaceholder" placeholder="متاحف، جبال، أسواق...">
-    </div>
-    <div class="field">
-            <label for="trip-notes" data-translate="form.notes">ملاحظات إضافية</label>
-            <textarea class="arhgo-textarea" id="trip-notes" data-translate-placeholder="form.notesPlaceholder" placeholder="أي تفاصيل إضافية..."></textarea>
-          </div>
+    
           <div class="stack">
-            <button type="button" class="btn btn-gradient" id="create-trip-btn" data-flight-sound data-translate="form.summary">ملخص الرحلة</button>
-            <button type="button" class="btn btn-ghost" id="ai-trip-btn" data-flight-sound data-translate="form.ai">توليد بالذكاء الاصطناعي</button>
-            <button type="button" class="btn btn-ghost" id="save-plan-btn" data-translate="form.save">حفظ خطتي</button>
+            <button type="button" class="btn btn-gradient" id="create-trip-btn" data-flight-sound style="font-size: 1.2rem; padding: 16px; font-weight: 700;">✈️ أنشئ الخطة</button>
+            <button type="button" class="btn btn-ghost" id="smart-planner-btn" data-flight-sound style="font-size: 1.1rem; padding: 14px;">🤖 مولد خطط ذكي</button>
+            <button type="button" class="btn btn-ghost" id="save-plan-btn" style="font-size: 1.1rem; padding: 14px;">💾 حفظ خطتي</button>
     </div>
         </form>
 
-        <div class="glass-card glow-card">
+        <div class="glass-card glow-card" style="position: relative; z-index: 10;">
           <h3 data-translate="summary.title">ملخص سريع</h3>
           <p data-translate="summary.desc">نحسب التكلفة التقديرية فورًا ونعرض رابط مشاركة قصير عند الحفظ.</p>
           <div class="stats-grid">
@@ -385,6 +468,16 @@
         <p class="section-subtitle" data-translate="sections.saved.subtitle">يمكنك تعديل الخطة لاحقًا أو نسخ الرابط القصير وإرساله.</p>
       </div>
       <div id="saved-plans-list" class="saved-plans"></div>
+    </section>
+
+    <section class="section" id="recommendations">
+      <div class="section-header">
+        <h2 class="section-title">🎯 توصيات ذكية مخصصة</h2>
+        <p class="section-subtitle">نظام توصيات متقدم يعتمد على اهتماماتك وتاريخ رحلاتك</p>
+      </div>
+      <div class="grid" id="recommendationsGrid">
+        <!-- سيتم ملؤها بالتوصيات -->
+      </div>
     </section>
 
     <section class="section split" id="destinations">
@@ -538,7 +631,7 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
     });
 
     const createBtn = document.getElementById('create-trip-btn');
-    const aiBtn = document.getElementById('ai-trip-btn');
+    const smartPlannerBtn = document.getElementById('smart-planner-btn');
     const saveBtn = document.getElementById('save-plan-btn');
     const inputs = {
       name: document.getElementById('trip-name'),
@@ -548,9 +641,87 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       tripType: document.getElementById('trip-type'),
       interests: document.getElementById('trip-interests'),
       budget: document.getElementById('trip-budget'),
-      things: document.getElementById('trip-things'),
+      weather: document.getElementById('trip-weather'),
+      scenery: document.getElementById('trip-scenery'),
+      people: document.getElementById('trip-people'),
       notes: document.getElementById('trip-notes')
     };
+    
+    let suggestedCountry = null;
+    
+    // تحديث اقتراح الدولة تلقائياً
+    function updateCountrySuggestion() {
+      const weather = inputs.weather.value;
+      const scenery = inputs.scenery.value;
+      const tripType = inputs.tripType.value;
+      const budget = inputs.budget.value;
+      const numPeople = parseInt(inputs.people.value) || 1;
+      
+      const interestsSelect = inputs.interests;
+      const selectedInterests = Array.from(interestsSelect.selectedOptions).map(opt => opt.value);
+      
+      if (weather && scenery && tripType && budget) {
+        const suggestions = suggestCountry(weather, scenery, tripType, selectedInterests, budget, numPeople);
+        if (suggestions.length > 0) {
+          suggestedCountry = suggestions[0].country;
+          const suggestedEl = document.getElementById('suggested-country-name');
+          const useBtn = document.getElementById('use-suggested-btn');
+          
+          suggestedEl.innerHTML = `🎯 ${suggestedCountry} <span style="font-size: 0.9rem; color: #666;">(مطابقة ${suggestions[0].match}%)</span>`;
+          useBtn.style.display = 'block';
+          
+          // تحديث الخلفية تلقائياً
+          changeBackgroundForCountry(suggestedCountry);
+        }
+      } else {
+        document.getElementById('suggested-country-name').textContent = 'املأ الحقول أعلاه للحصول على اقتراح ذكي';
+        document.getElementById('use-suggested-btn').style.display = 'none';
+      }
+    }
+    
+    // استخدام الدولة المقترحة (دالة عامة)
+    window.useSuggestedCountry = function() {
+      if (suggestedCountry) {
+        inputs.country.value = suggestedCountry;
+        changeBackgroundForCountry(suggestedCountry);
+        showToast(`تم اختيار ${suggestedCountry} كوجهة رحلتك ✨`);
+      }
+    };
+    
+    // تغيير الخلفية حسب الدولة
+    function changeBackgroundForCountry(country) {
+      const plannerSection = document.getElementById('planner');
+      const countryImage = getCountryImage(country);
+      
+      if (plannerSection && countryImage) {
+        plannerSection.style.backgroundImage = `linear-gradient(rgba(10, 28, 46, 0.85), rgba(15, 23, 34, 0.85)), url('${countryImage}')`;
+        plannerSection.style.backgroundSize = 'cover';
+        plannerSection.style.backgroundPosition = 'center';
+        plannerSection.style.backgroundAttachment = 'fixed';
+        plannerSection.style.transition = 'background-image 1s ease-in-out';
+      }
+    }
+    
+    // استماع لتغييرات الحقول
+    ['weather', 'scenery', 'tripType', 'budget', 'interests', 'people'].forEach(field => {
+      if (inputs[field]) {
+        inputs[field].addEventListener('change', updateCountrySuggestion);
+        if (field === 'interests') {
+          inputs[field].addEventListener('change', updateCountrySuggestion);
+        }
+      }
+    });
+    
+    // تغيير الخلفية عند اختيار الدولة يدوياً
+    inputs.country.addEventListener('change', function() {
+      const selectedCountry = this.value;
+      if (selectedCountry) {
+        changeBackgroundForCountry(selectedCountry);
+      }
+    });
+    
+    // تحديث أولي
+    updateCountrySuggestion();
 
     const stats = {
       days: document.getElementById('stat-days'),
@@ -571,31 +742,45 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       }, 3000);
     };
 
-    const calculateCost = (days, type) => {
-      const normalized = (type || '').toLowerCase();
-      let perDay = 120;
-      if (normalized.includes('اقتصادية') || normalized.includes('budget')) perDay = 60;
-      if (normalized.includes('فاخرة') || normalized.includes('lux')) perDay = 220;
-      return Math.max(1, days) * perDay;
-    };
 
     const buildTripPayload = () => {
       const days = parseInt(inputs.days.value, 10) || 1;
       const tripType = inputs.tripType.value || 'متوسطة';
-      const country = inputs.country.value || 'غير محدد';
+      let country = inputs.country.value;
+      
+      // استخدام الدولة المقترحة إذا لم يتم اختيار واحدة
+      if (!country && suggestedCountry) {
+        country = suggestedCountry;
+      }
+      country = country || 'غير محدد';
+      
+      const interestsSelect = inputs.interests;
+      const selectedInterests = Array.from(interestsSelect.selectedOptions).map(opt => opt.value).join('، ');
+      
       const payload = {
         name: inputs.name.value || 'مستخدم',
         email: inputs.email.value || '',
         country,
         days,
         tripType,
-        interests: inputs.interests.value || '',
+        interests: selectedInterests || '',
         budget: inputs.budget.value || 'متوسطة',
-        things: inputs.things.value || '',
+        weather: inputs.weather.value || '',
+        scenery: inputs.scenery.value || '',
+        people: parseInt(inputs.people.value) || 1,
         notes: inputs.notes.value || ''
       };
-      payload.estimatedCost = calculateCost(days, tripType);
+      payload.estimatedCost = calculateCost(days, tripType, payload.budget);
       return payload;
+    };
+    
+    const calculateCost = (days, type, budget) => {
+      const budgetMultiplier = budget === 'low' ? 0.5 : budget === 'high' ? 1.8 : 1;
+      const normalized = (type || '').toLowerCase();
+      let perDay = 120;
+      if (normalized.includes('اقتصادية') || normalized.includes('budget')) perDay = 60;
+      if (normalized.includes('فاخرة') || normalized.includes('lux')) perDay = 220;
+      return Math.max(1, days) * perDay * budgetMultiplier;
     };
 
     const updateStats = (payload, shortLink = 'سيظهر بعد الحفظ') => {
@@ -608,22 +793,157 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
 
   createBtn.addEventListener('click', () => {
       const payload = buildTripPayload();
-      updateStats(payload);
-      const url = `trip-summary.html?days=${payload.days}&type=${encodeURIComponent(payload.tripType)}&country=${encodeURIComponent(payload.country)}&cost=${payload.estimatedCost}`;
-      if (window.ArhGo?.delayedNavigate) {
-        window.ArhGo.delayedNavigate(url);
-      } else {
-        window.location.href = url;
+      
+      // استخدام الدولة المقترحة إذا لم يتم اختيار واحدة
+      if (!payload.country || payload.country === 'غير محدد') {
+        if (suggestedCountry) {
+          payload.country = suggestedCountry;
+          inputs.country.value = suggestedCountry;
+        } else {
+          alert('يرجى اختيار وجهة أو ملء الحقول للحصول على اقتراح ذكي');
+          return;
+        }
       }
+      
+      updateStats(payload);
+      
+      // تشغيل صوت الطائرة وإظهار الغيوم
+      if (window.ArhGo?.playFlightSound) {
+        window.ArhGo.playFlightSound();
+      }
+      showColoredClouds();
+      
+      // الانتقال بعد 3-5 ثواني
+      setTimeout(() => {
+        const url = `trip-summary.html?days=${payload.days}&type=${encodeURIComponent(payload.tripType)}&country=${encodeURIComponent(payload.country)}&cost=${payload.estimatedCost}`;
+        if (window.ArhGo?.delayedNavigate) {
+          window.ArhGo.delayedNavigate(url);
+        } else {
+          window.location.href = url;
+        }
+      }, 4000);
     });
+    
+    // دالة إظهار الغيوم الملونة
+    function showColoredClouds() {
+      const cloudsContainer = document.getElementById('colored-clouds');
+      if (!cloudsContainer) {
+        const container = document.createElement('div');
+        container.id = 'colored-clouds';
+        container.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden;';
+        document.body.appendChild(container);
+        
+        // إنشاء غيوم ملونة
+        const colors = ['#87CEEB', '#FFB6C1', '#DDA0DD', '#98D8C8', '#F7DC6F'];
+        for (let i = 0; i < 15; i++) {
+          const cloud = document.createElement('div');
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          const size = Math.random() * 150 + 100;
+          const left = Math.random() * 100;
+          const delay = Math.random() * 2;
+          const duration = Math.random() * 3 + 4;
+          
+          cloud.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size * 0.6}px;
+            background: ${color};
+            border-radius: ${size}px;
+            opacity: 0.7;
+            filter: blur(20px);
+            left: ${left}%;
+            top: 100%;
+            animation: cloudFloatUp ${duration}s ease-out ${delay}s forwards;
+          `;
+          
+          container.appendChild(cloud);
+        }
+        
+        // إزالة الغيوم بعد 5 ثواني
+        setTimeout(() => {
+          container.remove();
+        }, 5000);
+      }
+    }
+    
+    // إضافة animation للغيوم الملونة
+    if (!document.getElementById('cloud-animations')) {
+      const style = document.createElement('style');
+      style.id = 'cloud-animations';
+      style.textContent = `
+        @keyframes cloudFloatUp {
+          0% {
+            transform: translateY(0) translateX(0) scale(0.8) rotate(0deg);
+            opacity: 0.7;
+          }
+          25% {
+            transform: translateY(-25vh) translateX(${Math.random() * 30 - 15}px) scale(1) rotate(2deg);
+            opacity: 0.8;
+          }
+          50% {
+            transform: translateY(-50vh) translateX(${Math.random() * 50 - 25}px) scale(1.2) rotate(-2deg);
+            opacity: 0.9;
+          }
+          75% {
+            transform: translateY(-75vh) translateX(${Math.random() * 40 - 20}px) scale(1.3) rotate(1deg);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(-100vh) translateX(${Math.random() * 60 - 30}px) scale(1.5) rotate(0deg);
+            opacity: 0;
+          }
+        }
+        
+        /* تحسين شكل الغيوم */
+        #colored-clouds div {
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        #colored-clouds div::before,
+        #colored-clouds div::after {
+          content: '';
+          position: absolute;
+          background: inherit;
+          border-radius: inherit;
+          filter: blur(15px);
+        }
+        
+        #colored-clouds div::before {
+          width: 60%;
+          height: 60%;
+          top: -20%;
+          left: 10%;
+        }
+        
+        #colored-clouds div::after {
+          width: 50%;
+          height: 50%;
+          top: -15%;
+          right: 10%;
+        }
+      `;
+      document.head.appendChild(style);
+    }
 
-    aiBtn.addEventListener('click', () => {
+    smartPlannerBtn.addEventListener('click', () => {
       const payload = buildTripPayload();
-      const aiUrl = `ai-trip.html?country=${encodeURIComponent(payload.country)}&days=${payload.days}&interests=${encodeURIComponent(payload.interests)}&budget=${encodeURIComponent(payload.budget)}&notes=${encodeURIComponent(payload.notes)}`;
+      
+      // استخدام الدولة المقترحة إذا لم يتم اختيار واحدة
+      if (!payload.country || payload.country === 'غير محدد') {
+        if (suggestedCountry) {
+          payload.country = suggestedCountry;
+          inputs.country.value = suggestedCountry;
+        } else {
+          alert('يرجى اختيار وجهة أو ملء الحقول للحصول على اقتراح ذكي');
+          return;
+        }
+      }
+      
+      const smartUrl = `smart-planner.html?country=${encodeURIComponent(payload.country)}&days=${payload.days}&interests=${encodeURIComponent(payload.interests)}&budget=${encodeURIComponent(payload.budget)}&notes=${encodeURIComponent(payload.notes)}`;
       if (window.ArhGo?.delayedNavigate) {
-        window.ArhGo.delayedNavigate(aiUrl);
+        window.ArhGo.delayedNavigate(smartUrl);
       } else {
-        window.location.href = aiUrl;
+        window.location.href = smartUrl;
       }
     });
 
@@ -716,6 +1036,86 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
         showToast('تم تفعيل آخر تحديث لأسعار الرحلات ✈️');
       })
       .catch(() => {});
+
+    // نظام التوصيات الذكي
+    function generateRecommendations() {
+      const plans = getPlans();
+      const recommendationsGrid = document.getElementById('recommendationsGrid');
+      
+      if (!recommendationsGrid) return;
+      
+      // تحليل الاهتمامات من الخطط السابقة
+      const interests = {};
+      const destinations = {};
+      const budgets = [];
+      
+      plans.forEach(plan => {
+        if (plan.interests) {
+          plan.interests.split(',').forEach(i => {
+            const interest = i.trim();
+            interests[interest] = (interests[interest] || 0) + 1;
+          });
+        }
+        destinations[plan.country] = (destinations[plan.country] || 0) + 1;
+        if (plan.estimatedCost) budgets.push(plan.estimatedCost);
+      });
+      
+      const topInterests = Object.entries(interests).sort((a, b) => b[1] - a[1]).slice(0, 3).map(e => e[0]);
+      const avgBudget = budgets.length > 0 ? budgets.reduce((a, b) => a + b, 0) / budgets.length : 500;
+      
+      // توليد توصيات مخصصة
+      const recommendations = [
+        {
+          title: 'وجهات مشابهة لاهتماماتك',
+          description: `بناءً على اهتماماتك (${topInterests.join('، ')})، نوصي بهذه الوجهات`,
+          items: ['اليابان', 'إيطاليا', 'إسبانيا'],
+          icon: '🌍',
+          color: '#C9B27A'
+        },
+        {
+          title: 'عروض تناسب ميزانيتك',
+          description: `عروض خاصة بأسعار تبدأ من $${Math.round(avgBudget * 0.8)}`,
+          items: ['تايلاند', 'المغرب', 'تركيا'],
+          icon: '💰',
+          color: '#10B981'
+        },
+        {
+          title: 'وجهات جديدة لاكتشافها',
+          description: 'وجهات شائعة قد تهمك بناءً على اتجاهات السفر',
+          items: ['أيسلندا', 'نيوزيلندا', 'كرواتيا'],
+          icon: '✨',
+          color: '#8EA2B6'
+        }
+      ];
+      
+      recommendationsGrid.innerHTML = recommendations.map(rec => `
+        <article class="glass-card floating-card">
+          <div style="font-size: 3rem; margin-bottom: 16px;">${rec.icon}</div>
+          <h3 style="color: #0A1C2E; margin-bottom: 12px;">${rec.title}</h3>
+          <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">${rec.description}</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            ${rec.items.map(item => `
+              <span class="badge badge-info" style="background: ${rec.color}; color: #fff;">
+                ${item}
+              </span>
+            `).join('')}
+          </div>
+          <button class="btn btn-gradient" style="width: 100%; margin-top: 20px;" onclick="exploreDestination('${rec.items[0]}')">
+            استكشف ${rec.items[0]}
+          </button>
+        </article>
+      `).join('');
+    }
+    
+    function exploreDestination(destination) {
+      document.getElementById('trip-country').value = destination;
+      document.getElementById('planner').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // تحميل التوصيات عند تحميل الصفحة
+    setTimeout(() => {
+      generateRecommendations();
+    }, 1000);
 </script>
   <!-- زر ترجمة متعدد اللغات -->
   <div id="google_translate_element"></div>

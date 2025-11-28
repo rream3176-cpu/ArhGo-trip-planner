@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | مقارنة الأسعار</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0A1C2E 0%, #0F1722 30%, #8EA2B6 60%, #C9B27A 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .comparison-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .comparison-header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #fff;
+    }
+    
+    .comparison-header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #C9B27A, #8EA2B6, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .tab-btn {
+      padding: 16px 32px;
+      background: rgba(242, 244, 247, 0.95);
+      border: 2px solid rgba(201, 178, 122, 0.3);
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #0A1C2E;
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(135deg, #C9B27A, #8EA2B6);
+      color: #fff;
+      border-color: #C9B27A;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .search-card {
+      background: rgba(242, 244, 247, 0.95);
+      border-radius: 24px;
+      padding: 32px;
+      border: 2px solid rgba(201, 178, 122, 0.3);
+      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
+      backdrop-filter: blur(20px);
+      margin-bottom: 32px;
+    }
+    
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .price-card {
+      background: rgba(242, 244, 247, 0.95);
+      border-radius: 24px;
+      padding: 24px;
+      border: 2px solid rgba(201, 178, 122, 0.3);
+      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
+      backdrop-filter: blur(20px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+    
+    .price-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 80px rgba(10, 28, 46, 0.4);
+    }
+    
+    .price-card.best-price {
+      border-color: #10B981;
+      border-width: 3px;
+    }
+    
+    .price-card.best-price::before {
+      content: '🏆 أفضل سعر';
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: #10B981;
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    
+    .provider-logo {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    
+    .price-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0A1C2E;
+      margin: 16px 0;
+    }
+    
+    .price-details {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 8px 0;
+    }
+    
+    .savings-badge {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 12px;
+    }
+    
+    .price-history {
+      background: rgba(201, 178, 122, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 24px;
+    }
+    
+    .alert-card {
+      background: rgba(239, 68, 68, 0.1);
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      color: #EF4444;
+    }
+    
+    .alert-card.success {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10B981;
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <nav class="arhgo-nav">
+    <div class="arhgo-logo">ArhGo</div>
+    <ul>
+      <li><a data-nav href="index.html">الرئيسية</a></li>
+      <li><a data-nav href="analytics.html">التحليلات</a></li>
+      <li><a data-nav href="budget-manager.html">إدارة الميزانية</a></li>
+      <li><a data-nav href="smart-alerts.html">التنبيهات</a></li>
+    </ul>
+  </nav>
+
+  <main class="comparison-container">
+    <div class="comparison-header">
+      <h1>مقارنة الأسعار الذكية</h1>
+      <p style="font-size: 1.3rem; color: rgba(255,255,255,0.9); margin-bottom: 20px;">
+        قارن أسعار الفنادق والطيران من مصادر متعددة واحصل على أفضل العروض
+      </p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('flights')">✈️ الرحلات الجوية</button>
+      <button class="tab-btn" onclick="switchTab('hotels')">🏨 الفنادق</button>
+      <button class="tab-btn" onclick="switchTab('alerts')">🔔 تنبيهات الأسعار</button>
+    </div>
+
+    <!-- تبويب الرحلات -->
+    <div id="flights-tab" class="tab-content active">
+      <div class="search-card">
+        <h3 style="color: #0A1C2E; margin-bottom: 24px;">🔍 البحث عن رحلات</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+          <div class="field">
+            <label>من</label>
+            <input class="arhgo-input" type="text" id="flightFrom" placeholder="مثال: بغداد">
+          </div>
+          <div class="field">
+            <label>إلى</label>
+            <input class="arhgo-input" type="text" id="flightTo" placeholder="مثال: دبي">
+          </div>
+          <div class="field">
+            <label>تاريخ الذهاب</label>
+            <input class="arhgo-input" type="date" id="flightDate">
+          </div>
+          <div class="field">
+            <label>تاريخ العودة</label>
+            <input class="arhgo-input" type="date" id="flightReturn">
+          </div>
+        </div>
+        <button class="btn btn-gradient" onclick="searchFlights()" style="width: 100%;">🔍 بحث</button>
+      </div>
+
+      <div id="flightsResults" class="comparison-grid">
+        <!-- سيتم ملؤها بالنتائج -->
+      </div>
+    </div>
+
+    <!-- تبويب الفنادق -->
+    <div id="hotels-tab" class="tab-content">
+      <div class="search-card">
+        <h3 style="color: #0A1C2E; margin-bottom: 24px;">🔍 البحث عن فنادق</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+          <div class="field">
+            <label>الوجهة</label>
+            <input class="arhgo-input" type="text" id="hotelDestination" placeholder="مثال: دبي">
+          </div>
+          <div class="field">
+            <label>تاريخ الوصول</label>
+            <input class="arhgo-input" type="date" id="hotelCheckIn">
+          </div>
+          <div class="field">
+            <label>تاريخ المغادرة</label>
+            <input class="arhgo-input" type="date" id="hotelCheckOut">
+          </div>
+          <div class="field">
+            <label>عدد الغرف</label>
+            <input class="arhgo-input" type="number" id="hotelRooms" placeholder="1" min="1">
+          </div>
+        </div>
+        <button class="btn btn-gradient" onclick="searchHotels()" style="width: 100%;">🔍 بحث</button>
+      </div>
+
+      <div id="hotelsResults" class="comparison-grid">
+        <!-- سيتم ملؤها بالنتائج -->
+      </div>
+    </div>
+
+    <!-- تبويب التنبيهات -->
+    <div id="alerts-tab" class="tab-content">
+      <div class="search-card">
+        <h3 style="color: #0A1C2E; margin-bottom: 24px;">🔔 إعداد تنبيهات الأسعار</h3>
+        <div class="field" style="margin-bottom: 20px;">
+          <label>نوع التنبيه</label>
+          <select class="arhgo-select" id="alertType">
+            <option value="flight">✈️ رحلة جوية</option>
+            <option value="hotel">🏨 فندق</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+          <label>الوجهة</label>
+          <input class="arhgo-input" type="text" id="alertDestination" placeholder="مثال: دبي">
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+          <label>السعر المستهدف ($)</label>
+          <input class="arhgo-input" type="number" id="alertPrice" placeholder="مثال: 500" min="0">
+        </div>
+        <div class="field" style="margin-bottom: 20px;">
+          <label>البريد الإلكتروني</label>
+          <input class="arhgo-input" type="email" id="alertEmail" placeholder="email@example.com">
+        </div>
+        <button class="btn btn-gradient" onclick="createAlert()" style="width: 100%;">➕ إنشاء تنبيه</button>
+      </div>
+
+      <div id="alertsList">
+        <!-- سيتم ملؤها بالتنبيهات -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // محاكاة بيانات المزودين
+    const flightProviders = [
+      { name: 'Booking.com', logo: '✈️', basePrice: 450 },
+      { name: 'Expedia', logo: '🌐', basePrice: 480 },
+      { name: 'Kayak', logo: '🔍', basePrice: 465 },
+      { name: 'Skyscanner', logo: '📊', basePrice: 440 },
+      { name: 'Google Flights', logo: '🔎', basePrice: 455 }
+    ];
+
+    const hotelProviders = [
+      { name: 'Booking.com', logo: '🏨', basePrice: 120 },
+      { name: 'Agoda', logo: '🌏', basePrice: 115 },
+      { name: 'Hotels.com', logo: '🏢', basePrice: 125 },
+      { name: 'Expedia', logo: '🌐', basePrice: 130 },
+      { name: 'Trivago', logo: '🔍', basePrice: 118 }
+    ];
+
+    // تبديل التبويبات
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById(`${tab}-tab`).classList.add('active');
+    }
+
+    // البحث عن رحلات
+    function searchFlights() {
+      const from = document.getElementById('flightFrom').value;
+      const to = document.getElementById('flightTo').value;
+      const date = document.getElementById('flightDate').value;
+      const returnDate = document.getElementById('flightReturn').value;
+      
+      if (!from || !to || !date) {
+        alert('يرجى تعبئة جميع الحقول المطلوبة');
+        return;
+      }
+      
+      const results = document.getElementById('flightsResults');
+      const prices = flightProviders.map(p => ({
+        ...p,
+        price: p.basePrice + Math.random() * 100 - 50,
+        duration: `${Math.floor(Math.random() * 5 + 3)}h ${Math.floor(Math.random() * 60)}m`,
+        stops: Math.random() > 0.5 ? 'مباشر' : `${Math.floor(Math.random() * 2 + 1)} توقف`
+      }));
+      
+      prices.sort((a, b) => a.price - b.price);
+      const bestPrice = prices[0].price;
+      
+      results.innerHTML = prices.map((provider, index) => `
+        <div class="price-card ${index === 0 ? 'best-price' : ''}">
+          <div class="provider-logo">${provider.logo}</div>
+          <h3 style="color: #0A1C2E; margin-bottom: 12px;">${provider.name}</h3>
+          <div class="price-value">$${Math.round(provider.price)}</div>
+          <div class="price-details">⏱️ المدة: ${provider.duration}</div>
+          <div class="price-details">🛫 التوقفات: ${provider.stops}</div>
+          ${index === 0 ? '<div class="savings-badge">💰 وفر حتى $' + Math.round(prices[prices.length - 1].price - bestPrice) + '</div>' : ''}
+          ${index > 0 ? `<div class="savings-badge" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;">
+            +$${Math.round(provider.price - bestPrice)} أكثر من الأفضل
+          </div>` : ''}
+          <button class="btn btn-gradient" style="width: 100%; margin-top: 16px;" onclick="bookFlight('${provider.name}', ${Math.round(provider.price)})">
+            احجز الآن
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // البحث عن فنادق
+    function searchHotels() {
+      const destination = document.getElementById('hotelDestination').value;
+      const checkIn = document.getElementById('hotelCheckIn').value;
+      const checkOut = document.getElementById('hotelCheckOut').value;
+      const rooms = document.getElementById('hotelRooms').value || 1;
+      
+      if (!destination || !checkIn || !checkOut) {
+        alert('يرجى تعبئة جميع الحقول المطلوبة');
+        return;
+      }
+      
+      const results = document.getElementById('hotelsResults');
+      const prices = hotelProviders.map(p => ({
+        ...p,
+        price: (p.basePrice + Math.random() * 30 - 15) * rooms,
+        rating: (Math.random() * 2 + 3).toFixed(1),
+        reviews: Math.floor(Math.random() * 5000 + 1000)
+      }));
+      
+      prices.sort((a, b) => a.price - b.price);
+      const bestPrice = prices[0].price;
+      
+      results.innerHTML = prices.map((provider, index) => `
+        <div class="price-card ${index === 0 ? 'best-price' : ''}">
+          <div class="provider-logo">${provider.logo}</div>
+          <h3 style="color: #0A1C2E; margin-bottom: 12px;">${provider.name}</h3>
+          <div class="price-value">$${Math.round(provider.price)}</div>
+          <div class="price-details">⭐ التقييم: ${provider.rating}/5.0</div>
+          <div class="price-details">💬 ${provider.reviews.toLocaleString()} تقييم</div>
+          <div class="price-details">🏨 ${rooms} غرفة × ليلة</div>
+          ${index === 0 ? '<div class="savings-badge">💰 وفر حتى $' + Math.round(prices[prices.length - 1].price - bestPrice) + '</div>' : ''}
+          ${index > 0 ? `<div class="savings-badge" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;">
+            +$${Math.round(provider.price - bestPrice)} أكثر من الأفضل
+          </div>` : ''}
+          <button class="btn btn-gradient" style="width: 100%; margin-top: 16px;" onclick="bookHotel('${provider.name}', ${Math.round(provider.price)})">
+            احجز الآن
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // إنشاء تنبيه
+    function createAlert() {
+      const type = document.getElementById('alertType').value;
+      const destination = document.getElementById('alertDestination').value;
+      const price = parseFloat(document.getElementById('alertPrice').value);
+      const email = document.getElementById('alertEmail').value;
+      
+      if (!destination || !price || !email) {
+        alert('يرجى تعبئة جميع الحقول');
+        return;
+      }
+      
+      const alerts = JSON.parse(localStorage.getItem('arhgo-price-alerts') || '[]');
+      const newAlert = {
+        id: Date.now(),
+        type,
+        destination,
+        targetPrice: price,
+        email,
+        createdAt: new Date().toISOString(),
+        active: true
+      };
+      
+      alerts.push(newAlert);
+      localStorage.setItem('arhgo-price-alerts', JSON.stringify(alerts));
+      
+      document.getElementById('alertDestination').value = '';
+      document.getElementById('alertPrice').value = '';
+      document.getElementById('alertEmail').value = '';
+      
+      loadAlerts();
+      alert('تم إنشاء التنبيه بنجاح! سنرسل لك إشعاراً عند انخفاض السعر.');
+    }
+
+    // تحميل التنبيهات
+    function loadAlerts() {
+      const alerts = JSON.parse(localStorage.getItem('arhgo-price-alerts') || '[]');
+      const list = document.getElementById('alertsList');
+      
+      if (alerts.length === 0) {
+        list.innerHTML = '<div class="alert-card" style="text-align: center; color: #666;">لا توجد تنبيهات حالياً</div>';
+        return;
+      }
+      
+      list.innerHTML = alerts.map(alert => `
+        <div class="search-card">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+            <div>
+              <h3 style="color: #0A1C2E; margin-bottom: 8px;">
+                ${alert.type === 'flight' ? '✈️' : '🏨'} ${alert.destination}
+              </h3>
+              <div style="color: #666; margin-bottom: 4px;">السعر المستهدف: $${alert.targetPrice}</div>
+              <div style="color: #666; font-size: 0.9rem;">${new Date(alert.createdAt).toLocaleDateString('ar')}</div>
+            </div>
+            <button class="btn btn-ghost" onclick="deleteAlert(${alert.id})" style="padding: 8px 16px;">🗑️ حذف</button>
+          </div>
+          <div class="alert-card success">
+            ✅ التنبيه نشط - سنرسل إشعاراً عند انخفاض السعر إلى $${alert.targetPrice} أو أقل
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // حذف تنبيه
+    function deleteAlert(id) {
+      const alerts = JSON.parse(localStorage.getItem('arhgo-price-alerts') || '[]');
+      const filtered = alerts.filter(a => a.id !== id);
+      localStorage.setItem('arhgo-price-alerts', JSON.stringify(filtered));
+      loadAlerts();
+    }
+
+    // حجز رحلة
+    function bookFlight(provider, price) {
+      alert(`سيتم توجيهك إلى ${provider} لحجز الرحلة بسعر $${price}`);
+    }
+
+    // حجز فندق
+    function bookHotel(provider, price) {
+      alert(`سيتم توجيهك إلى ${provider} لحجز الفندق بسعر $${price}`);
+    }
+
+    // تهيئة الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+      // تعيين التواريخ الافتراضية
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const nextWeek = new Date(today);
+      nextWeek.setDate(nextWeek.getDate() + 7);
+      
+      document.getElementById('flightDate').value = tomorrow.toISOString().split('T')[0];
+      document.getElementById('flightReturn').value = nextWeek.toISOString().split('T')[0];
+      document.getElementById('hotelCheckIn').value = tomorrow.toISOString().split('T')[0];
+      document.getElementById('hotelCheckOut').value = nextWeek.toISOString().split('T')[0];
+      
+      loadAlerts();
+    });
+  </script>
+</body>
+</html>
+
