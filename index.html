@@ -7,19 +7,19 @@
   <!-- GE SS Two Font -->
   <link rel="preconnect" href="https://arbfonts.com">
   <link rel="stylesheet" href="assets/css/arhgo.css">
-  <script src="assets/js/user-auth.js"></script>
+  <script src="assets/js/user-auth.js" defer></script>
   <script src="assets/js/arhgo.js" defer></script>
-  <script src="assets/js/countries-database.js"></script>
-  <script src="assets/js/smart-country-suggestor.js"></script>
+  <script src="assets/js/countries-database.js" defer></script>
+  <script src="assets/js/smart-country-suggestor.js" defer></script>
 </head>
 <body class="page-hidden">
   <nav class="arhgo-nav">
     <div class="arhgo-logo">ArhGo</div>
     <ul>
-      <li><a data-nav href="#home" data-translate="nav.home">الرئيسية</a></li>
-      <li><a data-nav href="#features" data-translate="nav.features">المزايا</a></li>
-      <li><a data-nav href="#planner" data-translate="nav.planner">خطط رحلتك</a></li>
-      <li><a data-nav href="#destinations" data-translate="nav.destinations">الوجهات</a></li>
+      <li><a data-nav href="index.html#home" data-translate="nav.home">الرئيسية</a></li>
+      <li><a data-nav href="index.html#features" data-translate="nav.features">المزايا</a></li>
+      <li><a data-nav href="index.html#planner" data-translate="nav.planner">خطط رحلتك</a></li>
+      <li><a data-nav href="index.html#destinations" data-translate="nav.destinations">الوجهات</a></li>
       <li><a data-nav href="hotel.html" data-translate="nav.hotels">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html" data-translate="nav.flights">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html" data-translate="nav.restaurants">مطاعم</a></li>
@@ -33,9 +33,9 @@
       <a class="btn btn-gradient" href="signup.html" data-flight-sound data-translate="nav.signup" id="signupBtn">إنشاء حساب</a>
     </div>
     <div class="stack" id="userProfile" style="display: none;">
-      <div style="display: flex; align-items: center; gap: 12px; padding: 8px 16px; background: linear-gradient(135deg, rgba(55, 214, 192, 0.15), rgba(76, 168, 255, 0.1)); border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.4);">
-        <span style="color: #37D6C0; font-weight: 700; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);" id="userNameDisplay">المستخدم</span>
-        <button class="btn btn-ghost" onclick="userAuth.logout(); location.reload();" style="padding: 6px 16px; font-size: 0.9rem;">تسجيل الخروج</button>
+      <div style="padding: 12px 16px; background: linear-gradient(135deg, rgba(55, 214, 192, 0.15), rgba(76, 168, 255, 0.1)); border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.4); text-align: center;">
+        <span style="color: #37D6C0; font-weight: 700; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5); display: block; margin-bottom: 12px;" id="userNameDisplay">المستخدم</span>
+        <button class="btn btn-ghost" onclick="userAuth.logout(); location.reload();" style="width: 100%; padding: 10px 16px; font-size: 0.9rem;">تسجيل الخروج</button>
       </div>
     </div>
 </nav>
@@ -55,17 +55,6 @@
             </div>
           </div>
           <div class="deco-line"></div>
-          <div class="hero-meta">
-            <div class="hero-meta-card">
-              <strong data-translate="hero.meta1.title">Concierge ذكي</strong><br><span data-translate="hero.meta1.desc">جدولة صباح/ليل متوازنة</span>
-            </div>
-            <div class="hero-meta-card">
-              <strong data-translate="hero.meta2.title">تكامل فوري</strong><br><span data-translate="hero.meta2.desc">TripAdvisor · Google Places</span>
-            </div>
-            <div class="hero-meta-card">
-              <strong data-translate="hero.meta3.title">روابط قصيرة</strong><br><span data-translate="hero.meta3.desc">شارك كل خطة بنقرة</span>
-            </div>
-          </div>
           <div class="hero-actions">
             <button class="btn btn-gradient" id="hero-cta" data-flight-sound data-translate="hero.cta">ابدأ التخطيط الآن</button>
             <a class="btn btn-ghost" href="smart-planner.html" data-flight-sound data-translate="hero.ai">مولد خطط ذكي</a>
@@ -81,7 +70,7 @@
         </div>
         <div class="hero-visual">
           <div class="hero-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&h=800&fit=crop&q=90" alt="Travel Planning" class="hero-main-image" />
+            <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&h=800&fit=crop&q=90" alt="Travel Planning" class="hero-main-image" loading="lazy" />
             <div class="hero-image-overlay"></div>
           </div>
           <div class="hero-sparkles">
@@ -123,52 +112,6 @@
       </div>
     </section>
 
-    <div class="infinite-marquee" data-marquee>
-      <div class="marquee-track">
-        <span>Smart Trip Generator</span>
-        <span>Advanced Analytics</span>
-        <span>Price Comparison</span>
-        <span>Budget Manager</span>
-        <span>Smart Recommendations</span>
-        <span>Interactive Map</span>
-        <span>Real-time Alerts</span>
-        <span>Shareable Links</span>
-      </div>
-    </div>
-
-    <section class="section aurora" id="signature">
-      <div class="section-header">
-        <h2 class="section-title" data-translate="sections.signature.title">Neon Flight Deck</h2>
-        <p class="section-subtitle" data-translate="sections.signature.subtitle">ممر عرض فخم يختصر القصة أمام اللجنة: ضوء متدرج، صوت طائرة، ومحتوى يلمع بالبيانات.</p>
-      </div>
-      <div class="immersive-panels">
-        <article class="immersion-card">
-          <div class="card-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop&q=90" alt="Cinematic Experience" />
-          </div>
-          <div class="accent-chip">360°</div>
-          <h3 data-translate="sections.signature.card1.title">غلاف سينمائي</h3>
-          <p data-translate="sections.signature.card1.desc">أضواء أورورا، أجرام طائرة، وبطاقات زجاجية تتحرك بنعومة حول المحتوى.</p>
-        </article>
-        <article class="immersion-card">
-          <div class="card-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800&h=600&fit=crop&q=90" alt="Smart Algorithm" />
-          </div>
-          <div class="accent-chip">Algorithm+</div>
-          <h3 data-translate="sections.signature.card2.title">خوارزمية ذكية</h3>
-          <p data-translate="sections.signature.card2.desc">خوارزمية متقدمة لتوليد الخطط، تحفظ الاهتمامات، وتعرض التكلفة مباشرة.</p>
-        </article>
-        <article class="immersion-card">
-          <div class="card-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&q=90" alt="Share Links" />
-          </div>
-          <div class="accent-chip">Share</div>
-          <h3 data-translate="sections.signature.card3.title">روابط سريعة</h3>
-          <p data-translate="sections.signature.card3.desc">قرّب تجربتك من الواقع بإرسال روابط قصيرة للحجز أو مشاركة الملخّص.</p>
-        </article>
-      </div>
-    </section>
-
     <section class="section" id="features">
       <div class="section-header">
         <h2 class="section-title" data-translate="sections.features.title">كل ما تحتاجه لرحلة فخمة</h2>
@@ -177,7 +120,7 @@
       <div class="grid">
         <article class="glass-card floating-card">
           <div class="feature-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&q=90" alt="Smart Daily Plan" />
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&q=90" alt="Smart Daily Plan" loading="lazy" />
           </div>
           <div class="pill-small">1</div>
           <h3 data-translate="sections.features.card1.title">خطة يومية ذكية</h3>
@@ -185,7 +128,7 @@
         </article>
         <article class="glass-card floating-card" style="animation-delay:.3s">
           <div class="feature-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=600&fit=crop&q=90" alt="Interactive Map" />
+            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=600&fit=crop&q=90" alt="Interactive Map" loading="lazy" />
           </div>
           <div class="pill-small">2</div>
           <h3 data-translate="sections.features.card2.title">خريطة تفاعلية</h3>
@@ -193,7 +136,7 @@
         </article>
         <article class="glass-card floating-card" style="animation-delay:.6s">
           <div class="feature-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&q=90" alt="Hotels & Restaurants" />
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&q=90" alt="Hotels & Restaurants" loading="lazy" />
           </div>
           <div class="pill-small">3</div>
           <h3 data-translate="sections.features.card3.title">اقتراحات فندقية وغذائية</h3>
@@ -201,7 +144,7 @@
         </article>
         <article class="glass-card floating-card" style="animation-delay:.9s">
           <div class="feature-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&h=600&fit=crop&q=90" alt="Save & Share" />
+            <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&h=600&fit=crop&q=90" alt="Save & Share" loading="lazy" />
           </div>
           <div class="pill-small">4</div>
           <h3 data-translate="sections.features.card4.title">حفظ ومشاركة</h3>
@@ -209,55 +152,6 @@
         </article>
       </div>
 </section>
-
-    <section class="section" id="experience">
-      <div class="section-header">
-        <h2 class="section-title" data-translate="sections.experience.title">رحلة المستخدم داخل المنصّة</h2>
-        <p class="section-subtitle" data-translate="sections.experience.subtitle">عرض مراحل استخدام المنصّة يساعدك في شرح المشروع خلال العرض التقديمي.</p>
-      </div>
-      <div class="experience-track">
-        <article class="experience-step">
-          <div class="experience-image">
-            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop&q=90" alt="Login" />
-          </div>
-          <div class="badge badge-info">1</div>
-          <div>
-            <strong data-translate="sections.experience.step1.title">تسجيل الدخول أو إنشاء حساب</strong>
-            <p data-translate="sections.experience.step1.desc">بطاقات زجاجية فاخرة مع صوت إقلاع لحظة الدخول.</p>
-          </div>
-        </article>
-        <article class="experience-step">
-          <div class="experience-image">
-            <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&q=90" alt="Trip Details" />
-          </div>
-          <div class="badge badge-info">2</div>
-          <div>
-            <strong data-translate="sections.experience.step2.title">إدخال تفاصيل الرحلة</strong>
-            <p data-translate="sections.experience.step2.desc">نموذج غني بالحقول، تقدير تكلفة مباشر، وزر للحفظ أو المولد الذكي.</p>
-          </div>
-        </article>
-        <article class="experience-step">
-          <div class="experience-image">
-            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=600&fit=crop&q=90" alt="Summary & Map" />
-          </div>
-          <div class="badge badge-info">3</div>
-          <div>
-            <strong data-translate="sections.experience.step3.title">عرض الملخّص والخريطة</strong>
-            <p data-translate="sections.experience.step3.desc">صفحة ملخص مع عدّادات متحركة، خريطة Leaflet، وانتقال للطقس.</p>
-          </div>
-        </article>
-        <article class="experience-step">
-          <div class="experience-image">
-            <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop&q=90" alt="Services" />
-          </div>
-          <div class="badge badge-info">4</div>
-          <div>
-            <strong data-translate="sections.experience.step4.title">خدمات مساندة</strong>
-            <p data-translate="sections.experience.step4.desc">حجز فنادق، رحلات، مطاعم، ومشاركة الخطة برابط قصير واحد.</p>
-          </div>
-        </article>
-      </div>
-    </section>
 
     <section class="section" id="mood">
       <div class="section-header">
@@ -273,7 +167,7 @@
         </div>
         <div class="glass-card mood-details" id="mood-details">
           <div class="mood-image-wrapper">
-            <img id="mood-image" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop&q=90" alt="Travel Mood" />
+            <img id="mood-image" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop&q=90" alt="Travel Mood" loading="lazy" />
           </div>
           <span class="pill" id="mood-label" translate="yes">مزاج مختار</span>
           <h3 id="mood-title" translate="yes">عنوان المزاج</h3>
@@ -470,24 +364,6 @@
   </div>
 </section>
 
-    <section class="section" id="saved-plans">
-      <div class="section-header">
-        <h2 class="section-title" data-translate="sections.saved.title">خططي المحفوظة</h2>
-        <p class="section-subtitle" data-translate="sections.saved.subtitle">يمكنك تعديل الخطة لاحقًا أو نسخ الرابط القصير وإرساله.</p>
-      </div>
-      <div id="saved-plans-list" class="saved-plans"></div>
-    </section>
-
-    <section class="section" id="recommendations">
-      <div class="section-header">
-        <h2 class="section-title">🎯 توصيات ذكية مخصصة</h2>
-        <p class="section-subtitle">نظام توصيات متقدم يعتمد على اهتماماتك وتاريخ رحلاتك</p>
-      </div>
-      <div class="grid" id="recommendationsGrid">
-        <!-- سيتم ملؤها بالتوصيات -->
-      </div>
-    </section>
-
     <section class="section split" id="destinations">
       <div class="glass-card">
         <h3 data-translate="sections.destinations.title">أفضل الوجهات الآن</h3>
@@ -495,46 +371,10 @@
         <div id="destinations-content" class="timeline" style="margin-top:18px;"></div>
       </div>
       <div class="map-preview">
-        <iframe title="ArhGo world map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8582251.092659855!2d16.2795226!3d46.32532945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b45bbb4694c1f1%3A0x8d26ab9dd98ec605!2sMediterranean%20Sea!5e0!3m2!1sen!2siq!4v1731812222000!5m2!1sen!2siq" loading="lazy"></iframe>
+        <iframe title="ArhGo world map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8582251.092659855!2d16.2795226!3d46.32532945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b45bbb4694c1f1%3A0x8d26ab9dd98ec605!2sMediterranean%20Sea!5e0!3m2!1sen!2siq!4v1731812222000!5m2!1sen!2siq" loading="lazy" style="will-change: auto;"></iframe>
   </div>
 </section>
 
-    <section class="section" id="blog">
-      <div class="section-header">
-        <h2 class="section-title" data-translate="sections.blog.title">إلهام السفر</h2>
-        <p class="section-subtitle" data-translate="sections.blog.subtitle">محتوى مختار يمنحك أفكارًا حقيقية لكل نوع من الرحلات.</p>
-      </div>
-      <div class="blog-grid">
-        <a class="glass-card blog-card" href="story.html?topic=luxe" data-flight-sound>
-          <div class="blog-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=800&h=500&fit=crop&q=90" alt="شعور المدن الراقية" />
-          </div>
-          <h3 data-translate="sections.blog.card1.title">شعور المدن الراقية</h3>
-          <p data-translate="sections.blog.card1.desc">صفحة فاخرة تنقل جو العشاء تحت الأضواء، مع جدول يومي قصير.</p>
-        </a>
-        <a class="glass-card blog-card" href="story.html?topic=adventure" data-flight-sound>
-          <div class="blog-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&h=500&fit=crop&q=90" alt="بوابة المغامرات" />
-          </div>
-          <h3 data-translate="sections.blog.card2.title">بوابة المغامرات</h3>
-          <p data-translate="sections.blog.card2.desc">سرد سريع لجبال سويسرا وتايلاند مع قوائم معدات جاهزة.</p>
-        </a>
-        <a class="glass-card blog-card" href="story.html?topic=culture" data-flight-sound>
-          <div class="blog-image-wrapper">
-            <img src="https://img.freepik.com/premium-photo/three-friends-are-exploring-ancient-egyptian-temple-they-are-all-wearing-casual-clothes-carrying-backpacks_14117-197281.jpg" alt="رحلات ثقافية" />
-          </div>
-          <h3 data-translate="sections.blog.card3.title">رحلات ثقافية</h3>
-          <p data-translate="sections.blog.card3.desc">حكاية قصيرة عن قاهرة الليل ومراكش، مع أماكن لا تفوّت.</p>
-        </a>
-        <a class="glass-card blog-card" href="story.html?topic=budget" data-flight-sound>
-          <div class="blog-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&h=500&fit=crop&q=90" alt="سفر اقتصادي ذكي" />
-          </div>
-          <h3 data-translate="sections.blog.card4.title">سفر اقتصادي ذكي</h3>
-          <p data-translate="sections.blog.card4.desc">طريقة عرض البيانات لخفض التكاليف عبر واجهات ArhGo.</p>
-        </a>
-      </div>
-    </section>
   </main>
 
 <footer>
@@ -623,15 +463,12 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       bgDiv.style.backgroundImage = `url('${heroBackgroundImage}')`;
       heroEl.insertBefore(bgDiv, heroEl.firstChild);
     } else {
-      // إذا لم تكن هناك صورة، استخدم الصور الافتراضية
-      const cycleHero = () => {
-        heroIndex = (heroIndex + 1) % heroImages.length;
-        heroEl.style.backgroundImage = `url('${heroImages[heroIndex]}')`;
+      // استخدام صورة واحدة فقط (بدون cycling)
+      if (heroImages.length > 0) {
+        heroEl.style.backgroundImage = `url('${heroImages[0]}')`;
         heroEl.style.backgroundSize = 'cover';
         heroEl.style.backgroundPosition = 'center';
-      };
-      cycleHero();
-      setInterval(cycleHero, 6000);
+      }
     }
 
     document.getElementById('hero-cta').addEventListener('click', () => {
@@ -705,18 +542,20 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
         plannerSection.style.backgroundImage = `linear-gradient(rgba(10, 28, 46, 0.85), rgba(15, 23, 34, 0.85)), url('${countryImage}')`;
         plannerSection.style.backgroundSize = 'cover';
         plannerSection.style.backgroundPosition = 'center';
-        plannerSection.style.backgroundAttachment = 'fixed';
-        plannerSection.style.transition = 'background-image 1s ease-in-out';
+        plannerSection.style.transition = 'background-image 0.3s ease';
       }
     }
     
-    // استماع لتغييرات الحقول
+    // استماع لتغييرات الحقول (debounced)
+    let suggestionTimeout;
+    const debouncedUpdate = () => {
+      clearTimeout(suggestionTimeout);
+      suggestionTimeout = setTimeout(updateCountrySuggestion, 300);
+    };
+    
     ['weather', 'scenery', 'tripType', 'budget', 'interests', 'people'].forEach(field => {
       if (inputs[field]) {
-        inputs[field].addEventListener('change', updateCountrySuggestion);
-        if (field === 'interests') {
-          inputs[field].addEventListener('change', updateCountrySuggestion);
-        }
+        inputs[field].addEventListener('change', debouncedUpdate);
       }
     });
     
@@ -955,43 +794,12 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       }
     });
 
-    const STORAGE_KEY = 'arhgo-plans';
-    const getPlans = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    const setPlans = (plans) => localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
-
-    const renderPlans = () => {
-      const list = document.getElementById('saved-plans-list');
-      const plans = getPlans();
-      if (!plans.length) {
-        list.innerHTML = '<div class="saved-plan-card" translate="yes">لا توجد خطط محفوظة بعد.</div>';
-        return;
-      }
-      list.innerHTML = plans.map(plan => `
-        <article class="saved-plan-card" translate="yes">
-          <h4 translate="yes">${plan.country} — ${plan.days} <span translate="yes">أيام</span></h4>
-          <p class="plan-meta" translate="yes">${plan.tripType} • $${plan.estimatedCost}</p>
-          <p class="plan-meta" translate="yes">${plan.interests}</p>
-          <div class="badge badge-success" translate="yes">الرابط القصير</div>
-          <p class="plan-meta">${plan.link}</p>
-          <div class="stack">
-            <button class="btn btn-gradient" data-action="share" data-link="${plan.link}" translate="yes">نسخ الرابط</button>
-            <button class="btn btn-ghost" data-action="open" data-link="${plan.summaryUrl}" translate="yes">عرض الملخص</button>
-          </div>
-        </article>
-      `).join('');
-      
-    };
 
     saveBtn.addEventListener('click', () => {
       const payload = buildTripPayload();
       const shortCode = Math.random().toString(36).substring(2, 8).toUpperCase();
       const link = `https://arhgo.travel/r/${shortCode}`;
-      const summaryUrl = `trip-summary.html?days=${payload.days}&type=${encodeURIComponent(payload.tripType)}&country=${encodeURIComponent(payload.country)}&cost=${payload.estimatedCost}`;
-      const plan = { ...payload, link, summaryUrl, id: Date.now() };
-      const updated = [plan, ...getPlans()].slice(0, 6);
-      setPlans(updated);
       updateStats(payload, link);
-      renderPlans();
       
       // حفظ في قاعدة بيانات المستخدم إذا كان مسجل دخول
       if (typeof userAuth !== 'undefined' && userAuth.isLoggedIn()) {
@@ -1005,22 +813,6 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
         showToast('تم حفظ الخطة محلياً ✨ (سجّل دخولك لحفظها في حسابك)');
       }
     });
-
-    document.getElementById('saved-plans-list').addEventListener('click', (event) => {
-      const btn = event.target.closest('button');
-      if (!btn) return;
-      const action = btn.dataset.action;
-      const link = btn.dataset.link;
-      if (action === 'share' && link) {
-        navigator.clipboard?.writeText(link);
-        showToast('تم نسخ الرابط لمشاركتك');
-      }
-      if (action === 'open' && link) {
-        window.ArhGo?.delayedNavigate ? window.ArhGo.delayedNavigate(link) : window.location.href = link;
-      }
-    });
-
-    renderPlans();
 
     const destinations = [
       { name: 'فرنسا', tips: ['برج إيفل ليلاً', 'متحف اللوفر', 'كروز على نهر السين'] },
@@ -1058,7 +850,7 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
 
     // نظام التوصيات الذكي
     function generateRecommendations() {
-      const plans = getPlans();
+      const plans = [];
       const recommendationsGrid = document.getElementById('recommendationsGrid');
       
       if (!recommendationsGrid) return;
@@ -1131,24 +923,49 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       document.getElementById('planner').scrollIntoView({ behavior: 'smooth' });
     }
     
-    // تحميل التوصيات عند تحميل الصفحة
-    setTimeout(() => {
-      generateRecommendations();
-    }, 1000);
 </script>
   <!-- زر ترجمة متعدد اللغات -->
-  <div id="google_translate_element"></div>
+  <div id="google_translate_element" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; min-width: 110px; min-height: 55px;"></div>
 
   <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'ar',
-        includedLanguages: 'af,sq,am,ar,hy,az,eu,be,bn,bg,ca,ceb,ny,zh-CN,zh-TW,hr,cs,da,nl,en,eo,et,tl,fi,fr,gl,ka,de,el,gu,ht,ha,haw,iw,hi,hmn,hu,is,ig,id,ga,it,ja,jw,kn,kk,km,ko,ku,ky,lo,la,lv,lt,lb,mk,mg,ms,ml,mt,mi,mr,mn,my,né,no,fa,pl,pt,pa,ro,ru,sm,gd,sr,st,si,sk,sl,so,es,su,sw,sv,tg,ta,te,th,tr,uk,ur,uz,vi,cy,xh,yi,yo,zu',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
+    // تعريف الدالة قبل تحميل السكريبت
+    window.googleTranslateElementInit = function() {
+      try {
+        if (typeof google !== 'undefined' && google.translate && google.translate.TranslateElement) {
+          new google.translate.TranslateElement({
+            pageLanguage: 'ar',
+            includedLanguages: 'af,sq,am,ar,hy,az,eu,be,bn,bg,ca,ceb,ny,zh-CN,zh-TW,hr,cs,da,nl,en,eo,et,tl,fi,fr,gl,ka,de,el,gu,ht,ha,haw,iw,hi,hmn,hu,is,ig,id,ga,it,ja,jw,kn,kk,km,ko,ku,ky,lo,la,lv,lt,lb,mk,mg,ms,ml,mt,mi,mr,mn,my,né,no,fa,pl,pt,pa,ro,ru,sm,gd,sr,st,si,sk,sl,so,es,su,sw,sv,tg,ta,te,th,tr,uk,ur,uz,vi,cy,xh,yi,yo,zu',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+          }, 'google_translate_element');
+        }
+      } catch(e) {
+        console.error('خطأ في تحميل Google Translate:', e);
+      }
+    };
+    
+    // تحميل سكريبت الترجمة بعد تحميل الصفحة
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadTranslateScript);
+    } else {
+      loadTranslateScript();
+    }
+    
+    function loadTranslateScript() {
+      // التحقق من عدم تحميل السكريبت مسبقاً
+      if (document.querySelector('script[src*="translate.google.com"]')) {
+        return;
+      }
+      
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      script.onerror = function() {
+        console.error('فشل تحميل سكريبت Google Translate');
+      };
+      document.head.appendChild(script);
     }
   </script>
-  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <script>
     // التحقق من حالة تسجيل الدخول وعرضها
     function updateAuthUI() {
@@ -1211,28 +1028,16 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
           updateAuthUI();
-          // تحديث كل 200ms للتأكد (لمدة 4 ثواني)
-          let attempts = 0;
-          const maxAttempts = 20;
-          const interval = setInterval(() => {
+          // تحديث مرة واحدة بعد 500ms
+          setTimeout(() => {
             updateAuthUI();
-            attempts++;
-            if (attempts >= maxAttempts) {
-              clearInterval(interval);
-            }
-          }, 200);
+          }, 500);
         });
       } else {
-        // تحديث كل 200ms للتأكد (لمدة 4 ثواني)
-        let attempts = 0;
-        const maxAttempts = 20;
-        const interval = setInterval(() => {
+        // تحديث مرة واحدة بعد 500ms
+        setTimeout(() => {
           updateAuthUI();
-          attempts++;
-          if (attempts >= maxAttempts) {
-            clearInterval(interval);
-          }
-        }, 200);
+        }, 500);
       }
     })();
     

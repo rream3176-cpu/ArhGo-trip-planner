@@ -1,9 +1,16 @@
 (() => {
   const FLIGHT_SOUND_URL = 'https://www.soundjay.com/transport/airplane-flyby-01.mp3';
-  const audio = new Audio(FLIGHT_SOUND_URL);
-  audio.preload = 'auto';
-  audio.volume = 0.6;
+  let audio = null;
   let soundEnabled = true;
+  
+  // تحميل الصوت فقط عند الحاجة
+  const getAudio = () => {
+    if (!audio) {
+      audio = new Audio(FLIGHT_SOUND_URL);
+      audio.volume = 0.6;
+    }
+    return audio;
+  };
 
   if (document.body) {
     document.body.classList.add('page-hidden');
@@ -12,10 +19,11 @@
   }
 
   const unlockAudio = () => {
-    audio.play()
+    const audioInstance = getAudio();
+    audioInstance.play()
       .then(() => {
-        audio.pause();
-        audio.currentTime = 0;
+        audioInstance.pause();
+        audioInstance.currentTime = 0;
       })
       .catch(() => {});
   };
@@ -26,13 +34,14 @@
   const playFlightSound = () => {
     if (!soundEnabled) return;
     try {
-      audio.currentTime = 0;
-      const playPromise = audio.play();
+      const audioInstance = getAudio();
+      audioInstance.currentTime = 0;
+      const playPromise = audioInstance.play();
       if (playPromise && typeof playPromise.catch === 'function') {
         playPromise.catch(() => {});
       }
     } catch (err) {
-      console.warn('Flight sound blocked:', err.message);
+      // تجاهل الأخطاء
     }
   };
 
@@ -184,57 +193,37 @@
     });
   };
 
-  // Parallax Effect
+  // Parallax Effect - معطل للأداء
   const setupParallax = () => {
-    const parallaxElements = document.querySelectorAll('.parallax-element, .hero-main-image');
-    
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      
-      parallaxElements.forEach(el => {
-        const speed = el.dataset.speed || 0.5;
-        const yPos = -(scrolled * speed);
-        el.style.transform = `translateY(${yPos}px)`;
-      });
-    });
+    // تم تعطيله لتحسين الأداء
   };
 
-  // Magnetic Hover Effect
+  // Magnetic Hover Effect - معطل للأداء
   const setupMagneticHover = () => {
-    const magneticElements = document.querySelectorAll('.btn, .card-luxury, .magnetic-hover');
-    
-    magneticElements.forEach(el => {
-      el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        
-        el.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
-      });
-      
-      el.addEventListener('mouseleave', () => {
-        el.style.transform = 'translate(0, 0)';
-      });
-    });
+    // تم تعطيله لتحسين الأداء
   };
 
-  // Navbar Scroll Effect
+  // Navbar Scroll Effect - مع throttling
   const setupNavbarScroll = () => {
-    const navbar = document.querySelector('.arhgo-nav');
-    if (!navbar) return;
-    
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset;
-      
-      if (currentScroll > 100) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-      
-      lastScroll = currentScroll;
-    });
+    // تم تعطيل تغيير لون الشريط المتنقل - يبقى ثابت
+    // const navbar = document.querySelector('.arhgo-nav');
+    // if (!navbar) return;
+    // 
+    // let ticking = false;
+    // window.addEventListener('scroll', () => {
+    //   if (!ticking) {
+    //     window.requestAnimationFrame(() => {
+    //       const currentScroll = window.pageYOffset;
+    //       if (currentScroll > 100) {
+    //         navbar.classList.add('scrolled');
+    //       } else {
+    //         navbar.classList.remove('scrolled');
+    //       }
+    //       ticking = false;
+    //     });
+    //     ticking = true;
+    //   }
+    // });
   };
 
   // Add Ripple Effect to Buttons
@@ -263,25 +252,9 @@
     });
   };
 
-  // Add Glow Effect on Scroll
+  // Add Glow Effect on Scroll - معطل للأداء
   const setupGlowEffects = () => {
-    const glowElements = document.querySelectorAll('.glow-effect, .btn-gradient, .hero');
-    
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const windowHeight = window.innerHeight;
-      
-      glowElements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        const elementTop = rect.top + scrolled;
-        const elementCenter = elementTop + rect.height / 2;
-        const distanceFromCenter = Math.abs(scrolled + windowHeight / 2 - elementCenter);
-        const maxDistance = windowHeight;
-        const intensity = Math.max(0, 1 - distanceFromCenter / maxDistance);
-        
-        el.style.setProperty('--glow-intensity', intensity);
-      });
-    });
+    // تم تعطيله لتحسين الأداء
   };
 
   // Text Reveal Animation
