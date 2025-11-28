@@ -7,7 +7,7 @@
   <script src="assets/js/arhgo.js" defer></script>
   <style>
     body {
-      background: linear-gradient(135deg, #0A1C2E 0%, #0F1722 30%, #8EA2B6 60%, #C9B27A 100%);
+      background: linear-gradient(135deg, #0E1F33 0%, #163A5F 50%, #0E1F33 100%);
       background-size: 400% 400%;
       animation: gradientShift 15s ease infinite;
       position: relative;
@@ -39,25 +39,23 @@
       width: min(420px, 96vw);
       padding: 48px;
       border-radius: 24px;
-      background: rgba(242, 244, 247, 0.95);
-      border: 2px solid rgba(201, 178, 122, 0.3);
+      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
+      border: 2px solid rgba(55, 214, 192, 0.4);
       box-shadow: 
-        0 20px 60px rgba(10, 28, 46, 0.3),
-        0 0 40px rgba(201, 178, 122, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        0 20px 60px rgba(14, 31, 51, 0.4),
+        0 0 40px rgba(55, 214, 192, 0.3);
       text-align: center;
       backdrop-filter: blur(20px) saturate(180%);
-      color: var(--text);
+      color: #F2F9FF;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .auth-card:hover {
       transform: translateY(-5px);
       box-shadow: 
-        0 30px 80px rgba(10, 28, 46, 0.4),
-        0 0 60px rgba(201, 178, 122, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-      border-color: rgba(201, 178, 122, 0.5);
+        0 30px 80px rgba(14, 31, 51, 0.5),
+        0 0 60px rgba(55, 214, 192, 0.4);
+      border-color: rgba(55, 214, 192, 0.6);
     }
     .auth-card h2 {
       margin-bottom: 12px;
@@ -68,7 +66,7 @@
       font-style: normal;
     }
     .auth-card p {
-      color: var(--muted);
+      color: #B8D4F0;
       margin-bottom: 28px;
       font-size: 1.05rem;
       line-height: 1.7;
@@ -120,7 +118,7 @@
     .auth-logo-text .tagline {
       font-size: 0.7rem;
       font-weight: 600;
-      color: var(--muted);
+      color: #B8D4F0;
       letter-spacing: 3px;
       text-transform: uppercase;
     }
@@ -172,7 +170,7 @@
     
     .cloud {
       position: absolute;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(55, 214, 192, 0.3);
       border-radius: 100px;
       opacity: 0;
       filter: blur(2px);
@@ -184,7 +182,7 @@
     .cloud::after {
       content: '';
       position: absolute;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(55, 214, 192, 0.3);
       border-radius: 100px;
       filter: blur(1px);
     }
@@ -438,41 +436,69 @@
       error.textContent = '';
       error.style.color = '';
       
-      const userData = localStorage.getItem('user');
-
       if (!email || !password) {
         error.style.color = 'var(--danger)';
         error.textContent = "يرجى إدخال بيانات الدخول كاملة.";
         return;
       }
 
-      if (!userData) {
-        error.style.color = 'var(--danger)';
-        error.textContent = "لا يوجد حساب محفوظ، أنشئ حسابًا جديدًا.";
-        return;
-      }
-
-      const user = JSON.parse(userData);
-      const match = user.email.trim().toLowerCase() === email && user.password.trim() === password;
-
-      if (match) {
-        localStorage.setItem('loggedIn', user.username);
-        error.style.color = '#10B981';
-        error.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
+      // استخدام نظام المصادقة الجديد
+      if (typeof userAuth !== 'undefined') {
+        const result = userAuth.login(email, password);
         
-        // تشغيل الموسيقى
-        playFlightSoundEffect();
-        
-        // إظهار الغيوم
-        createClouds();
-        
-        // الانتقال بعد 5 ثواني
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 5000);
+        if (result.success) {
+          // التأكد من حفظ البيانات
+          localStorage.setItem('arhgo_current_user', result.user.username);
+          localStorage.setItem('loggedIn', result.user.username);
+          
+          error.style.color = '#4DFFD1';
+          error.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
+          
+          // تشغيل الموسيقى
+          playFlightSoundEffect();
+          
+          // إظهار الغيوم
+          createClouds();
+          
+          // الانتقال بعد 1.5 ثانية مع إضافة timestamp لمنع cache
+          setTimeout(() => {
+            window.location.href = 'index.html?t=' + Date.now();
+          }, 1500);
+        } else {
+          error.style.color = 'var(--danger)';
+          error.textContent = result.message;
+        }
       } else {
-        error.style.color = 'var(--danger)';
-        error.textContent = "بيانات الدخول غير صحيحة.";
+        // طريقة احتياطية (للتوافق مع الكود القديم)
+        const userData = localStorage.getItem('user');
+
+        if (!userData) {
+          error.style.color = 'var(--danger)';
+          error.textContent = "لا يوجد حساب محفوظ، أنشئ حسابًا جديدًا.";
+          return;
+        }
+
+        const user = JSON.parse(userData);
+        const match = user.email.trim().toLowerCase() === email && user.password.trim() === password;
+
+        if (match) {
+          // حفظ البيانات في كلا المفاتيح
+          localStorage.setItem('arhgo_current_user', user.username);
+          localStorage.setItem('loggedIn', user.username);
+          
+          error.style.color = '#4DFFD1';
+          error.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
+          
+          playFlightSoundEffect();
+          createClouds();
+          
+          setTimeout(() => {
+            window.location.href = 'index.html?t=' + Date.now();
+          }, 1500);
+        } else {
+          error.style.color = 'var(--danger)';
+          error.textContent = "بيانات الدخول غير صحيحة.";
+        }
       }
     }
   </script>

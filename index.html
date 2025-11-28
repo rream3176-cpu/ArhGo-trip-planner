@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo — المنصّة الذكية لتخطيط السفر</title>
+  <!-- GE SS Two Font -->
+  <link rel="preconnect" href="https://arbfonts.com">
   <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/user-auth.js"></script>
   <script src="assets/js/arhgo.js" defer></script>
   <script src="assets/js/countries-database.js"></script>
   <script src="assets/js/smart-country-suggestor.js"></script>
@@ -25,17 +28,22 @@
       <li><a data-nav href="price-comparison.html">مقارنة الأسعار</a></li>
       <li><a data-nav href="smart-alerts.html">التنبيهات</a></li>
   </ul>
-    <div class="stack">
-      <a class="btn btn-ghost" href="login.html" data-flight-sound data-translate="nav.login">تسجيل الدخول</a>
-      <a class="btn btn-gradient" href="signup.html" data-flight-sound data-translate="nav.signup">إنشاء حساب</a>
-  </div>
+    <div class="stack" id="authButtons">
+      <a class="btn btn-ghost" href="login.html" data-flight-sound data-translate="nav.login" id="loginBtn">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound data-translate="nav.signup" id="signupBtn">إنشاء حساب</a>
+    </div>
+    <div class="stack" id="userProfile" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 8px 16px; background: linear-gradient(135deg, rgba(55, 214, 192, 0.15), rgba(76, 168, 255, 0.1)); border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.4);">
+        <span style="color: #37D6C0; font-weight: 700; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);" id="userNameDisplay">المستخدم</span>
+        <button class="btn btn-ghost" onclick="userAuth.logout(); location.reload();" style="padding: 6px 16px; font-size: 0.9rem;">تسجيل الخروج</button>
+      </div>
+    </div>
 </nav>
 
   <main class="page-shell">
 <section class="hero" id="home">
       <div class="hero-grid">
         <div class="hero-main">
-          <span class="pill"><span class="status-signal"></span> ArhGo — Nightflight Edition</span>
           <h1 data-translate="hero.title">منصّة ذكية لتخطيط رحلاتك بكل سهولة</h1>
           <p data-translate="hero.subtitle">ArhGo تقدّم لك لوحة قيادة مظلمة، صوت إقلاع فوري، وخطط فخمة تُعرض كرحلة جوية خاصة في كل مرة.</p>
           <div class="hero-highlights">
@@ -343,7 +351,7 @@
               <option value="رياضة">⚽ رياضة</option>
               <option value="استرخاء">🧘 استرخاء</option>
             </select>
-            <small style="color: #666; font-size: 0.9rem;">اضغط Ctrl/Cmd لاختيار أكثر من واحد</small>
+            <small style="color: #B8D4F0; font-size: 0.9rem;">اضغط Ctrl/Cmd لاختيار أكثر من واحد</small>
     </div>
     
     <div class="field">
@@ -366,9 +374,9 @@
             <input class="arhgo-input" type="number" id="trip-days" min="1" placeholder="مثال: 5" style="font-size: 1.1rem; padding: 14px;">
     </div>
     
-    <div class="field" style="background: rgba(201, 178, 122, 0.1); padding: 20px; border-radius: 12px; border: 2px solid rgba(201, 178, 122, 0.3); margin: 20px 0;">
-            <label style="font-size: 1.1rem; font-weight: 700; color: #0A1C2E; margin-bottom: 12px; display: block;">✨ الدولة المقترحة (ذكية)</label>
-            <div id="suggested-country" style="font-size: 1.3rem; font-weight: 700; color: #C9B27A; margin: 12px 0; min-height: 40px; display: flex; align-items: center; gap: 12px;">
+    <div class="field" style="background: rgba(55, 214, 192, 0.15); padding: 20px; border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.4); margin: 20px 0;">
+            <label style="font-size: 1.1rem; font-weight: 700; color: #F2F9FF; margin-bottom: 12px; display: block;">✨ الدولة المقترحة (ذكية)</label>
+            <div id="suggested-country" style="font-size: 1.3rem; font-weight: 700; color: #37D6C0; margin: 12px 0; min-height: 40px; display: flex; align-items: center; gap: 12px;">
               <span id="suggested-country-name">املأ الحقول أعلاه للحصول على اقتراح ذكي</span>
             </div>
             <button type="button" class="btn btn-ghost" id="use-suggested-btn" onclick="useSuggestedCountry()" style="width: 100%; margin-top: 12px; display: none;">
@@ -667,7 +675,7 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
           const suggestedEl = document.getElementById('suggested-country-name');
           const useBtn = document.getElementById('use-suggested-btn');
           
-          suggestedEl.innerHTML = `🎯 ${suggestedCountry} <span style="font-size: 0.9rem; color: #666;">(مطابقة ${suggestions[0].match}%)</span>`;
+          suggestedEl.innerHTML = `🎯 ${suggestedCountry} <span style="font-size: 0.9rem; color: #B8D4F0;">(مطابقة ${suggestions[0].match}%)</span>`;
           useBtn.style.display = 'block';
           
           // تحديث الخلفية تلقائياً
@@ -984,7 +992,18 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       setPlans(updated);
       updateStats(payload, link);
       renderPlans();
-      showToast('تم حفظ الخطة مع رابط قصير ✨');
+      
+      // حفظ في قاعدة بيانات المستخدم إذا كان مسجل دخول
+      if (typeof userAuth !== 'undefined' && userAuth.isLoggedIn()) {
+        const result = userAuth.saveFormData(payload);
+        if (result.success) {
+          showToast('✅ تم حفظ الخطة في حسابك مع رابط قصير ✨');
+        } else {
+          showToast('تم حفظ الخطة محلياً ✨');
+        }
+      } else {
+        showToast('تم حفظ الخطة محلياً ✨ (سجّل دخولك لحفظها في حسابك)');
+      }
     });
 
     document.getElementById('saved-plans-list').addEventListener('click', (event) => {
@@ -1092,7 +1111,7 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
         <article class="glass-card floating-card">
           <div style="font-size: 3rem; margin-bottom: 16px;">${rec.icon}</div>
           <h3 style="color: #0A1C2E; margin-bottom: 12px;">${rec.title}</h3>
-          <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">${rec.description}</p>
+          <p style="color: #B8D4F0; margin-bottom: 20px; line-height: 1.6;">${rec.description}</p>
           <div style="display: flex; flex-wrap: wrap; gap: 8px;">
             ${rec.items.map(item => `
               <span class="badge badge-info" style="background: ${rec.color}; color: #fff;">
@@ -1130,6 +1149,113 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
     }
   </script>
   <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+    // التحقق من حالة تسجيل الدخول وعرضها
+    function updateAuthUI() {
+      // التحقق من localStorage مباشرة أولاً
+      const currentUser = localStorage.getItem('arhgo_current_user');
+      const loggedIn = localStorage.getItem('loggedIn');
+      
+      const authButtons = document.getElementById('authButtons');
+      const userProfile = document.getElementById('userProfile');
+      const userNameDisplay = document.getElementById('userNameDisplay');
+      
+      // إذا كان هناك مستخدم مسجل دخول في localStorage
+      if (currentUser || loggedIn) {
+        // محاولة استخدام userAuth إذا كان متاحاً
+        if (typeof userAuth !== 'undefined') {
+          try {
+            const isLoggedIn = userAuth.isLoggedIn();
+            if (isLoggedIn) {
+              const user = userAuth.getCurrentUser();
+              if (user) {
+                if (authButtons) authButtons.style.display = 'none';
+                if (userProfile) {
+                  userProfile.style.display = 'flex';
+                  if (userNameDisplay) {
+                    userNameDisplay.textContent = `👤 ${user.fullname || user.username || currentUser || loggedIn}`;
+                  }
+                }
+                return;
+              }
+            }
+          } catch (error) {
+            console.error('Error with userAuth:', error);
+          }
+        }
+        
+        // إذا لم يكن userAuth متاحاً، استخدام البيانات من localStorage مباشرة
+        if (authButtons) authButtons.style.display = 'none';
+        if (userProfile) {
+          userProfile.style.display = 'flex';
+          if (userNameDisplay) {
+            // محاولة الحصول على اسم المستخدم من localStorage
+            const allUsers = JSON.parse(localStorage.getItem('arhgo_users') || '[]');
+            const user = allUsers.find(u => u.username === (currentUser || loggedIn));
+            const displayName = user ? (user.fullname || user.username) : (currentUser || loggedIn);
+            userNameDisplay.textContent = `👤 ${displayName}`;
+          }
+        }
+      } else {
+        // لا يوجد مستخدم مسجل دخول
+        if (authButtons) authButtons.style.display = 'flex';
+        if (userProfile) userProfile.style.display = 'none';
+      }
+    }
+
+    // تحديث فوري عند تحميل الصفحة
+    (function initAuthUI() {
+      // تحديث فوري
+      updateAuthUI();
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          updateAuthUI();
+          // تحديث كل 200ms للتأكد (لمدة 4 ثواني)
+          let attempts = 0;
+          const maxAttempts = 20;
+          const interval = setInterval(() => {
+            updateAuthUI();
+            attempts++;
+            if (attempts >= maxAttempts) {
+              clearInterval(interval);
+            }
+          }, 200);
+        });
+      } else {
+        // تحديث كل 200ms للتأكد (لمدة 4 ثواني)
+        let attempts = 0;
+        const maxAttempts = 20;
+        const interval = setInterval(() => {
+          updateAuthUI();
+          attempts++;
+          if (attempts >= maxAttempts) {
+            clearInterval(interval);
+          }
+        }, 200);
+      }
+    })();
+    
+    // تحديث عند تغيير localStorage (من نافذة أخرى)
+    window.addEventListener('storage', () => {
+      setTimeout(updateAuthUI, 50);
+    });
+    
+    // تحديث عند التركيز على النافذة
+    window.addEventListener('focus', updateAuthUI);
+    
+    // تحديث عند تحميل الصفحة من cache
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        updateAuthUI();
+      }
+    });
+    
+    // تحديث عند الانتقال من صفحة أخرى
+    if (performance.navigation.type === 1) {
+      setTimeout(updateAuthUI, 100);
+    }
+  </script>
 </body>
 </html>
 

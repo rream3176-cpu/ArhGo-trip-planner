@@ -34,7 +34,7 @@
     .analytics-header h1 {
       font-size: 3.5rem;
       margin-bottom: 16px;
-      background: linear-gradient(135deg, #C9B27A, #8EA2B6, #fff);
+      background: linear-gradient(135deg, #37D6C0, #4CA8FF, #F2F9FF);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -48,10 +48,10 @@
     }
     
     .stat-card {
-      background: rgba(242, 244, 247, 0.95);
+      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
       border-radius: 24px;
       padding: 32px;
-      border: 2px solid rgba(201, 178, 122, 0.3);
+      border: 2px solid rgba(55, 214, 192, 0.4);
       box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
       backdrop-filter: blur(20px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -66,7 +66,7 @@
       left: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, #C9B27A, #8EA2B6);
+      background: linear-gradient(90deg, #37D6C0, #4CA8FF);
     }
     
     .stat-card:hover {
@@ -82,12 +82,12 @@
     .stat-value {
       font-size: 2.5rem;
       font-weight: 800;
-      color: #0A1C2E;
+      color: #F2F9FF;
       margin-bottom: 8px;
     }
     
     .stat-label {
-      color: #666;
+      color: #B8D4F0;
       font-size: 1.1rem;
       font-weight: 600;
     }
@@ -113,16 +113,16 @@
     }
     
     .chart-card {
-      background: rgba(242, 244, 247, 0.95);
+      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
       border-radius: 24px;
       padding: 32px;
-      border: 2px solid rgba(201, 178, 122, 0.3);
+      border: 2px solid rgba(55, 214, 192, 0.4);
       box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
       backdrop-filter: blur(20px);
     }
     
     .chart-card h3 {
-      color: #0A1C2E;
+      color: #F2F9FF;
       margin-bottom: 24px;
       font-size: 1.5rem;
       font-weight: 700;
@@ -134,10 +134,10 @@
     }
     
     .table-container {
-      background: rgba(242, 244, 247, 0.95);
+      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
       border-radius: 24px;
       padding: 32px;
-      border: 2px solid rgba(201, 178, 122, 0.3);
+      border: 2px solid rgba(55, 214, 192, 0.4);
       box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
       backdrop-filter: blur(20px);
       margin-bottom: 40px;
@@ -153,18 +153,18 @@
     .data-table td {
       padding: 16px;
       text-align: right;
-      border-bottom: 1px solid rgba(201, 178, 122, 0.2);
+      border-bottom: 1px solid rgba(55, 214, 192, 0.3);
     }
     
     .data-table th {
-      background: rgba(201, 178, 122, 0.1);
-      color: #0A1C2E;
+      background: rgba(55, 214, 192, 0.15);
+      color: #F2F9FF;
       font-weight: 700;
       font-size: 1.1rem;
     }
     
     .data-table tr:hover {
-      background: rgba(201, 178, 122, 0.05);
+      background: rgba(55, 214, 192, 0.1);
     }
     
     .export-buttons {
@@ -402,8 +402,8 @@
           datasets: [{
             label: 'المصروفات ($)',
             data: Object.values(monthlyExpenses),
-            backgroundColor: 'rgba(201, 178, 122, 0.8)',
-            borderColor: '#C9B27A',
+            backgroundColor: 'rgba(55, 214, 192, 0.8)',
+            borderColor: '#37D6C0',
             borderWidth: 2
           }]
         },

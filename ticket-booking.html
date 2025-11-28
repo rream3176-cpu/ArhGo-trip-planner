@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArhGo | نموذج حجز الرحلة</title>
+  <title>ArhGo | حجز الرحلات</title>
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
+  <script src="assets/js/booking-system.js" defer></script>
   <style>
     .wrapper {
       display: grid;
@@ -16,11 +17,46 @@
       display: grid;
       gap: 16px;
     }
+    .summary-card {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
     .summary-card .summary-item {
       display: flex;
       justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(74, 144, 226, 0.15);
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(55, 214, 192, 0.3);
+    }
+    .summary-item:last-child {
+      border-bottom: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #37D6C0;
+      margin-top: 10px;
+      padding-top: 15px;
+      border-top: 2px solid rgba(55, 214, 192, 0.4);
+    }
+    .success-message {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      margin-top: 20px;
+      text-align: center;
+    }
+    .booking-id {
+      font-family: 'Courier New', monospace;
+      background: rgba(55, 214, 192, 0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
     }
   </style>
 </head>
@@ -34,7 +70,7 @@
       <li><a data-nav href="index.html#destinations">الوجهات</a></li>
       <li><a data-nav href="hotel.html">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
-      <li><a data-nav href="Restuarnt.html">مطاعم</a></li>
+      <li><a data-nav href="Restuarnt.html">حجز المطاعم</a></li>
     </ul>
     <div class="stack">
       <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
@@ -44,47 +80,49 @@
   <main class="page-shell">
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title">نموذج حجز الرحلات</h2>
-        <p class="section-subtitle">املأ التفاصيل، سنرسلها لخادم ArhGo (منفذ 4002) ونحدّث الملخص فورًا.</p>
+        <h2 class="section-title">حجز الرحلات الجوية</h2>
+        <p class="section-subtitle">احجز رحلتك بسهولة وأمان. جميع الحجوزات تُحفظ تلقائياً ويمكنك طباعتها.</p>
       </div>
       <div class="wrapper">
         <form id="bookingForm" class="glass-card booking-form">
           <div class="field">
-            <label>نوع الرحلة</label>
-            <select class="arhgo-select" id="tripType">
-              <option>ذهاب فقط</option>
-              <option>ذهاب وعودة</option>
-              <option>متعدد الوجهات</option>
+            <label>نوع الرحلة *</label>
+            <select class="arhgo-select" id="tripType" required>
+              <option value="">اختر نوع الرحلة</option>
+              <option value="ذهاب فقط">ذهاب فقط</option>
+              <option value="ذهاب وعودة">ذهاب وعودة</option>
+              <option value="متعدد الوجهات">متعدد الوجهات</option>
             </select>
           </div>
           <div class="field">
-            <label>من / إلى</label>
+            <label>من / إلى *</label>
             <div class="stack">
-              <input class="arhgo-input" type="text" id="from" placeholder="من">
-              <input class="arhgo-input" type="text" id="to" placeholder="إلى">
+              <input class="arhgo-input" type="text" id="from" placeholder="من (مثال: بغداد)" required>
+              <input class="arhgo-input" type="text" id="to" placeholder="إلى (مثال: دبي)" required>
             </div>
           </div>
           <div class="field">
-            <label>تاريخ المغادرة</label>
-            <input class="arhgo-input" type="date" id="depart">
+            <label>تاريخ المغادرة *</label>
+            <input class="arhgo-input" type="date" id="depart" required>
           </div>
-          <div class="field">
+          <div class="field" id="returnField" style="display: none;">
             <label>تاريخ العودة</label>
             <input class="arhgo-input" type="date" id="return">
           </div>
           <div class="field">
-            <label>الدرجة</label>
-            <select class="arhgo-select" id="classType">
-              <option>اقتصادية</option>
-              <option>درجة رجال الأعمال</option>
-              <option>الأولى</option>
+            <label>الدرجة *</label>
+            <select class="arhgo-select" id="classType" required>
+              <option value="">اختر الدرجة</option>
+              <option value="اقتصادية">اقتصادية</option>
+              <option value="درجة رجال الأعمال">درجة رجال الأعمال</option>
+              <option value="الأولى">الأولى</option>
             </select>
           </div>
           <div class="field">
-            <label>عدد المسافرين</label>
+            <label>عدد المسافرين *</label>
             <div class="stack" style="gap:8px;">
               <button type="button" class="btn btn-ghost" onclick="changeCount(-1)">−</button>
-              <input class="arhgo-input" type="text" id="pcount" value="1" readonly style="text-align:center;">
+              <input class="arhgo-input" type="number" id="pcount" value="1" min="1" max="9" required style="text-align:center;">
               <button type="button" class="btn btn-ghost" onclick="changeCount(1)">+</button>
             </div>
           </div>
@@ -93,23 +131,24 @@
             <span>أفضل الرحلات بدون توقف</span>
           </label>
           <div class="field">
-            <label>الاسم الكامل</label>
-            <input class="arhgo-input" type="text" id="fullname" placeholder="اسمك الكامل">
+            <label>الاسم الكامل *</label>
+            <input class="arhgo-input" type="text" id="fullname" placeholder="اسمك الكامل" required>
           </div>
           <div class="field">
-            <label>البريد الإلكتروني</label>
-            <input class="arhgo-input" type="email" id="email" placeholder="example@mail.com">
+            <label>البريد الإلكتروني *</label>
+            <input class="arhgo-input" type="email" id="email" placeholder="example@mail.com" required>
           </div>
           <div class="field">
-            <label>رقم الهاتف</label>
-            <input class="arhgo-input" type="tel" id="phone" placeholder="+964 770 000 0000">
+            <label>رقم الهاتف *</label>
+            <input class="arhgo-input" type="tel" id="phone" placeholder="+964 770 000 0000" required>
           </div>
           <div class="field">
-            <label>طريقة الدفع</label>
-            <select class="arhgo-select" id="payment">
-              <option>نقدًا عند الوصول</option>
-              <option>بطاقة ائتمان</option>
-              <option>دفع إلكتروني</option>
+            <label>طريقة الدفع *</label>
+            <select class="arhgo-select" id="payment" required>
+              <option value="">اختر طريقة الدفع</option>
+              <option value="نقدًا عند الوصول">نقدًا عند الوصول</option>
+              <option value="بطاقة ائتمان">بطاقة ائتمان</option>
+              <option value="دفع إلكتروني">دفع إلكتروني</option>
             </select>
           </div>
           <div class="field">
@@ -122,41 +161,105 @@
         <article class="glass-card summary-card">
           <h3>ملخص الحجز</h3>
           <div id="summaryContent">
-            <div class="summary-item"><span>الرحلة</span><span>—</span></div>
-            <div class="summary-item"><span>من — إلى</span><span>—</span></div>
-            <div class="summary-item"><span>التاريخ</span><span>—</span></div>
-            <div class="summary-item"><span>المسافرون</span><span>1</span></div>
-            <div class="summary-item"><span>الدرجة</span><span>—</span></div>
-            <div class="summary-item"><span>بدون توقف</span><span>لا</span></div>
-            <div class="summary-item"><span>السعر المتوقع</span><span id="sumPrice">$150</span></div>
+            <div class="summary-item"><span>الرحلة</span><span id="sumTrip">—</span></div>
+            <div class="summary-item"><span>من — إلى</span><span id="sumRoute">—</span></div>
+            <div class="summary-item"><span>التاريخ</span><span id="sumDate">—</span></div>
+            <div class="summary-item"><span>المسافرون</span><span id="sumPassengers">1</span></div>
+            <div class="summary-item"><span>الدرجة</span><span id="sumClass">—</span></div>
+            <div class="summary-item"><span>بدون توقف</span><span id="sumNonstop">لا</span></div>
+            <div class="summary-item"><span>السعر الإجمالي</span><span id="sumPrice">$0</span></div>
           </div>
-          <p class="section-subtitle" style="margin-top:20px;">واجهة تدريبية — القيم تستبدل عند الربط الفعلي بالخادم.</p>
+          <div id="successMessage" class="success-message" style="display: none;">
+            <h4 style="color: var(--success); margin: 0 0 10px 0;">✅ تم تأكيد الحجز بنجاح!</h4>
+            <p>رقم الحجز:</p>
+            <div class="booking-id" id="bookingIdDisplay"></div>
+            <div class="action-buttons">
+              <button class="btn btn-gradient" onclick="printBooking()" style="flex: 1;">طباعة التذكرة</button>
+              <button class="btn btn-ghost" onclick="resetForm()" style="flex: 1;">حجز جديد</button>
+            </div>
+          </div>
         </article>
       </div>
     </section>
   </main>
 
   <script>
-    function changeCount(delta) {
-      const el = document.getElementById('pcount');
-      let val = parseInt(el.value, 10);
-      val = Math.min(9, Math.max(1, val + delta));
-      el.value = val;
+    let currentBooking = null;
+
+    // تعيين الحد الأدنى للتاريخ (اليوم)
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('depart').setAttribute('min', today);
+    document.getElementById('return').setAttribute('min', today);
+
+    // إظهار/إخفاء حقل العودة
+    document.getElementById('tripType').addEventListener('change', function() {
+      const returnField = document.getElementById('returnField');
+      if (this.value === 'ذهاب وعودة') {
+        returnField.style.display = 'block';
+        document.getElementById('return').setAttribute('required', 'required');
+      } else {
+        returnField.style.display = 'none';
+        document.getElementById('return').removeAttribute('required');
+      }
+      updateSummary();
+    });
+
+    // تحديث الملخص عند تغيير الحقول
+    ['tripType', 'from', 'to', 'depart', 'return', 'classType', 'pcount', 'nonstop'].forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener('change', updateSummary);
+        element.addEventListener('input', updateSummary);
+      }
+    });
+
+    function updateSummary() {
+      const tripType = document.getElementById('tripType').value || '—';
+      const from = document.getElementById('from').value || '—';
+      const to = document.getElementById('to').value || '—';
+      const depart = document.getElementById('depart').value || '—';
+      const returnDate = document.getElementById('return').value || '';
+      const classType = document.getElementById('classType').value || '—';
+      const pcount = parseInt(document.getElementById('pcount').value) || 1;
+      const nonstop = document.getElementById('nonstop').checked ? 'نعم' : 'لا';
+
+      document.getElementById('sumTrip').textContent = tripType;
+      document.getElementById('sumRoute').textContent = `${from} — ${to}`;
+      document.getElementById('sumDate').textContent = returnDate ? `${depart} / ${returnDate}` : depart;
+      document.getElementById('sumPassengers').textContent = pcount;
+      document.getElementById('sumClass').textContent = classType;
+      document.getElementById('sumNonstop').textContent = nonstop;
+
+      // حساب السعر
+      if (tripType !== '—' && from !== '—' && to !== '—' && classType !== '—') {
+        const price = bookingSystem.calculateFlightPrice(tripType, classType, pcount, from, to);
+        document.getElementById('sumPrice').textContent = `$${price}`;
+      } else {
+        document.getElementById('sumPrice').textContent = '$0';
+      }
     }
 
-    const summaryRows = () => document.querySelectorAll('#summaryContent .summary-item span:last-child');
+    function changeCount(delta) {
+      const el = document.getElementById('pcount');
+      let val = parseInt(el.value, 10) || 1;
+      val = Math.min(9, Math.max(1, val + delta));
+      el.value = val;
+      updateSummary();
+    }
 
+    // معالجة إرسال النموذج
     document.getElementById('bookingForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = {
+
+      const formData = {
         trip: document.getElementById('tripType').value,
         from: document.getElementById('from').value,
         to: document.getElementById('to').value,
         depart: document.getElementById('depart').value,
-        return: document.getElementById('return').value,
-        pcount: document.getElementById('pcount').value,
+        return: document.getElementById('return').value || null,
+        pcount: parseInt(document.getElementById('pcount').value),
         classType: document.getElementById('classType').value,
-        nonstop: document.getElementById('nonstop').checked ? 'نعم' : 'لا',
+        nonstop: document.getElementById('nonstop').checked,
         fullname: document.getElementById('fullname').value,
         email: document.getElementById('email').value,
         phone: document.getElementById('phone').value,
@@ -164,32 +267,57 @@
         notes: document.getElementById('notes').value
       };
 
-      const rows = summaryRows();
-      rows[0].textContent = data.trip;
-      rows[1].textContent = `${data.from} — ${data.to}`;
-      rows[2].textContent = data.return ? `${data.depart} / ${data.return}` : data.depart;
-      rows[3].textContent = data.pcount;
-      rows[4].textContent = data.classType;
-      rows[5].textContent = data.nonstop;
+      // حساب السعر
+      const price = bookingSystem.calculateFlightPrice(
+        formData.trip,
+        formData.classType,
+        formData.pcount,
+        formData.from,
+        formData.to
+      );
+      formData.price = price;
 
+      // حفظ الحجز
       try {
-        const response = await fetch('http://localhost:4002/api/book', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+        currentBooking = bookingSystem.bookFlight(formData);
+        
+        // إظهار رسالة النجاح
+        document.getElementById('bookingIdDisplay').textContent = currentBooking.id;
+        document.getElementById('successMessage').style.display = 'block';
+        document.getElementById('summaryContent').style.opacity = '0.6';
+
+        // محاولة إرسال للخادم (اختياري)
+        bookingSystem.sendToServer(currentBooking, 'http://localhost:4002/api/book').catch(() => {
+          // تم الحفظ محلياً فقط
         });
-        const result = await response.json();
-        if (response.ok) {
-          document.getElementById('sumPrice').textContent = `$${150 * parseInt(data.pcount, 10)}`;
-          alert(`✅ تم تأكيد الحجز!\nرقم الحجز: ${result.bookingId}`);
-        } else {
-          alert(`❌ حدث خطأ: ${result.message}`);
-        }
-      } catch (err) {
-        alert('⚠ فشل الاتصال بالخادم: ' + err.message);
+
+        // إعادة تعيين النموذج بعد 3 ثواني
+        setTimeout(() => {
+          document.getElementById('bookingForm').reset();
+          updateSummary();
+        }, 3000);
+
+      } catch (error) {
+        alert('❌ حدث خطأ أثناء الحجز: ' + error.message);
       }
     });
+
+    function printBooking() {
+      if (currentBooking) {
+        bookingSystem.printBooking(currentBooking);
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('bookingForm').reset();
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('summaryContent').style.opacity = '1';
+      currentBooking = null;
+      updateSummary();
+    }
+
+    // تحديث الملخص عند التحميل
+    updateSummary();
   </script>
 </body>
 </html>
-

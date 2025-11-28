@@ -5,9 +5,10 @@
   <title>ArhGo | إنشاء حساب</title>
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
+  <script src="assets/js/user-auth.js"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #0A1C2E 0%, #0F1722 30%, #8EA2B6 60%, #C9B27A 100%);
+      background: linear-gradient(135deg, #0E1F33 0%, #163A5F 50%, #0E1F33 100%);
       background-size: 400% 400%;
       animation: gradientShift 15s ease infinite;
       position: relative;
@@ -39,24 +40,22 @@
       width: min(520px, 96vw);
       padding: 48px;
       border-radius: 24px;
-      background: rgba(242, 244, 247, 0.95);
-      border: 2px solid rgba(201, 178, 122, 0.3);
+      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
+      border: 2px solid rgba(55, 214, 192, 0.4);
       box-shadow: 
-        0 20px 60px rgba(10, 28, 46, 0.3),
-        0 0 40px rgba(201, 178, 122, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        0 20px 60px rgba(14, 31, 51, 0.4),
+        0 0 40px rgba(55, 214, 192, 0.3);
       backdrop-filter: blur(20px) saturate(180%);
-      color: var(--text);
+      color: #F2F9FF;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .signup-card:hover {
       transform: translateY(-5px);
       box-shadow: 
-        0 30px 80px rgba(10, 28, 46, 0.4),
-        0 0 60px rgba(201, 178, 122, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-      border-color: rgba(201, 178, 122, 0.5);
+        0 30px 80px rgba(14, 31, 51, 0.5),
+        0 0 60px rgba(55, 214, 192, 0.4);
+      border-color: rgba(55, 214, 192, 0.6);
     }
     .signup-grid {
       display: grid;
@@ -74,7 +73,7 @@
     }
     .signup-card p {
       text-align: center;
-      color: var(--muted);
+      color: #B8D4F0;
       margin-bottom: 32px;
       font-size: 1.05rem;
       line-height: 1.7;
@@ -130,7 +129,7 @@
     
     .cloud {
       position: absolute;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(55, 214, 192, 0.3);
       border-radius: 100px;
       opacity: 0;
       filter: blur(2px);
@@ -142,7 +141,7 @@
     .cloud::after {
       content: '';
       position: absolute;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(55, 214, 192, 0.3);
       border-radius: 100px;
       filter: blur(1px);
     }
@@ -208,9 +207,9 @@
       gap: 12px;
       margin: 20px 0;
       padding: 16px;
-      background: rgba(201, 178, 122, 0.1);
+      background: rgba(55, 214, 192, 0.15);
       border-radius: 12px;
-      border: 1px solid rgba(201, 178, 122, 0.3);
+      border: 1px solid rgba(55, 214, 192, 0.4);
     }
     
     .terms-checkbox input[type="checkbox"] {
@@ -223,7 +222,7 @@
     
     .terms-checkbox label {
       font-size: 0.9rem;
-      color: var(--text);
+      color: #F2F9FF;
       line-height: 1.6;
       cursor: pointer;
     }
@@ -527,31 +526,68 @@
         return;
       }
 
-      // حفظ الحساب في localStorage
-      const user = { 
-        username, 
-        fullname, 
-        email, 
-        password,
-        createdAt: new Date().toISOString()
-      };
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('loggedIn', username);
+      // حفظ الحساب باستخدام نظام المصادقة الجديد
+      if (typeof userAuth !== 'undefined') {
+        const result = userAuth.saveUser({ 
+          username, 
+          fullname, 
+          email, 
+          password
+        });
 
-      // رسالة نجاح
-      error.style.color = '#10B981';
-      error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
-      
-      // تشغيل الموسيقى
-      playFlightSoundEffect();
-      
-      // إظهار الغيوم
-      createClouds();
-      
-      // الانتقال بعد 5 ثواني
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 5000);
+        if (result.success) {
+          // تسجيل الدخول تلقائياً
+          const loginResult = userAuth.login(email, password);
+          
+          if (loginResult.success) {
+            // التأكد من حفظ البيانات
+            localStorage.setItem('arhgo_current_user', loginResult.user.username);
+            localStorage.setItem('loggedIn', loginResult.user.username);
+            
+            error.style.color = '#4DFFD1';
+            error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
+            
+            // تشغيل الموسيقى
+            playFlightSoundEffect();
+            
+            // إظهار الغيوم
+            createClouds();
+            
+            // الانتقال بعد 1.5 ثانية مع إضافة timestamp لمنع cache
+            setTimeout(() => {
+              window.location.href = 'index.html?t=' + Date.now();
+            }, 1500);
+          } else {
+            error.style.color = 'var(--danger)';
+            error.textContent = "تم إنشاء الحساب لكن فشل تسجيل الدخول. يرجى تسجيل الدخول يدوياً.";
+          }
+        } else {
+          error.style.color = 'var(--danger)';
+          error.textContent = result.message;
+        }
+      } else {
+        // طريقة احتياطية (للتوافق مع الكود القديم)
+        const user = { 
+          username, 
+          fullname, 
+          email, 
+          password,
+          createdAt: new Date().toISOString()
+        };
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('arhgo_current_user', username);
+        localStorage.setItem('loggedIn', username);
+
+        error.style.color = '#4DFFD1';
+        error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
+        
+        playFlightSoundEffect();
+        createClouds();
+        
+        setTimeout(() => {
+          window.location.href = 'index.html?t=' + Date.now();
+        }, 1500);
+      }
     }
   </script>
 </body>

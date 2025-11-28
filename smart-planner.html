@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
   <script src="assets/js/countries-database.js"></script>
+  <script src="assets/js/plan-manager.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #0A1C2E 0%, #0F1722 30%, #8EA2B6 60%, #C9B27A 100%);
+      background: linear-gradient(135deg, #163A5F 0%, #1E4A6F 40%, #255A7F 80%, #163A5F 100%);
       background-size: 400% 400%;
       animation: gradientShift 15s ease infinite;
     }
@@ -29,13 +30,17 @@
     .planner-header {
       text-align: center;
       margin-bottom: 40px;
-      color: #fff;
+      color: #F2F9FF;
+    }
+    
+    .planner-header p {
+      text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);
     }
     
     .planner-header h1 {
       font-size: 3rem;
       margin-bottom: 16px;
-      background: linear-gradient(135deg, #C9B27A, #8EA2B6, #fff);
+      background: linear-gradient(135deg, #37D6C0, #4CA8FF, #F2F9FF);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -48,9 +53,12 @@
       gap: 12px;
       margin: 20px 0;
       padding: 16px;
-      background: rgba(201, 178, 122, 0.1);
+      background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.15));
       border-radius: 12px;
-      border: 2px solid rgba(201, 178, 122, 0.3);
+      border: 2px solid rgba(55, 214, 192, 0.5);
+      color: #F2F9FF;
+      text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);
+      box-shadow: 0 4px 15px rgba(55, 214, 192, 0.2);
     }
     
     .status-indicator {
@@ -80,28 +88,29 @@
     }
     
     .info-card {
-      background: rgba(242, 244, 247, 0.95);
+      background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85));
       border-radius: 24px;
       padding: 32px;
-      border: 2px solid rgba(201, 178, 122, 0.3);
-      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
+      border: 2px solid rgba(55, 214, 192, 0.5);
+      box-shadow: 0 20px 60px rgba(14, 31, 51, 0.4), 0 0 30px rgba(55, 214, 192, 0.2);
       backdrop-filter: blur(20px);
     }
     
     .day-plan {
-      background: rgba(242, 244, 247, 0.95);
+      background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85));
       border-radius: 24px;
       padding: 32px;
       margin-bottom: 24px;
-      border: 2px solid rgba(201, 178, 122, 0.3);
-      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
+      border: 2px solid rgba(55, 214, 192, 0.5);
+      box-shadow: 0 20px 60px rgba(14, 31, 51, 0.4), 0 0 30px rgba(55, 214, 192, 0.2);
       backdrop-filter: blur(20px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     
     .day-plan:hover {
       transform: translateY(-5px);
-      box-shadow: 0 30px 80px rgba(10, 28, 46, 0.4);
+      box-shadow: 0 30px 80px rgba(14, 31, 51, 0.5), 0 0 40px rgba(55, 214, 192, 0.3);
+      border-color: rgba(55, 214, 192, 0.7);
     }
     
     .day-header {
@@ -110,13 +119,13 @@
       justify-content: space-between;
       margin-bottom: 24px;
       padding-bottom: 16px;
-      border-bottom: 2px solid rgba(201, 178, 122, 0.3);
+      border-bottom: 2px solid rgba(55, 214, 192, 0.4);
     }
     
     .day-number {
       font-size: 2rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #0A1C2E, #C9B27A);
+      background: linear-gradient(135deg, #37D6C0, #4DFFD1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -125,15 +134,18 @@
     .time-slot {
       margin: 20px 0;
       padding: 20px;
-      background: rgba(201, 178, 122, 0.1);
+      background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.15));
       border-radius: 12px;
-      border-right: 4px solid #C9B27A;
+      border-right: 4px solid #37D6C0;
+      box-shadow: 0 4px 15px rgba(55, 214, 192, 0.2);
     }
     
     .time-slot h4 {
-      color: #0A1C2E;
+      color: #F2F9FF;
       margin-bottom: 12px;
       font-size: 1.2rem;
+      text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);
+      font-weight: 700;
     }
     
     .activity-item {
@@ -142,15 +154,16 @@
       gap: 12px;
       margin: 12px 0;
       padding: 12px;
-      background: rgba(255, 255, 255, 0.5);
+      background: linear-gradient(135deg, rgba(30, 74, 111, 0.5), rgba(22, 58, 95, 0.6));
       border-radius: 8px;
+      border: 1px solid rgba(55, 214, 192, 0.3);
     }
     
     .activity-icon {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #C9B27A, #8EA2B6);
+      background: linear-gradient(135deg, #37D6C0, #4CA8FF);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -183,8 +196,8 @@
     .loading-spinner {
       width: 60px;
       height: 60px;
-      border: 4px solid rgba(201, 178, 122, 0.3);
-      border-top-color: #C9B27A;
+      border: 4px solid rgba(55, 214, 192, 0.3);
+      border-top-color: #37D6C0;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-bottom: 20px;
@@ -202,23 +215,26 @@
     }
     
     .stat-card {
-      background: rgba(201, 178, 122, 0.1);
+      background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.15));
       padding: 20px;
       border-radius: 12px;
       text-align: center;
-      border: 1px solid rgba(201, 178, 122, 0.3);
+      border: 1px solid rgba(55, 214, 192, 0.5);
+      box-shadow: 0 4px 15px rgba(55, 214, 192, 0.2);
     }
     
     .stat-value {
       font-size: 2rem;
       font-weight: 800;
-      color: #0A1C2E;
+      color: #F2F9FF;
       margin-bottom: 8px;
+      text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);
     }
     
     .stat-label {
-      color: #666;
+      color: #B8D4F0;
       font-size: 0.9rem;
+      text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);
     }
   </style>
 </head>
@@ -250,6 +266,15 @@
         <div class="status-indicator"></div>
         <span>الخوارزمية نشطة - تحليل وتوليد محسّن</span>
       </div>
+      <div id="planActions" style="display: none; margin-top: 24px; gap: 16px; flex-wrap: wrap; justify-content: center;">
+        <button id="savePlanBtn" class="btn btn-gradient" style="padding: 12px 32px; font-size: 1.1rem; border-radius: 12px; cursor: pointer; border: none; font-weight: 700;">
+          💾 حفظ الخطة
+        </button>
+        <button id="sharePlanBtn" class="btn btn-ghost" style="padding: 12px 32px; font-size: 1.1rem; border-radius: 12px; cursor: pointer; border: 2px solid rgba(55, 214, 192, 0.5); font-weight: 700;">
+          🔗 مشاركة الخطة
+        </button>
+      </div>
+      <div id="planMessage" style="margin-top: 16px; min-height: 24px; text-align: center; font-weight: 600;"></div>
     </div>
 
     <div class="planner-grid">
@@ -260,7 +285,7 @@
       </div>
       
       <div class="info-card">
-        <h3 style="color: #0A1C2E; margin-bottom: 20px;">تحليل الخوارزمية</h3>
+        <h3 style="color: #37D6C0; margin-bottom: 20px; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">تحليل الخوارزمية</h3>
         <canvas id="algorithmChart" style="max-height: 300px;"></canvas>
         <div class="route-optimization" id="routeInfo" style="margin-top: 20px;">
           <strong>تحسين المسار:</strong>
@@ -270,7 +295,7 @@
     </div>
 
     <div class="info-card" style="margin-bottom: 40px;">
-      <h3 style="color: #0A1C2E; margin-bottom: 20px;">🗺️ خريطة الرحلة</h3>
+      <h3 style="color: #37D6C0; margin-bottom: 20px; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">🗺️ خريطة الرحلة</h3>
       <div id="trip-map" style="width: 100%; height: 400px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
         <iframe id="google-map-iframe" style="width: 100%; height: 100%; border: none;" loading="lazy" allowfullscreen></iframe>
       </div>
@@ -545,48 +570,48 @@
       const tripInfo = document.getElementById('tripInfo');
       tripInfo.innerHTML = `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-          <div style="background: linear-gradient(135deg, rgba(201, 178, 122, 0.2), rgba(142, 162, 182, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(201, 178, 122, 0.3);">
+          <div style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
             <div style="font-size: 2rem; margin-bottom: 8px;">🌍</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #0A1C2E; margin-bottom: 4px;">الوجهة</div>
-            <div style="font-size: 1.3rem; color: #C9B27A; font-weight: 800;">${country}</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #37D6C0; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">الوجهة</div>
+            <div style="font-size: 1.3rem; color: #37D6C0; font-weight: 800; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">${country}</div>
           </div>
-          <div style="background: linear-gradient(135deg, rgba(201, 178, 122, 0.2), rgba(142, 162, 182, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(201, 178, 122, 0.3);">
+          <div style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
             <div style="font-size: 2rem; margin-bottom: 8px;">📅</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #0A1C2E; margin-bottom: 4px;">مدة الرحلة</div>
-            <div style="font-size: 1.3rem; color: #C9B27A; font-weight: 800;">${days} ${days === 1 ? 'يوم' : 'أيام'}</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #37D6C0; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">مدة الرحلة</div>
+            <div style="font-size: 1.3rem; color: #37D6C0; font-weight: 800; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">${days} ${days === 1 ? 'يوم' : 'أيام'}</div>
           </div>
-          <div style="background: linear-gradient(135deg, rgba(201, 178, 122, 0.2), rgba(142, 162, 182, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(201, 178, 122, 0.3);">
+          <div style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
             <div style="font-size: 2rem; margin-bottom: 8px;">🎯</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #0A1C2E; margin-bottom: 4px;">الاهتمامات</div>
-            <div style="font-size: 1rem; color: #666; line-height: 1.6;">${interests}</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #37D6C0; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">الاهتمامات</div>
+            <div style="font-size: 1rem; color: #F2F9FF; line-height: 1.6; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${interests}</div>
           </div>
-          <div style="background: linear-gradient(135deg, rgba(201, 178, 122, 0.2), rgba(142, 162, 182, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(201, 178, 122, 0.3);">
+          <div style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
             <div style="font-size: 2rem; margin-bottom: 8px;">💰</div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: #0A1C2E; margin-bottom: 4px;">الميزانية</div>
-            <div style="font-size: 1.2rem; color: #10B981; font-weight: 700;">${budget === 'low' ? '💵 اقتصادية' : budget === 'medium' ? '💶 متوسطة' : '💎 فاخرة'}</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: #37D6C0; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">الميزانية</div>
+            <div style="font-size: 1.2rem; color: #4DFFD1; font-weight: 700; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${budget === 'low' ? '💵 اقتصادية' : budget === 'medium' ? '💶 متوسطة' : '💎 فاخرة'}</div>
           </div>
         </div>
-        <div style="margin-top: 24px; padding: 24px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1)); border-radius: 16px; border: 2px solid rgba(16, 185, 129, 0.3);">
-          <h3 style="color: #0A1C2E; font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+        <div style="margin-top: 24px; padding: 24px; background: linear-gradient(135deg, rgba(55, 214, 192, 0.15), rgba(76, 168, 255, 0.1)); border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
+          <h3 style="color: #37D6C0; font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">
             <span>💡</span>
             <span>نصائح ومعلومات مهمة</span>
           </h3>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
-            <div style="background: rgba(255, 255, 255, 0.7); padding: 16px; border-radius: 12px;">
-              <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 8px;">🌤️ الطقس المتوقع:</div>
-              <div style="color: #666; line-height: 1.8;">${weatherInfo['مشمس'] || '☀️ مشمس - مثالي للأنشطة الخارجية'}</div>
+            <div style="background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); padding: 16px; border-radius: 12px; border: 1px solid rgba(55, 214, 192, 0.3);">
+              <div style="font-weight: 700; color: #37D6C0; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">🌤️ الطقس المتوقع:</div>
+              <div style="color: #F2F9FF; line-height: 1.8; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${weatherInfo['مشمس'] || '☀️ مشمس - مثالي للأنشطة الخارجية'}</div>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.7); padding: 16px; border-radius: 12px;">
-              <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 8px;">⏰ التوقيت المحلي:</div>
-              <div style="color: #666; line-height: 1.8;">${countryData?.timeSlots?.morning || '09:00'} - ${countryData?.timeSlots?.evening || '22:00'}</div>
+            <div style="background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); padding: 16px; border-radius: 12px; border: 1px solid rgba(55, 214, 192, 0.3);">
+              <div style="font-weight: 700; color: #37D6C0; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">⏰ التوقيت المحلي:</div>
+              <div style="color: #F2F9FF; line-height: 1.8; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${countryData?.timeSlots?.morning || '09:00'} - ${countryData?.timeSlots?.evening || '22:00'}</div>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.7); padding: 16px; border-radius: 12px;">
-              <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 8px;">📱 معلومات مهمة:</div>
-              <div style="color: #666; line-height: 1.8;">احمل جواز السفر، بطاقة ائتمانية، وشارك الخطة مع الأصدقاء</div>
+            <div style="background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); padding: 16px; border-radius: 12px; border: 1px solid rgba(55, 214, 192, 0.3);">
+              <div style="font-weight: 700; color: #37D6C0; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">📱 معلومات مهمة:</div>
+              <div style="color: #F2F9FF; line-height: 1.8; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">احمل جواز السفر، بطاقة ائتمانية، وشارك الخطة مع الأصدقاء</div>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.7); padding: 16px; border-radius: 12px;">
-              <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 8px;">🚗 المواصلات:</div>
-              <div style="color: #666; line-height: 1.8;">استخدم التطبيقات المحلية للمواصلات أو استأجر سيارة</div>
+            <div style="background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); padding: 16px; border-radius: 12px; border: 1px solid rgba(55, 214, 192, 0.3);">
+              <div style="font-weight: 700; color: #37D6C0; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">🚗 المواصلات:</div>
+              <div style="color: #F2F9FF; line-height: 1.8; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">استخدم التطبيقات المحلية للمواصلات أو استأجر سيارة</div>
             </div>
           </div>
         </div>
@@ -623,8 +648,8 @@
           datasets: [{
             label: 'التكلفة اليومية',
             data: plan.map(d => Math.round(d.totalCost)),
-            borderColor: '#C9B27A',
-            backgroundColor: 'rgba(201, 178, 122, 0.1)',
+            borderColor: '#37D6C0',
+            backgroundColor: 'rgba(55, 214, 192, 0.15)',
             tension: 0.4
           }]
         },
@@ -647,6 +672,21 @@
       
       // تحديث خريطة Google
       updateGoogleMap(country);
+      
+      // إظهار أزرار الحفظ والمشاركة
+      document.getElementById('planActions').style.display = 'flex';
+      
+      // حفظ بيانات الخطة للاستخدام لاحقاً
+      window.currentPlanData = {
+        country: country,
+        days: days,
+        budget: budget,
+        interests: interests,
+        plan: plan,
+        totalCost: totalCost,
+        avgDailyCost: avgDailyCost,
+        totalActivities: totalActivities
+      };
       
       // قاعدة بيانات الأيقونات والصور
       const activityIcons = {
@@ -674,15 +714,15 @@
       // عرض الخطط اليومية
       const dailyPlans = document.getElementById('dailyPlans');
       dailyPlans.innerHTML = plan.map(day => `
-        <div class="day-plan" style="background: rgba(242, 244, 247, 0.98); border-radius: 24px; padding: 32px; margin-bottom: 32px; box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3); border: 2px solid rgba(201, 178, 122, 0.3);">
-          <div class="day-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 3px solid rgba(201, 178, 122, 0.3);">
+        <div class="day-plan" style="background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85)); border-radius: 24px; padding: 32px; margin-bottom: 32px; box-shadow: 0 20px 60px rgba(14, 31, 51, 0.4), 0 0 30px rgba(55, 214, 192, 0.2); border: 2px solid rgba(55, 214, 192, 0.5);">
+          <div class="day-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 3px solid rgba(55, 214, 192, 0.4);">
             <div>
-              <div class="day-number" style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #0A1C2E, #C9B27A); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">اليوم ${day.day}</div>
-              <p style="color: #666; margin-top: 8px; font-size: 1.2rem; font-weight: 600;">📍 ${day.city}</p>
+              <div class="day-number" style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #37D6C0, #4DFFD1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">اليوم ${day.day}</div>
+              <p style="color: #F2F9FF; margin-top: 8px; font-size: 1.2rem; font-weight: 600; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">📍 ${day.city}</p>
             </div>
-            <div style="text-align: left; background: rgba(201, 178, 122, 0.1); padding: 16px 24px; border-radius: 12px; border: 2px solid rgba(201, 178, 122, 0.3);">
+            <div style="text-align: left; background: rgba(55, 214, 192, 0.15); padding: 16px 24px; border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.4);">
               <div style="font-size: 2rem; font-weight: 800; color: #0A1C2E;">$${Math.round(day.totalCost)}</div>
-              <div style="color: #666; font-size: 0.95rem; margin-top: 4px;">💰 التكلفة اليومية</div>
+              <div style="color: #B8D4F0; font-size: 0.95rem; margin-top: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">💰 التكلفة اليومية</div>
             </div>
           </div>
           
@@ -711,13 +751,13 @@
                 ];
                 const openingHours = ['09:00 - 18:00', '08:00 - 17:00', '10:00 - 19:00', '09:30 - 17:30'];
                 return `
-                <div class="activity-item" style="padding: 24px; margin: 16px 0; background: rgba(255, 255, 255, 0.95); border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.12); transition: all 0.3s ease; border: 2px solid rgba(201, 178, 122, 0.2);">
+                <div class="activity-item" style="padding: 24px; margin: 16px 0; background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85)); border-radius: 16px; box-shadow: 0 6px 20px rgba(14, 31, 51, 0.4), 0 0 20px rgba(55, 214, 192, 0.15); transition: all 0.3s ease; border: 2px solid rgba(55, 214, 192, 0.5);">
                   <div style="display: flex; gap: 20px; align-items: flex-start;">
                     <div style="display: flex; flex-direction: column; gap: 12px; flex-shrink: 0;">
                       <div style="width: 120px; height: 120px; border-radius: 16px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.2);">
                         <img src="${getActivityImage(activity.type)}" alt="${activity.name}" style="width: 100%; height: 100%; object-fit: cover;">
                       </div>
-                      <div class="activity-icon" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #C9B27A, #8EA2B6); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto; box-shadow: 0 6px 20px rgba(201, 178, 122, 0.4);">
+                      <div class="activity-icon" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #37D6C0, #4CA8FF); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto; box-shadow: 0 6px 20px rgba(55, 214, 192, 0.4);">
                         ${getActivityIcon(activity.type)}
                       </div>
                     </div>
@@ -727,29 +767,29 @@
                         <div style="display: flex; align-items: center; gap: 8px; background: rgba(255, 193, 7, 0.15); padding: 8px 16px; border-radius: 20px;">
                           <span style="font-size: 1.2rem;">⭐</span>
                           <span style="font-weight: 700; color: #0A1C2E;">${rating}</span>
-                          <span style="color: #666; font-size: 0.9rem;">(${reviews}+)</span>
+                          <span style="color: #B8D4F0; font-size: 0.9rem;">(${reviews}+)</span>
                         </div>
                       </div>
-                      <p style="color: #666; font-size: 1rem; line-height: 1.8; margin-bottom: 16px; padding: 12px; background: rgba(201, 178, 122, 0.08); border-radius: 8px; border-right: 3px solid #C9B27A;">
+                      <p style="color: #F2F9FF; font-size: 1rem; line-height: 1.8; margin-bottom: 16px; padding: 12px; background: rgba(55, 214, 192, 0.15); border-radius: 8px; border-right: 3px solid #37D6C0; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                         ${activity.description || descriptions[activity.type] || descriptions.cultural}
                       </p>
                       ${activity.visitType ? `
                         <div style="margin-bottom: 12px;">
-                          <span style="background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(123, 31, 162, 0.2)); padding: 8px 16px; border-radius: 20px; font-size: 0.95rem; color: #0A1C2E; font-weight: 600; display: inline-block;">
+                          <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 8px 16px; border-radius: 20px; font-size: 0.95rem; color: #37D6C0; font-weight: 600; display: inline-block;">
                             🎯 ${activity.visitType}
                           </span>
                         </div>
                       ` : ''}
                       ${activity.activities && activity.activities.length > 0 ? `
-                        <div style="padding: 16px; background: rgba(33, 150, 243, 0.08); border-radius: 12px; margin-top: 12px; border-right: 3px solid #2196F3;">
+                        <div style="padding: 16px; background: rgba(55, 214, 192, 0.15); border-radius: 12px; margin-top: 12px; border-right: 3px solid #37D6C0;">
                           <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             <span>✅</span>
                             <span>ما يمكنك فعله:</span>
                           </div>
                           <ul style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px;">
                             ${activity.activities.map(act => `
-                              <li style="color: #666; font-size: 0.95rem; padding: 8px 12px; background: rgba(255, 255, 255, 0.7); border-radius: 8px; display: flex; align-items: center; gap: 8px;">
-                                <span style="color: #2196F3;">✓</span>
+                              <li style="color: #F2F9FF; font-size: 0.95rem; padding: 8px 12px; background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); border-radius: 8px; display: flex; align-items: center; gap: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5); border: 1px solid rgba(55, 214, 192, 0.3);">
+                                <span style="color: #37D6C0;">✓</span>
                                 <span>${act}</span>
                               </li>
                             `).join('')}
@@ -762,35 +802,35 @@
                             <span>📍</span>
                             <span>العنوان:</span>
                           </div>
-                          <div style="color: #666; font-size: 0.95rem; line-height: 1.6;">
+                          <div style="color: #F2F9FF; font-size: 0.95rem; line-height: 1.6; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                             ${activity.address}
                           </div>
                         </div>
                       ` : ''}
                       <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
-                        <span style="background: linear-gradient(135deg, rgba(201, 178, 122, 0.2), rgba(142, 162, 182, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #37D6C0; font-weight: 600; display: flex; align-items: center; gap: 6px;">
                           <span>⏱️</span>
                           <span>${activity.duration}</span>
                         </span>
-                        <span style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(77, 255, 209, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #4DFFD1; font-weight: 700; display: flex; align-items: center; gap: 6px;">
                           <span>💰</span>
                           <span>$${Math.round(activity.cost)}</span>
                         </span>
-                        <span style="background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(63, 81, 181, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(76, 168, 255, 0.2), rgba(55, 214, 192, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #4CA8FF; font-weight: 600; display: flex; align-items: center; gap: 6px;">
                           <span>🕐</span>
                           <span>${activity.bestTime || openingHours[idx % openingHours.length]}</span>
                         </span>
                       </div>
                       ${activity.activities && activity.activities.length > 0 ? `
-                        <div style="padding: 16px; background: rgba(33, 150, 243, 0.08); border-radius: 12px; margin-top: 12px; border-right: 3px solid #2196F3;">
+                        <div style="padding: 16px; background: rgba(55, 214, 192, 0.15); border-radius: 12px; margin-top: 12px; border-right: 3px solid #37D6C0;">
                           <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             <span>✅</span>
                             <span>ما يمكنك فعله:</span>
                           </div>
                           <ul style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px;">
                             ${activity.activities.map(act => `
-                              <li style="color: #666; font-size: 0.95rem; padding: 8px 12px; background: rgba(255, 255, 255, 0.7); border-radius: 8px; display: flex; align-items: center; gap: 8px;">
-                                <span style="color: #2196F3;">✓</span>
+                              <li style="color: #F2F9FF; font-size: 0.95rem; padding: 8px 12px; background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); border-radius: 8px; display: flex; align-items: center; gap: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5); border: 1px solid rgba(55, 214, 192, 0.3);">
+                                <span style="color: #37D6C0;">✓</span>
                                 <span>${act}</span>
                               </li>
                             `).join('')}
@@ -803,7 +843,7 @@
                             <span>📍</span>
                             <span>العنوان:</span>
                           </div>
-                          <div style="color: #666; font-size: 0.95rem; line-height: 1.6;">
+                          <div style="color: #F2F9FF; font-size: 0.95rem; line-height: 1.6; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                             ${activity.address}
                           </div>
                         </div>
@@ -813,7 +853,7 @@
                           <span>💡</span>
                           <span>نصيحة:</span>
                         </div>
-                        <div style="color: #666; font-size: 0.95rem; line-height: 1.7;">
+                        <div style="color: #F2F9FF; font-size: 0.95rem; line-height: 1.7; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                           ${tips[idx % tips.length]}
                         </div>
                       </div>
@@ -826,7 +866,7 @@
           ` : ''}
           
           ${day.afternoon.length > 0 ? `
-            <div class="time-slot" style="margin: 24px 0; padding: 24px; background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(63, 81, 181, 0.1)); border-radius: 16px; border-right: 5px solid #2196F3;">
+            <div class="time-slot" style="margin: 24px 0; padding: 24px; background: linear-gradient(135deg, rgba(55, 214, 192, 0.15), rgba(76, 168, 255, 0.15)); border-radius: 16px; border-right: 5px solid #37D6C0;">
               <h4 style="color: #0A1C2E; margin-bottom: 16px; font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 12px;">
                 <span style="font-size: 2rem;">🌆</span>
                 <span>بعد الظهر (${getCountryData(country)?.timeSlots?.afternoon || '14:00-17:00'})</span>
@@ -850,13 +890,13 @@
                 ];
                 const openingHours = ['09:00 - 18:00', '08:00 - 17:00', '10:00 - 19:00', '09:30 - 17:30'];
                 return `
-                <div class="activity-item" style="padding: 24px; margin: 16px 0; background: rgba(255, 255, 255, 0.95); border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.12); transition: all 0.3s ease; border: 2px solid rgba(33, 150, 243, 0.2);">
+                <div class="activity-item" style="padding: 24px; margin: 16px 0; background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85)); border-radius: 16px; box-shadow: 0 6px 20px rgba(14, 31, 51, 0.4), 0 0 20px rgba(55, 214, 192, 0.15); transition: all 0.3s ease; border: 2px solid rgba(55, 214, 192, 0.5);">
                   <div style="display: flex; gap: 20px; align-items: flex-start;">
                     <div style="display: flex; flex-direction: column; gap: 12px; flex-shrink: 0;">
                       <div style="width: 120px; height: 120px; border-radius: 16px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.2);">
                         <img src="${getActivityImage(activity.type)}" alt="${activity.name}" style="width: 100%; height: 100%; object-fit: cover;">
                       </div>
-                      <div class="activity-icon" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #8EA2B6, #C9B27A); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto; box-shadow: 0 6px 20px rgba(142, 162, 182, 0.4);">
+                      <div class="activity-icon" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #4CA8FF, #37D6C0); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto; box-shadow: 0 6px 20px rgba(55, 214, 192, 0.4);">
                         ${getActivityIcon(activity.type)}
                       </div>
                     </div>
@@ -866,29 +906,29 @@
                         <div style="display: flex; align-items: center; gap: 8px; background: rgba(255, 193, 7, 0.15); padding: 8px 16px; border-radius: 20px;">
                           <span style="font-size: 1.2rem;">⭐</span>
                           <span style="font-weight: 700; color: #0A1C2E;">${rating}</span>
-                          <span style="color: #666; font-size: 0.9rem;">(${reviews}+)</span>
+                          <span style="color: #B8D4F0; font-size: 0.9rem;">(${reviews}+)</span>
                         </div>
                       </div>
-                      <p style="color: #666; font-size: 1rem; line-height: 1.8; margin-bottom: 16px; padding: 12px; background: rgba(33, 150, 243, 0.08); border-radius: 8px; border-right: 3px solid #2196F3;">
+                      <p style="color: #F2F9FF; font-size: 1rem; line-height: 1.8; margin-bottom: 16px; padding: 12px; background: rgba(55, 214, 192, 0.15); border-radius: 8px; border-right: 3px solid #37D6C0; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                         ${activity.description || descriptions[activity.type] || descriptions.cultural}
                       </p>
                       ${activity.visitType ? `
                         <div style="margin-bottom: 12px;">
-                          <span style="background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(123, 31, 162, 0.2)); padding: 8px 16px; border-radius: 20px; font-size: 0.95rem; color: #0A1C2E; font-weight: 600; display: inline-block;">
+                          <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 8px 16px; border-radius: 20px; font-size: 0.95rem; color: #37D6C0; font-weight: 600; display: inline-block;">
                             🎯 ${activity.visitType}
                           </span>
                         </div>
                       ` : ''}
                       ${activity.activities && activity.activities.length > 0 ? `
-                        <div style="padding: 16px; background: rgba(33, 150, 243, 0.08); border-radius: 12px; margin-top: 12px; border-right: 3px solid #2196F3;">
+                        <div style="padding: 16px; background: rgba(55, 214, 192, 0.15); border-radius: 12px; margin-top: 12px; border-right: 3px solid #37D6C0;">
                           <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             <span>✅</span>
                             <span>ما يمكنك فعله:</span>
                           </div>
                           <ul style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px;">
                             ${activity.activities.map(act => `
-                              <li style="color: #666; font-size: 0.95rem; padding: 8px 12px; background: rgba(255, 255, 255, 0.7); border-radius: 8px; display: flex; align-items: center; gap: 8px;">
-                                <span style="color: #2196F3;">✓</span>
+                              <li style="color: #F2F9FF; font-size: 0.95rem; padding: 8px 12px; background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); border-radius: 8px; display: flex; align-items: center; gap: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5); border: 1px solid rgba(55, 214, 192, 0.3);">
+                                <span style="color: #37D6C0;">✓</span>
                                 <span>${act}</span>
                               </li>
                             `).join('')}
@@ -901,35 +941,35 @@
                             <span>📍</span>
                             <span>العنوان:</span>
                           </div>
-                          <div style="color: #666; font-size: 0.95rem; line-height: 1.6;">
+                          <div style="color: #F2F9FF; font-size: 0.95rem; line-height: 1.6; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                             ${activity.address}
                           </div>
                         </div>
                       ` : ''}
                       <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
-                        <span style="background: linear-gradient(135deg, rgba(201, 178, 122, 0.2), rgba(142, 162, 182, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #37D6C0; font-weight: 600; display: flex; align-items: center; gap: 6px;">
                           <span>⏱️</span>
                           <span>${activity.duration}</span>
                         </span>
-                        <span style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(77, 255, 209, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #4DFFD1; font-weight: 700; display: flex; align-items: center; gap: 6px;">
                           <span>💰</span>
                           <span>$${Math.round(activity.cost)}</span>
                         </span>
-                        <span style="background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(63, 81, 181, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(76, 168, 255, 0.2), rgba(55, 214, 192, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #4CA8FF; font-weight: 600; display: flex; align-items: center; gap: 6px;">
                           <span>🕐</span>
                           <span>${activity.bestTime || openingHours[idx % openingHours.length]}</span>
                         </span>
                       </div>
                       ${activity.activities && activity.activities.length > 0 ? `
-                        <div style="padding: 16px; background: rgba(33, 150, 243, 0.08); border-radius: 12px; margin-top: 12px; border-right: 3px solid #2196F3;">
+                        <div style="padding: 16px; background: rgba(55, 214, 192, 0.15); border-radius: 12px; margin-top: 12px; border-right: 3px solid #37D6C0;">
                           <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             <span>✅</span>
                             <span>ما يمكنك فعله:</span>
                           </div>
                           <ul style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px;">
                             ${activity.activities.map(act => `
-                              <li style="color: #666; font-size: 0.95rem; padding: 8px 12px; background: rgba(255, 255, 255, 0.7); border-radius: 8px; display: flex; align-items: center; gap: 8px;">
-                                <span style="color: #2196F3;">✓</span>
+                              <li style="color: #F2F9FF; font-size: 0.95rem; padding: 8px 12px; background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); border-radius: 8px; display: flex; align-items: center; gap: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5); border: 1px solid rgba(55, 214, 192, 0.3);">
+                                <span style="color: #37D6C0;">✓</span>
                                 <span>${act}</span>
                               </li>
                             `).join('')}
@@ -942,7 +982,7 @@
                             <span>📍</span>
                             <span>العنوان:</span>
                           </div>
-                          <div style="color: #666; font-size: 0.95rem; line-height: 1.6;">
+                          <div style="color: #F2F9FF; font-size: 0.95rem; line-height: 1.6; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                             ${activity.address}
                           </div>
                         </div>
@@ -952,7 +992,7 @@
                           <span>💡</span>
                           <span>نصيحة:</span>
                         </div>
-                        <div style="color: #666; font-size: 0.95rem; line-height: 1.7;">
+                        <div style="color: #F2F9FF; font-size: 0.95rem; line-height: 1.7; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                           ${tips[idx % tips.length]}
                         </div>
                       </div>
@@ -965,7 +1005,7 @@
           ` : ''}
           
           ${day.evening.length > 0 ? `
-            <div class="time-slot" style="margin: 24px 0; padding: 24px; background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), rgba(123, 31, 162, 0.1)); border-radius: 16px; border-right: 5px solid #9C27B0;">
+            <div class="time-slot" style="margin: 24px 0; padding: 24px; background: linear-gradient(135deg, rgba(55, 214, 192, 0.15), rgba(77, 255, 209, 0.15)); border-radius: 16px; border-right: 5px solid #4DFFD1;">
               <h4 style="color: #0A1C2E; margin-bottom: 16px; font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 12px;">
                 <span style="font-size: 2rem;">🌙</span>
                 <span>المساء (${getCountryData(country)?.timeSlots?.evening || '19:00-22:00'})</span>
@@ -988,13 +1028,13 @@
                 const restaurantHours = ['18:00 - 23:00', '19:00 - 00:00', '17:30 - 22:30', '18:30 - 23:30'];
                 const priceRanges = ['$$', '$$$', '$$$$', '$$$$$'];
                 return `
-                <div class="activity-item" style="padding: 24px; margin: 16px 0; background: rgba(255, 255, 255, 0.95); border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.12); transition: all 0.3s ease; border: 2px solid rgba(156, 39, 176, 0.2);">
+                <div class="activity-item" style="padding: 24px; margin: 16px 0; background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85)); border-radius: 16px; box-shadow: 0 6px 20px rgba(14, 31, 51, 0.4), 0 0 20px rgba(55, 214, 192, 0.15); transition: all 0.3s ease; border: 2px solid rgba(55, 214, 192, 0.5);">
                   <div style="display: flex; gap: 20px; align-items: flex-start;">
                     <div style="display: flex; flex-direction: column; gap: 12px; flex-shrink: 0;">
                       <div style="width: 120px; height: 120px; border-radius: 16px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.2);">
                         <img src="${getActivityImage('food')}" alt="${activity.name}" style="width: 100%; height: 100%; object-fit: cover;">
                       </div>
-                      <div class="activity-icon" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #C9B27A, #8EA2B6); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto; box-shadow: 0 6px 20px rgba(201, 178, 122, 0.4);">
+                      <div class="activity-icon" style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #37D6C0, #4CA8FF); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto; box-shadow: 0 6px 20px rgba(55, 214, 192, 0.4);">
                         🍽️
                       </div>
                     </div>
@@ -1002,34 +1042,34 @@
                       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 12px;">
                         <div>
                           <strong style="color: #0A1C2E; font-size: 1.4rem; font-weight: 800; display: block;">${activity.name}</strong>
-                          <span style="color: #9C27B0; font-weight: 700; font-size: 1rem; margin-top: 4px; display: inline-block;">${priceRanges[idx % priceRanges.length]}</span>
+                          <span style="color: #4DFFD1; font-weight: 700; font-size: 1rem; margin-top: 4px; display: inline-block;">${priceRanges[idx % priceRanges.length]}</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px; background: rgba(255, 193, 7, 0.15); padding: 8px 16px; border-radius: 20px;">
                           <span style="font-size: 1.2rem;">⭐</span>
                           <span style="font-weight: 700; color: #0A1C2E;">${rating}</span>
-                          <span style="color: #666; font-size: 0.9rem;">(${reviews}+)</span>
+                          <span style="color: #B8D4F0; font-size: 0.9rem;">(${reviews}+)</span>
                         </div>
                       </div>
-                      <p style="color: #666; font-size: 1rem; line-height: 1.8; margin-bottom: 16px; padding: 12px; background: rgba(156, 39, 176, 0.08); border-radius: 8px; border-right: 3px solid #9C27B0;">
+                      <p style="color: #F2F9FF; font-size: 1rem; line-height: 1.8; margin-bottom: 16px; padding: 12px; background: rgba(55, 214, 192, 0.15); border-radius: 8px; border-right: 3px solid #37D6C0; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                         ${activity.description || foodDescriptions[idx % foodDescriptions.length]}
                       </p>
                       ${activity.visitType ? `
                         <div style="margin-bottom: 12px;">
-                          <span style="background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(123, 31, 162, 0.2)); padding: 8px 16px; border-radius: 20px; font-size: 0.95rem; color: #0A1C2E; font-weight: 600; display: inline-block;">
+                          <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 8px 16px; border-radius: 20px; font-size: 0.95rem; color: #37D6C0; font-weight: 600; display: inline-block;">
                             🎯 ${activity.visitType}
                           </span>
                         </div>
                       ` : ''}
                       ${activity.activities && activity.activities.length > 0 ? `
-                        <div style="padding: 16px; background: rgba(156, 39, 176, 0.08); border-radius: 12px; margin-top: 12px; border-right: 3px solid #9C27B0;">
+                        <div style="padding: 16px; background: rgba(55, 214, 192, 0.15); border-radius: 12px; margin-top: 12px; border-right: 3px solid #37D6C0;">
                           <div style="font-weight: 700; color: #0A1C2E; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             <span>✅</span>
                             <span>ما يمكنك فعله:</span>
                           </div>
                           <ul style="list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px;">
                             ${activity.activities.map(act => `
-                              <li style="color: #666; font-size: 0.95rem; padding: 8px 12px; background: rgba(255, 255, 255, 0.7); border-radius: 8px; display: flex; align-items: center; gap: 8px;">
-                                <span style="color: #9C27B0;">✓</span>
+                              <li style="color: #F2F9FF; font-size: 0.95rem; padding: 8px 12px; background: linear-gradient(135deg, rgba(30, 74, 111, 0.6), rgba(22, 58, 95, 0.7)); border-radius: 8px; display: flex; align-items: center; gap: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5); border: 1px solid rgba(55, 214, 192, 0.3);">
+                                <span style="color: #37D6C0;">✓</span>
                                 <span>${act}</span>
                               </li>
                             `).join('')}
@@ -1042,21 +1082,21 @@
                             <span>📍</span>
                             <span>العنوان:</span>
                           </div>
-                          <div style="color: #666; font-size: 0.95rem; line-height: 1.6;">
+                          <div style="color: #F2F9FF; font-size: 0.95rem; line-height: 1.6; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                             ${activity.address}
                           </div>
                         </div>
                       ` : ''}
                       <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
-                        <span style="background: linear-gradient(135deg, rgba(201, 178, 122, 0.2), rgba(142, 162, 182, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #37D6C0; font-weight: 600; display: flex; align-items: center; gap: 6px;">
                           <span>⏱️</span>
                           <span>${activity.duration}</span>
                         </span>
-                        <span style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(77, 255, 209, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #4DFFD1; font-weight: 700; display: flex; align-items: center; gap: 6px;">
                           <span>💰</span>
                           <span>$${Math.round(activity.cost)}</span>
                         </span>
-                        <span style="background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(123, 31, 162, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #0A1C2E; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <span style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(77, 255, 209, 0.2)); padding: 10px 18px; border-radius: 25px; font-size: 1rem; color: #4DFFD1; font-weight: 600; display: flex; align-items: center; gap: 6px;">
                           <span>🕐</span>
                           <span>${activity.bestTime || restaurantHours[idx % restaurantHours.length]}</span>
                         </span>
@@ -1066,7 +1106,7 @@
                           <span>💡</span>
                           <span>نصيحة:</span>
                         </div>
-                        <div style="color: #666; font-size: 0.95rem; line-height: 1.7;">
+                        <div style="color: #F2F9FF; font-size: 0.95rem; line-height: 1.7; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
                           ${foodTips[idx % foodTips.length]}
                         </div>
                       </div>
@@ -1080,8 +1120,8 @@
           
           <div class="route-optimization" style="margin-top: 24px; padding: 20px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1)); border-radius: 12px; border: 2px solid rgba(16, 185, 129, 0.3);">
             <strong style="color: #0A1C2E; font-size: 1.1rem; display: block; margin-bottom: 12px;">🗺️ المسار المحسّن:</strong>
-            <p style="color: #666; font-size: 1rem; line-height: 1.8; direction: rtl;">${day.route.join(' → ')}</p>
-            <div style="margin-top: 12px; padding: 12px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; font-size: 0.9rem; color: #666;">
+            <p style="color: #F2F9FF; font-size: 1rem; line-height: 1.8; direction: rtl;">${day.route.join(' → ')}</p>
+            <div style="margin-top: 12px; padding: 12px; background: linear-gradient(135deg, rgba(30, 74, 111, 0.5), rgba(22, 58, 95, 0.6)); border-radius: 8px; font-size: 0.9rem; color: #F2F9FF; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5); border: 1px solid rgba(55, 214, 192, 0.3);">
               💡 تم تحسين المسار باستخدام خوارزمية Nearest Neighbor لتقليل المسافة والوقت
             </div>
           </div>
@@ -1094,12 +1134,12 @@
           item.addEventListener('mouseenter', function() {
             this.style.transform = 'translateX(-12px) scale(1.02)';
             this.style.boxShadow = '0 12px 32px rgba(0,0,0,0.2)';
-            this.style.borderColor = 'rgba(201, 178, 122, 0.5)';
+            this.style.borderColor = 'rgba(55, 214, 192, 0.6)';
           });
           item.addEventListener('mouseleave', function() {
             this.style.transform = 'translateX(0) scale(1)';
             this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.12)';
-            this.style.borderColor = 'rgba(201, 178, 122, 0.2)';
+            this.style.borderColor = 'rgba(55, 214, 192, 0.4)';
           });
         });
       }, 100);
@@ -1157,6 +1197,124 @@
         displayPlan(plan, country, days, interests, budget);
       }, 2000);
     }, 1500);
+  </script>
+
+  <script>
+    // وظائف حفظ ومشاركة الخطة
+    let currentPlanId = null;
+
+    // زر حفظ الخطة
+    document.getElementById('savePlanBtn').addEventListener('click', async function() {
+      if (!window.currentPlanData) {
+        showMessage('لا توجد خطة لحفظها', 'error');
+        return;
+      }
+
+      const result = planManager.savePlan(window.currentPlanData);
+      
+      if (result.success) {
+        currentPlanId = result.planId;
+        showMessage(result.message, 'success');
+        this.textContent = '✅ تم الحفظ';
+        this.disabled = true;
+        setTimeout(() => {
+          this.textContent = '💾 حفظ الخطة';
+          this.disabled = false;
+        }, 3000);
+      } else {
+        showMessage(result.message, 'error');
+        // إذا لم يكن مسجل دخول، توجيهه لصفحة تسجيل الدخول
+        if (result.message.includes('تسجيل الدخول')) {
+          setTimeout(() => {
+            if (confirm('هل تريد الانتقال إلى صفحة تسجيل الدخول؟')) {
+              window.location.href = 'login.html';
+            }
+          }, 2000);
+        }
+      }
+    });
+
+    // زر مشاركة الخطة
+    document.getElementById('sharePlanBtn').addEventListener('click', async function() {
+      if (!window.currentPlanData) {
+        showMessage('لا توجد خطة للمشاركة', 'error');
+        return;
+      }
+
+      // إذا لم تكن الخطة محفوظة، احفظها أولاً
+      if (!currentPlanId) {
+        const saveResult = planManager.savePlan(window.currentPlanData);
+        if (saveResult.success) {
+          currentPlanId = saveResult.planId;
+        } else {
+          showMessage('يجب حفظ الخطة أولاً قبل المشاركة. ' + saveResult.message, 'error');
+          return;
+        }
+      }
+
+      const result = planManager.sharePlan(currentPlanId);
+      
+      if (result.success) {
+        // نسخ الرابط إلى الحافظة
+        const copyResult = await planManager.copyToClipboard(result.link);
+        
+        if (copyResult.success) {
+          showMessage('✅ ' + copyResult.message + ' الرابط: ' + result.link, 'success');
+          
+          // إظهار الرابط في حقل قابل للنسخ
+          const linkDisplay = document.createElement('div');
+          linkDisplay.style.cssText = 'margin-top: 16px; padding: 16px; background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.15)); border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.5);';
+          linkDisplay.innerHTML = `
+            <div style="color: #37D6C0; font-weight: 700; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">🔗 رابط المشاركة:</div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="shareLinkInput" value="${result.link}" readonly 
+                style="flex: 1; min-width: 200px; padding: 10px; border-radius: 8px; border: 1px solid rgba(55, 214, 192, 0.4); 
+                background: rgba(14, 31, 51, 0.5); color: #F2F9FF; font-size: 0.9rem; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">
+              <button onclick="copyShareLink()" 
+                style="padding: 10px 20px; background: linear-gradient(135deg, #37D6C0, #4CA8FF); 
+                color: #0E1F33; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.9rem;">
+                📋 نسخ
+              </button>
+            </div>
+          `;
+          
+          const messageDiv = document.getElementById('planMessage');
+          messageDiv.innerHTML = '';
+          messageDiv.appendChild(linkDisplay);
+        } else {
+          showMessage('تم إنشاء رابط المشاركة: ' + result.link, 'success');
+        }
+      } else {
+        showMessage(result.message, 'error');
+      }
+    });
+
+    // وظيفة نسخ رابط المشاركة
+    async function copyShareLink() {
+      const input = document.getElementById('shareLinkInput');
+      if (input) {
+        const result = await planManager.copyToClipboard(input.value);
+        showMessage(result.message, result.success ? 'success' : 'error');
+      }
+    }
+
+    // وظيفة إظهار الرسائل
+    function showMessage(message, type) {
+      const messageDiv = document.getElementById('planMessage');
+      const colors = {
+        success: '#4DFFD1',
+        error: '#FF6B6B',
+        info: '#37D6C0'
+      };
+      
+      messageDiv.innerHTML = `<div style="color: ${colors[type] || colors.info}; font-weight: 600; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${message}</div>`;
+      
+      setTimeout(() => {
+        if (messageDiv.children.length === 1 && messageDiv.children[0].tagName === 'DIV' && !messageDiv.children[0].querySelector('input')) {
+          messageDiv.innerHTML = '';
+        }
+      }, 5000);
+    }
   </script>
 </body>
 </html>

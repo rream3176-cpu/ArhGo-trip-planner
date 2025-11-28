@@ -6,6 +6,8 @@
   <title>ArhGo | حجز الفنادق</title>
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
+  <script src="assets/js/booking-system.js" defer></script>
+  <script src="assets/js/hotels-database.js" defer></script>
   <style>
     .search-panel {
       display: grid;
@@ -14,19 +16,52 @@
     }
     .hotel-card {
       border-radius: var(--radius-md);
-      padding: 20px;
-      background: #ffffff;
-      border: 1px solid rgba(74, 144, 226, 0.2);
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
+      border: 2px solid rgba(55, 214, 192, 0.4);
       box-shadow: var(--shadow-soft);
+      transition: all 0.3s ease;
+    }
+    .hotel-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(55, 214, 192, 0.6);
     }
     .hotel-card h3 {
-      margin-bottom: 8px;
-      color: var(--primary);
+      margin-bottom: 12px;
+      color: #37D6C0;
+      font-size: 1.4rem;
+    }
+    .hotel-card p {
+      color: #F2F9FF;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .hotel-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .feature-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      background: rgba(59, 130, 246, 0.1);
+      color: #37D6C0;
+      border: 1px solid rgba(55, 214, 192, 0.4);
+    }
+    .price-tag {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #37D6C0;
+      margin: 12px 0;
     }
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -34,12 +69,31 @@
       z-index: 2000;
     }
     .modal-content {
-      width: min(480px, 95vw);
+      width: min(550px, 95vw);
+      max-height: 90vh;
+      overflow-y: auto;
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(242, 244, 247, 0.95));
       border-radius: var(--radius-lg);
-      border: 2px solid rgba(74, 144, 226, 0.3);
+      border: 2px solid rgba(55, 214, 192, 0.4);
       padding: 30px;
       box-shadow: var(--shadow-elevated);
+      position: relative;
+    }
+    .success-message {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      margin-top: 20px;
+      text-align: center;
+    }
+    .booking-id {
+      font-family: 'Courier New', monospace;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: inline-block;
     }
   </style>
 </head>
@@ -47,83 +101,120 @@
   <nav class="arhgo-nav">
     <div class="arhgo-logo">ArhGo</div>
     <ul>
-      <li><a data-nav href="index.html#home" data-translate="nav.home">الرئيسية</a></li>
-      <li><a data-nav href="index.html#features" data-translate="nav.features">المزايا</a></li>
-      <li><a data-nav href="index.html#planner" data-translate="nav.planner">خطط رحلتك</a></li>
-      <li><a data-nav href="index.html#destinations" data-translate="nav.destinations">الوجهات</a></li>
-      <li><a data-nav href="hotel.html" data-translate="nav.hotels">الفنادق</a></li>
-      <li><a data-nav href="ticket-booking.html" data-translate="nav.flights">حجز الرحلات</a></li>
-      <li><a data-nav href="Restuarnt.html" data-translate="nav.restaurants">مطاعم</a></li>
+      <li><a data-nav href="index.html#home">الرئيسية</a></li>
+      <li><a data-nav href="index.html#features">المزايا</a></li>
+      <li><a data-nav href="index.html#planner">خطط رحلتك</a></li>
+      <li><a data-nav href="index.html#destinations">الوجهات</a></li>
+      <li><a data-nav href="hotel.html">الفنادق</a></li>
+      <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
+      <li><a data-nav href="Restuarnt.html">حجز المطاعم</a></li>
     </ul>
     <div class="stack">
-      <a class="btn btn-ghost" href="login.html" data-flight-sound data-translate="nav.login">تسجيل الدخول</a>
-      <a class="btn btn-gradient" href="signup.html" data-flight-sound data-translate="nav.signup">إنشاء حساب</a>
+      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
     </div>
   </nav>
   <main class="page-shell">
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title" data-translate="hotels.title">حجز الفنادق الذكي</h2>
-        <p class="section-subtitle" data-translate="hotels.subtitle">أدخل وجهتك وميزانيتك لنقترح عليك أفضل الفنادق عبر تكامل TripAdvisor/Google Places.</p>
+        <h2 class="section-title">حجز الفنادق</h2>
+        <p class="section-subtitle">ابحث عن أفضل الفنادق واحجز غرفتك بسهولة. جميع الحجوزات تُحفظ تلقائياً ويمكنك طباعتها.</p>
       </div>
       <div class="glass-card">
         <div class="search-panel">
-          <input class="arhgo-input" id="destination" type="text" data-translate-placeholder="hotels.destinationPlaceholder" placeholder="الدولة أو المدينة">
+          <input class="arhgo-input" id="destination" type="text" placeholder="الدولة أو المدينة (مثال: دبي، بغداد، إسطنبول)">
+          <input class="arhgo-input" id="checkin" type="date" placeholder="تاريخ الوصول">
+          <input class="arhgo-input" id="checkout" type="date" placeholder="تاريخ المغادرة">
           <select class="arhgo-select" id="budget">
-            <option value="" data-translate="hotels.budget">الميزانية</option>
-            <option value="منخفضة" data-translate="hotels.budgetLow">منخفضة</option>
-            <option value="متوسطة" data-translate="hotels.budgetMedium">متوسطة</option>
-            <option value="عالية" data-translate="hotels.budgetHigh">عالية</option>
+            <option value="">الميزانية</option>
+            <option value="منخفضة">منخفضة ($50-100)</option>
+            <option value="متوسطة">متوسطة ($100-200)</option>
+            <option value="عالية">عالية ($200+)</option>
+          </select>
+          <select class="arhgo-select" id="guests">
+            <option value="1">1 شخص</option>
+            <option value="2" selected>2 أشخاص</option>
+            <option value="3">3 أشخاص</option>
+            <option value="4">4 أشخاص</option>
+            <option value="5+">5+ أشخاص</option>
           </select>
         </div>
         <div class="stack" style="margin-top:18px;justify-content:flex-end;">
-          <button class="btn btn-gradient" id="searchBtn" data-translate="hotels.search">بحث</button>
-          <a class="btn btn-ghost" href="index.html" data-flight-sound data-translate="hotels.back">عودة للرئيسية</a>
+          <button class="btn btn-gradient" id="searchBtn">بحث عن فنادق</button>
         </div>
       </div>
       <div id="hotelsContainer" class="grid" style="margin-top:30px;"></div>
+      <div id="empty" class="glass-card" style="display:none; text-align: center; padding: 40px;">
+        <p style="font-size: 1.1rem; color: var(--muted);">لم يتم العثور على فنادق. جرّب تغيير معايير البحث.</p>
+      </div>
     </section>
   </main>
 
   <div class="modal" id="bookingModal">
     <div class="modal-content">
-      <button class="btn btn-ghost" id="closeModal" style="position:absolute;top:10px;left:10px;" data-translate="common.close">إغلاق</button>
-      <h3 style="margin-top:0;" data-translate="hotels.bookingDetails">تفاصيل الحجز</h3>
+      <button class="btn btn-ghost" id="closeModal" style="position:absolute;top:10px;left:10px;">✕</button>
+      <h3 style="margin-top:0; color: var(--primary);">تفاصيل الحجز</h3>
       <form id="bookingForm">
-        <label class="field">
-          <span data-translate="hotels.hotelName">اسم الفندق</span>
-          <input class="arhgo-input" type="text" id="hotelName" readonly>
-        </label>
-        <label class="field">
-          <span data-translate="hotels.userName">اسم المستخدم</span>
-          <input class="arhgo-input" type="text" id="userName" required>
-        </label>
-        <label class="field">
-          <span data-translate="hotels.rooms">عدد الغرف</span>
-          <input class="arhgo-input" type="number" id="rooms" min="1" value="1">
-        </label>
-        <label class="field">
-          <span data-translate="hotels.guests">عدد الأشخاص</span>
-          <input class="arhgo-input" type="number" id="guests" min="1" value="1">
-        </label>
-        <label class="field">
-          <span data-translate="hotels.checkin">تاريخ الوصول</span>
+        <div class="field">
+          <label>اسم الفندق</label>
+          <input class="arhgo-input" type="text" id="hotelName" readonly style="background: rgba(0,0,0,0.05);">
+        </div>
+        <div class="field">
+          <label>الاسم الكامل *</label>
+          <input class="arhgo-input" type="text" id="userName" required placeholder="اسمك الكامل">
+        </div>
+        <div class="field">
+          <label>البريد الإلكتروني *</label>
+          <input class="arhgo-input" type="email" id="userEmail" required placeholder="example@mail.com">
+        </div>
+        <div class="field">
+          <label>رقم الهاتف *</label>
+          <input class="arhgo-input" type="tel" id="userPhone" required placeholder="+964 770 000 0000">
+        </div>
+        <div class="field">
+          <label>عدد الغرف *</label>
+          <input class="arhgo-input" type="number" id="rooms" min="1" max="10" value="1" required>
+        </div>
+        <div class="field">
+          <label>عدد الأشخاص *</label>
+          <input class="arhgo-input" type="number" id="guests" min="1" max="20" value="2" required>
+        </div>
+        <div class="field">
+          <label>تاريخ الوصول *</label>
           <input class="arhgo-input" type="date" id="checkin" required>
-        </label>
-        <label class="field">
-          <span data-translate="hotels.checkout">تاريخ المغادرة</span>
+        </div>
+        <div class="field">
+          <label>تاريخ المغادرة *</label>
           <input class="arhgo-input" type="date" id="checkout" required>
-        </label>
-        <label class="field">
-          <span data-translate="hotels.payment">طريقة الدفع</span>
-          <select class="arhgo-select" id="payment">
-            <option value="نقداً" data-translate="hotels.paymentCash">نقداً عند الوصول</option>
-            <option value="بطاقة" data-translate="hotels.paymentCard">بطاقة مصرفية</option>
+        </div>
+        <div class="field">
+          <label>طريقة الدفع *</label>
+          <select class="arhgo-select" id="payment" required>
+            <option value="">اختر طريقة الدفع</option>
+            <option value="نقداً">نقداً عند الوصول</option>
+            <option value="بطاقة">بطاقة مصرفية</option>
+            <option value="دفع إلكتروني">دفع إلكتروني</option>
           </select>
-        </label>
-        <button class="btn btn-gradient" type="submit" style="margin-top:16px;" data-translate="hotels.confirm">تأكيد الحجز</button>
-        <div id="successMessage" class="badge badge-success" style="margin-top:12px;display:none;" data-translate="hotels.success">تم تأكيد الحجز ✅</div>
+        </div>
+        <div class="field">
+          <label>ملاحظات خاصة</label>
+          <textarea class="arhgo-textarea" id="notes" placeholder="طلبات خاصة (مثل: طابق عالي، غرفة بجانب المسبح، إلخ)"></textarea>
+        </div>
+        <div class="field">
+          <label>السعر المتوقع</label>
+          <input class="arhgo-input" type="text" id="estimatedPrice" readonly style="background: rgba(0,0,0,0.05); font-weight: 700; color: var(--primary);">
+        </div>
+        <button class="btn btn-gradient" type="submit" style="width: 100%; margin-top: 16px;">تأكيد الحجز</button>
       </form>
+      <div id="successMessage" class="success-message" style="display: none;">
+        <h4 style="color: var(--success); margin: 0 0 10px 0;">✅ تم تأكيد الحجز بنجاح!</h4>
+        <p>رقم الحجز:</p>
+        <div class="booking-id" id="bookingIdDisplay"></div>
+        <div class="action-buttons" style="display: flex; gap: 10px; margin-top: 15px;">
+          <button class="btn btn-gradient" onclick="printHotelBooking()" style="flex: 1;">طباعة الإيصال</button>
+          <button class="btn btn-ghost" onclick="closeBookingModal()" style="flex: 1;">إغلاق</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -134,66 +225,225 @@
     const successMessage = document.getElementById('successMessage');
     const hotelNameInput = document.getElementById('hotelName');
     const closeModal = document.getElementById('closeModal');
+    let currentBooking = null;
+    let currentHotel = null;
+
+    // استخدام قاعدة البيانات الشاملة من الملف الخارجي
+
+    // تعيين الحد الأدنى للتاريخ
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('checkin').setAttribute('min', today);
+    document.getElementById('checkout').setAttribute('min', today);
+
+    // تحديث تاريخ المغادرة عند تغيير تاريخ الوصول
+    document.getElementById('checkin').addEventListener('change', function() {
+      const checkout = document.getElementById('checkout');
+      checkout.setAttribute('min', this.value);
+      if (checkout.value && checkout.value <= this.value) {
+        checkout.value = '';
+      }
+    });
 
     document.getElementById('searchBtn').addEventListener('click', () => {
       const dest = document.getElementById('destination').value.trim();
       const budget = document.getElementById('budget').value;
-      searchHotels(dest, budget);
+      const checkin = document.getElementById('checkin').value;
+      const checkout = document.getElementById('checkout').value;
+      const guests = document.getElementById('guests').value;
+      searchHotels(dest, budget, checkin, checkout, guests);
     });
 
-    async function searchHotels(destination, budget) {
+    async function searchHotels(destination, budget, checkin, checkout, guests) {
       if (!destination) {
         alert('الرجاء كتابة الدولة أو المدينة!');
         return;
       }
-      container.innerHTML = "<div class='glass-card'>⏳ جاري البحث عن الفنادق...</div>";
-      try {
-        const response = await fetch('http://localhost:3012/get-hotels', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ destination, budget })
+      
+      container.innerHTML = "<div class='glass-card' style='text-align: center; padding: 40px;'>⏳ جاري البحث عن الفنادق...</div>";
+      document.getElementById('empty').style.display = 'none';
+      
+      // محاكاة البحث (يمكن استبدالها بخادم)
+      setTimeout(() => {
+        const destLower = destination.toLowerCase().trim();
+        
+        let filtered = hotelsDatabase.filter(hotel => {
+          // فلترة حسب الميزانية
+          if (budget && hotel.budget !== budget) return false;
+          
+          // بحث مرن في الموقع (المدينة أو الدولة)
+          if (destination) {
+            const locationMatch = 
+              hotel.location.toLowerCase().includes(destLower) ||
+              (hotel.country && hotel.country.toLowerCase().includes(destLower)) ||
+              hotel.name.toLowerCase().includes(destLower);
+            if (!locationMatch) return false;
+          }
+          
+          return true;
         });
-        const data = await response.json();
-        renderHotels(data.hotels || [], destination, budget);
-      } catch (err) {
-        container.innerHTML = "<div class='glass-card'>⚠️ حدث خطأ أثناء البحث عن الفنادق.</div>";
-      }
+
+        // إذا لم توجد نتائج والبحث عن موقع، جرب البحث بدون فلتر الموقع
+        if (filtered.length === 0 && destination) {
+          filtered = hotelsDatabase.filter(hotel => {
+            if (budget && hotel.budget !== budget) return false;
+            return true;
+          }).slice(0, 12); // عرض أول 12 فندق
+        }
+
+        renderHotels(filtered, checkin, checkout, guests);
+      }, 500);
     }
 
-    function renderHotels(list, destination, budget) {
+    function renderHotels(list, checkin, checkout, guests) {
       if (!list.length) {
-        container.innerHTML = "<div class='glass-card'>لا توجد فنادق حسب المعايير المدخلة.</div>";
+        container.innerHTML = '';
+        document.getElementById('empty').style.display = 'block';
         return;
       }
-      container.innerHTML = list.map(hotel => `
-        <article class="hotel-card">
-          <h3>${hotel.name}</h3>
-          <p>📍 ${destination} — 💰 ${budget || 'غير محددة'}</p>
-          <p>${hotel.desc}</p>
-          <button class="btn btn-gradient" onclick="openBooking('${hotel.name}')">احجز الآن</button>
-        </article>
-      `).join('');
+      
+      document.getElementById('empty').style.display = 'none';
+      container.innerHTML = list.map(hotel => {
+        const stars = '★'.repeat(Math.floor(hotel.rating)) + '☆'.repeat(5 - Math.floor(hotel.rating));
+        return `
+          <article class="hotel-card">
+            <h3>${hotel.name}</h3>
+            <p>📍 ${hotel.location}${hotel.country ? ', ' + hotel.country : ''} — ${stars} ${hotel.rating.toFixed(1)}</p>
+            <p>${hotel.desc}</p>
+            <div class="hotel-features">
+              ${hotel.features.map(f => `<span class="feature-badge">${f}</span>`).join('')}
+            </div>
+            <div class="price-tag">من $${hotel.price}/ليلة</div>
+            <button class="btn btn-gradient" onclick="openBooking(${hotel.id}, '${hotel.name}', ${hotel.price})" style="width: 100%; margin-top: 12px;">احجز الآن</button>
+          </article>
+        `;
+      }).join('');
     }
 
-    window.openBooking = (name) => {
+    window.openBooking = (id, name, basePrice) => {
+      currentHotel = { id, name, basePrice };
       hotelNameInput.value = name;
       bookingForm.reset();
       hotelNameInput.value = name;
       successMessage.style.display = 'none';
+      bookingForm.style.display = 'block';
+      
+      // تعيين التواريخ من البحث
+      const checkin = document.getElementById('checkin').value;
+      const checkout = document.getElementById('checkout').value;
+      if (checkin) document.getElementById('checkin').setAttribute('value', checkin);
+      if (checkout) document.getElementById('checkout').setAttribute('value', checkout);
+      
+      // تحديث السعر المتوقع
+      updateEstimatedPrice();
+      
       modal.style.display = 'flex';
     };
 
-    closeModal.addEventListener('click', () => modal.style.display = 'none');
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.style.display = 'none';
+    function updateEstimatedPrice() {
+      const checkin = document.getElementById('checkin').value;
+      const checkout = document.getElementById('checkout').value;
+      const rooms = parseInt(document.getElementById('rooms').value) || 1;
+      const guests = parseInt(document.getElementById('guests').value) || 2;
+
+      if (checkin && checkout && currentHotel) {
+        const price = bookingSystem.calculateHotelPrice(
+          currentHotel.name,
+          rooms,
+          guests,
+          checkin,
+          checkout
+        );
+        document.getElementById('estimatedPrice').value = `$${price} (${bookingSystem.calculateNights(checkin, checkout)} ليلة)`;
+      } else {
+        document.getElementById('estimatedPrice').value = '—';
+      }
+    }
+
+    ['checkin', 'checkout', 'rooms', 'guests'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('change', updateEstimatedPrice);
+        el.addEventListener('input', updateEstimatedPrice);
+      }
     });
+
+    closeModal.addEventListener('click', closeBookingModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeBookingModal();
+    });
+
+    function closeBookingModal() {
+      modal.style.display = 'none';
+      bookingForm.reset();
+      successMessage.style.display = 'none';
+      bookingForm.style.display = 'block';
+      currentBooking = null;
+    }
 
     bookingForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      successMessage.style.display = 'inline-flex';
-      setTimeout(() => { modal.style.display = 'none'; }, 1500);
+      
+      const userName = document.getElementById('userName').value.trim();
+      const userEmail = document.getElementById('userEmail').value.trim();
+      const userPhone = document.getElementById('userPhone').value.trim();
+      const rooms = parseInt(document.getElementById('rooms').value);
+      const guests = parseInt(document.getElementById('guests').value);
+      const checkin = document.getElementById('checkin').value;
+      const checkout = document.getElementById('checkout').value;
+      const payment = document.getElementById('payment').value;
+      const notes = document.getElementById('notes').value.trim();
+
+      if (!userName || !userEmail || !userPhone || !checkin || !checkout || !payment) {
+        alert('يرجى ملء جميع الحقول المطلوبة');
+        return;
+      }
+
+      // حساب السعر
+      const price = bookingSystem.calculateHotelPrice(
+        currentHotel.name,
+        rooms,
+        guests,
+        checkin,
+        checkout
+      );
+
+      // حفظ الحجز
+      const bookingData = {
+        hotelId: currentHotel.id,
+        hotelName: currentHotel.name,
+        userName,
+        userEmail,
+        userPhone,
+        rooms,
+        guests,
+        checkin,
+        checkout,
+        payment,
+        notes: notes || null,
+        price
+      };
+
+      currentBooking = bookingSystem.bookHotel(bookingData);
+      
+      // إظهار رسالة النجاح
+      document.getElementById('bookingIdDisplay').textContent = currentBooking.id;
+      successMessage.style.display = 'block';
+      bookingForm.style.display = 'none';
+
+      // محاولة إرسال للخادم (اختياري)
+      bookingSystem.sendToServer(currentBooking, 'http://localhost:3012/api/hotels/book').catch(() => {
+        // تم الحفظ محلياً فقط
+      });
     });
+
+    function printHotelBooking() {
+      if (currentBooking) {
+        bookingSystem.printBooking(currentBooking);
+      }
+    }
+
+    // تحميل الفنادق عند فتح الصفحة
+    searchHotels('', '', '', '', '2');
   </script>
 </body>
 </html>
-

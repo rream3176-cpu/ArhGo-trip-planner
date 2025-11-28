@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | خطة سفر مشتركة</title>
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+  <script src="assets/js/countries-database.js"></script>
+  <script src="assets/js/plan-manager.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #163A5F 0%, #1E4A6F 40%, #255A7F 80%, #163A5F 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .share-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .share-header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #F2F9FF;
+    }
+    
+    .share-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #37D6C0, #4CA8FF, #F2F9FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .share-badge {
+      display: inline-block;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.15));
+      border-radius: 12px;
+      border: 2px solid rgba(55, 214, 192, 0.5);
+      color: #37D6C0;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);
+    }
+    
+    .info-card {
+      background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85));
+      border-radius: 24px;
+      padding: 32px;
+      border: 2px solid rgba(55, 214, 192, 0.5);
+      box-shadow: 0 20px 60px rgba(14, 31, 51, 0.4), 0 0 30px rgba(55, 214, 192, 0.2);
+      backdrop-filter: blur(20px);
+      margin-bottom: 24px;
+    }
+    
+    .day-plan {
+      background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85));
+      border-radius: 24px;
+      padding: 32px;
+      margin-bottom: 24px;
+      border: 2px solid rgba(55, 214, 192, 0.5);
+      box-shadow: 0 20px 60px rgba(14, 31, 51, 0.4), 0 0 30px rgba(55, 214, 192, 0.2);
+      backdrop-filter: blur(20px);
+    }
+    
+    .error-message {
+      text-align: center;
+      padding: 40px;
+      background: linear-gradient(135deg, rgba(30, 74, 111, 0.75), rgba(22, 58, 95, 0.85));
+      border-radius: 24px;
+      border: 2px solid rgba(255, 107, 107, 0.5);
+      color: #FF6B6B;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 40px auto;
+      max-width: 600px;
+    }
+    
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(14, 31, 51, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      color: #F2F9FF;
+    }
+    
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(55, 214, 192, 0.3);
+      border-top-color: #37D6C0;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <nav class="arhgo-nav">
+    <div class="arhgo-logo">ArhGo</div>
+    <ul>
+      <li><a data-nav href="index.html">الرئيسية</a></li>
+      <li><a data-nav href="analytics.html">التحليلات</a></li>
+      <li><a data-nav href="budget-manager.html">إدارة الميزانية</a></li>
+      <li><a data-nav href="price-comparison.html">مقارنة الأسعار</a></li>
+      <li><a data-nav href="smart-alerts.html">التنبيهات</a></li>
+    </ul>
+  </nav>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <h2>جارٍ تحميل الخطة...</h2>
+  </div>
+
+  <main class="share-container">
+    <div class="share-header">
+      <h1>خطة سفر مشتركة</h1>
+      <div class="share-badge">🔗 خطة مشتركة من ArhGo</div>
+    </div>
+
+    <div id="planContent"></div>
+  </main>
+
+  <script>
+    // الحصول على معرف الخطة من URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const planId = urlParams.get('id');
+
+    // تحميل وعرض الخطة
+    async function loadSharedPlan() {
+      if (!planId) {
+        showError('لم يتم تحديد معرف الخطة');
+        return;
+      }
+
+      const plan = planManager.getPlan(planId);
+
+      if (!plan) {
+        showError('الخطة غير موجودة أو انتهت صلاحيتها');
+        return;
+      }
+
+      // إخفاء شاشة التحميل
+      document.getElementById('loadingOverlay').style.display = 'none';
+
+      // عرض الخطة
+      displayPlan(plan);
+    }
+
+    // عرض رسالة خطأ
+    function showError(message) {
+      document.getElementById('loadingOverlay').style.display = 'none';
+      document.getElementById('planContent').innerHTML = `
+        <div class="error-message">
+          <div style="font-size: 3rem; margin-bottom: 16px;">⚠️</div>
+          <div>${message}</div>
+          <a href="index.html" style="display: inline-block; margin-top: 24px; padding: 12px 32px; 
+            background: linear-gradient(135deg, #37D6C0, #4CA8FF); color: #0E1F33; 
+            border-radius: 12px; text-decoration: none; font-weight: 700;">
+            العودة إلى الصفحة الرئيسية
+          </a>
+        </div>
+      `;
+    }
+
+    // عرض الخطة (نفس الكود من smart-planner.html)
+    function displayPlan(planData) {
+      const { country, days, budget, interests, plan, totalCost, avgDailyCost, totalActivities } = planData;
+      
+      // عرض معلومات الرحلة
+      const countryData = getCountryData(country);
+      const weatherInfo = {
+        'مشمس': '☀️ مشمس - مثالي للأنشطة الخارجية',
+        'معتدل': '☁️ معتدل - جو لطيف ومريح',
+        'بارد': '❄️ بارد - احرص على ارتداء ملابس دافئة',
+        'ممطر': '🌧️ ممطر - احمل مظلة معك'
+      };
+      
+      let content = `
+        <div class="info-card">
+          <h3 style="color: #37D6C0; margin-bottom: 20px; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">معلومات الرحلة</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🌍</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #37D6C0; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">الوجهة</div>
+              <div style="font-size: 1.3rem; color: #37D6C0; font-weight: 800; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${country}</div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
+              <div style="font-size: 2rem; margin-bottom: 8px;">📅</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #37D6C0; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">مدة الرحلة</div>
+              <div style="font-size: 1.3rem; color: #37D6C0; font-weight: 800; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${days} ${days === 1 ? 'يوم' : 'أيام'}</div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
+              <div style="font-size: 2rem; margin-bottom: 8px;">💰</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #37D6C0; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">الميزانية</div>
+              <div style="font-size: 1.2rem; color: #4DFFD1; font-weight: 700; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${budget === 'low' ? '💵 اقتصادية' : budget === 'medium' ? '💶 متوسطة' : '💎 فاخرة'}</div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(55, 214, 192, 0.2), rgba(76, 168, 255, 0.2)); padding: 20px; border-radius: 16px; border: 2px solid rgba(55, 214, 192, 0.4);">
+              <div style="font-size: 2rem; margin-bottom: 8px;">📊</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #37D6C0; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">التكلفة الإجمالية</div>
+              <div style="font-size: 1.3rem; color: #4DFFD1; font-weight: 800; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">$${Math.round(totalCost)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // عرض الخطط اليومية (نفس الكود من smart-planner.html)
+      // ملاحظة: سأستخدم نفس الكود الموجود في smart-planner.html لعرض الخطط اليومية
+      // لكن سأبسطه هنا لعرض المعلومات الأساسية
+      
+      plan.forEach((day, index) => {
+        content += `
+          <div class="day-plan">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid rgba(55, 214, 192, 0.4);">
+              <div>
+                <div style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #37D6C0, #4DFFD1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">اليوم ${day.day}</div>
+                <p style="color: #F2F9FF; margin-top: 8px; font-size: 1.2rem; font-weight: 600; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">📍 ${day.city}</p>
+              </div>
+              <div style="text-align: left; background: rgba(55, 214, 192, 0.15); padding: 16px 24px; border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.4);">
+                <div style="font-size: 2rem; font-weight: 800; color: #F2F9FF; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">$${Math.round(day.totalCost)}</div>
+                <div style="color: #B8D4F0; font-size: 0.95rem; margin-top: 4px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">💰 التكلفة اليومية</div>
+              </div>
+            </div>
+            
+            <div style="margin-top: 24px;">
+              <h4 style="color: #37D6C0; margin-bottom: 16px; font-size: 1.4rem; font-weight: 700; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">🌅 الصباح</h4>
+              ${day.morning.map(activity => `
+                <div style="padding: 16px; margin: 12px 0; background: linear-gradient(135deg, rgba(30, 74, 111, 0.5), rgba(22, 58, 95, 0.6)); border-radius: 12px; border: 1px solid rgba(55, 214, 192, 0.3);">
+                  <div style="color: #F2F9FF; font-weight: 700; font-size: 1.1rem; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${activity.name || 'نشاط'}</div>
+                  ${activity.description ? `<div style="color: #B8D4F0; margin-top: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${activity.description}</div>` : ''}
+                </div>
+              `).join('')}
+            </div>
+            
+            <div style="margin-top: 24px;">
+              <h4 style="color: #37D6C0; margin-bottom: 16px; font-size: 1.4rem; font-weight: 700; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">☀️ الظهر</h4>
+              ${day.afternoon.map(activity => `
+                <div style="padding: 16px; margin: 12px 0; background: linear-gradient(135deg, rgba(30, 74, 111, 0.5), rgba(22, 58, 95, 0.6)); border-radius: 12px; border: 1px solid rgba(55, 214, 192, 0.3);">
+                  <div style="color: #F2F9FF; font-weight: 700; font-size: 1.1rem; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${activity.name || 'نشاط'}</div>
+                  ${activity.description ? `<div style="color: #B8D4F0; margin-top: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${activity.description}</div>` : ''}
+                </div>
+              `).join('')}
+            </div>
+            
+            <div style="margin-top: 24px;">
+              <h4 style="color: #37D6C0; margin-bottom: 16px; font-size: 1.4rem; font-weight: 700; text-shadow: 0 2px 8px rgba(14, 31, 51, 0.6);">🌙 المساء</h4>
+              ${day.evening.map(activity => `
+                <div style="padding: 16px; margin: 12px 0; background: linear-gradient(135deg, rgba(30, 74, 111, 0.5), rgba(22, 58, 95, 0.6)); border-radius: 12px; border: 1px solid rgba(55, 214, 192, 0.3);">
+                  <div style="color: #F2F9FF; font-weight: 700; font-size: 1.1rem; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${activity.name || 'نشاط'}</div>
+                  ${activity.description ? `<div style="color: #B8D4F0; margin-top: 8px; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5);">${activity.description}</div>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('planContent').innerHTML = content;
+    }
+
+    // دالة مساعدة للحصول على بيانات الدولة (من countries-database.js)
+    function getCountryData(country) {
+      if (typeof countriesDatabase !== 'undefined' && countriesDatabase[country]) {
+        return countriesDatabase[country];
+      }
+      return {};
+    }
+
+    // تحميل الخطة عند تحميل الصفحة
+    window.addEventListener('DOMContentLoaded', loadSharedPlan);
+  </script>
+</body>
+</html>
+

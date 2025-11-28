@@ -1,0 +1,17 @@
+# خط GE SS Two
+
+## تعليمات التثبيت
+
+1. قم بزيارة الرابط: https://arbfonts.com/font-109-ge-ss-two.html
+2. قم بتنزيل الخط
+3. ضع ملفات الخط في هذا المجلد (`assets/fonts/`) بالأسماء التالية:
+   - `GE_SS_Two_Light.woff2` أو `GE_SS_Two_Light.woff` أو `GE_SS_Two_Light.ttf`
+   - `GE_SS_Two_Medium.woff2` أو `GE_SS_Two_Medium.woff` أو `GE_SS_Two_Medium.ttf`
+   - `GE_SS_Two_Bold.woff2` أو `GE_SS_Two_Bold.woff` أو `GE_SS_Two_Bold.ttf`
+   - `GE_SS_Two_ExtraBold.woff2` أو `GE_SS_Two_ExtraBold.woff` أو `GE_SS_Two_ExtraBold.ttf`
+
+4. بعد إضافة الملفات، سيتم تطبيق الخط تلقائياً على شريط التنقل.
+
+## ملاحظة
+إذا لم تقم بإضافة ملفات الخط، سيتم استخدام الخطوط البديلة (Cairo, Almarai, Tajawal).
+
