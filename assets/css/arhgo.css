@@ -55,7 +55,7 @@
 /* Google Translate Widget Styling */
 #google_translate_element {
   position: fixed !important;
-  bottom: 20px !important;
+  top: 600px !important;
   left: 20px !important;
   z-index: 9999 !important;
   background: linear-gradient(to bottom right, #0E1F33 0%, #163A5F 50%, #1E4A6F 100%) !important;
@@ -1524,16 +1524,18 @@ main {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   margin-bottom: 20px;
   letter-spacing: -0.3px;
-  background: linear-gradient(135deg, #0E1F33 0%, #163A5F 50%, #37D6C0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #F2F9FF !important;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 800 !important;
   position: relative;
   display: inline-block;
   font-style: normal;
-  filter: drop-shadow(0 2px 8px rgba(14, 31, 51, 0.4));
+  text-shadow: 
+    0 0 10px rgba(55, 214, 192, 0.8),
+    0 0 20px rgba(55, 214, 192, 0.6),
+    0 2px 8px rgba(14, 31, 51, 0.9),
+    0 4px 12px rgba(14, 31, 51, 0.7);
+  filter: drop-shadow(0 4px 12px rgba(55, 214, 192, 0.6));
 }
 
 .section-title::after {
@@ -3955,4 +3957,3 @@ html {
     border: 1px solid #ddd;
   }
 }
-
