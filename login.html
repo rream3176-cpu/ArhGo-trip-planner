@@ -429,7 +429,7 @@
       }, 5000);
     }
     
-    function login() {
+    async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
       const password = document.getElementById('password').value.trim();
       const error = document.getElementById('error');
@@ -442,14 +442,35 @@
         return;
       }
 
-      // استخدام نظام المصادقة الجديد
-      if (typeof userAuth !== 'undefined') {
-        const result = userAuth.login(email, password);
+      try {
+        // تحديد URL الأساسي
+        let baseUrl = '';
+        if (window.location.protocol === 'file:') {
+          baseUrl = 'http://localhost/ArhGo-trip-planner/';
+        }
+        
+        const response = await fetch(baseUrl + 'api/login.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+        
+        const result = await response.json();
         
         if (result.success) {
-          // التأكد من حفظ البيانات
-          localStorage.setItem('arhgo_current_user', result.user.username);
-          localStorage.setItem('loggedIn', result.user.username);
+          // حفظ بيانات الجلسة والمستخدم
+          localStorage.setItem('session_token', result.session_token);
+          localStorage.setItem('user', JSON.stringify(result.user));
+          localStorage.setItem('arhgo_current_user', result.user.full_name);
+          localStorage.setItem('loggedIn', result.user.full_name);
+          
+          // إرسال event لتحديث الصفحات الأخرى
+          window.dispatchEvent(new Event('authStateChanged'));
           
           error.style.color = '#4DFFD1';
           error.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
@@ -460,45 +481,18 @@
           // إظهار الغيوم
           createClouds();
           
-          // الانتقال بعد 1.5 ثانية مع إضافة timestamp لمنع cache
+          // الانتقال بعد 1.5 ثانية
           setTimeout(() => {
             window.location.href = 'index.html?t=' + Date.now();
           }, 1500);
         } else {
           error.style.color = 'var(--danger)';
-          error.textContent = result.message;
+          error.textContent = result.error || 'حدث خطأ أثناء تسجيل الدخول';
         }
-      } else {
-        // طريقة احتياطية (للتوافق مع الكود القديم)
-        const userData = localStorage.getItem('user');
-
-        if (!userData) {
-          error.style.color = 'var(--danger)';
-          error.textContent = "لا يوجد حساب محفوظ، أنشئ حسابًا جديدًا.";
-          return;
-        }
-
-        const user = JSON.parse(userData);
-        const match = user.email.trim().toLowerCase() === email && user.password.trim() === password;
-
-        if (match) {
-          // حفظ البيانات في كلا المفاتيح
-          localStorage.setItem('arhgo_current_user', user.username);
-          localStorage.setItem('loggedIn', user.username);
-          
-          error.style.color = '#4DFFD1';
-          error.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
-          
-          playFlightSoundEffect();
-          createClouds();
-          
-          setTimeout(() => {
-            window.location.href = 'index.html?t=' + Date.now();
-          }, 1500);
-        } else {
-          error.style.color = 'var(--danger)';
-          error.textContent = "بيانات الدخول غير صحيحة.";
-        }
+      } catch (err) {
+        console.error('خطأ في تسجيل الدخول:', err);
+        error.style.color = 'var(--danger)';
+        error.textContent = 'حدث خطأ في الاتصال بالخادم. تأكد من أن WAMP/XAMPP يعمل.';
       }
     }
   </script>

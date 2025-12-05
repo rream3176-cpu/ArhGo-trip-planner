@@ -480,7 +480,7 @@
       alert('سياسة الخصوصية:\n\n1. نحن نحترم خصوصيتك ونحمي بياناتك الشخصية\n2. بياناتك محفوظة محلياً في متصفحك فقط\n3. لا نشارك بياناتك مع أي طرف ثالث\n4. يمكنك حذف حسابك في أي وقت');
     }
     
-    function signup() {
+    async function signup() {
       const username = document.getElementById('username').value.trim();
       const fullname = document.getElementById('fullname').value.trim();
       const email = document.getElementById('email').value.trim().toLowerCase();
@@ -499,9 +499,9 @@
       }
       
       // التحقق من كلمة المرور
-      if (password.length < 8) {
+      if (password.length < 6) {
         error.style.color = 'var(--danger)';
-        error.textContent = "كلمة المرور يجب أن تكون 8 أحرف على الأقل.";
+        error.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
         return;
       }
       
@@ -526,23 +526,55 @@
         return;
       }
 
-      // حفظ الحساب باستخدام نظام المصادقة الجديد
-      if (typeof userAuth !== 'undefined') {
-        const result = userAuth.saveUser({ 
-          username, 
-          fullname, 
-          email, 
-          password
+      try {
+        // تحديد URL الأساسي
+        let baseUrl = '';
+        if (window.location.protocol === 'file:') {
+          baseUrl = 'http://localhost/ArhGo-trip-planner/';
+        }
+        
+        // تسجيل المستخدم الجديد
+        const response = await fetch(baseUrl + 'api/register.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            full_name: fullname,
+            email: email,
+            password: password,
+            phone: '',
+            country: '',
+            city: ''
+          })
         });
-
+        
+        const result = await response.json();
+        
         if (result.success) {
           // تسجيل الدخول تلقائياً
-          const loginResult = userAuth.login(email, password);
+          const loginResponse = await fetch(baseUrl + 'api/login.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+          });
+          
+          const loginResult = await loginResponse.json();
           
           if (loginResult.success) {
-            // التأكد من حفظ البيانات
-            localStorage.setItem('arhgo_current_user', loginResult.user.username);
-            localStorage.setItem('loggedIn', loginResult.user.username);
+            // حفظ بيانات الجلسة والمستخدم
+            localStorage.setItem('session_token', loginResult.session_token);
+            localStorage.setItem('user', JSON.stringify(loginResult.user));
+            localStorage.setItem('arhgo_current_user', loginResult.user.full_name);
+            localStorage.setItem('loggedIn', loginResult.user.full_name);
+            
+            // إرسال event لتحديث الصفحات الأخرى
+            window.dispatchEvent(new Event('authStateChanged'));
             
             error.style.color = '#4DFFD1';
             error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
@@ -553,40 +585,22 @@
             // إظهار الغيوم
             createClouds();
             
-            // الانتقال بعد 1.5 ثانية مع إضافة timestamp لمنع cache
+            // الانتقال بعد 1.5 ثانية
             setTimeout(() => {
               window.location.href = 'index.html?t=' + Date.now();
             }, 1500);
           } else {
             error.style.color = 'var(--danger)';
-            error.textContent = "تم إنشاء الحساب لكن فشل تسجيل الدخول. يرجى تسجيل الدخول يدوياً.";
+            error.textContent = loginResult.error || "تم إنشاء الحساب لكن فشل تسجيل الدخول. يرجى تسجيل الدخول يدوياً.";
           }
         } else {
           error.style.color = 'var(--danger)';
-          error.textContent = result.message;
+          error.textContent = result.error || 'حدث خطأ أثناء إنشاء الحساب';
         }
-      } else {
-        // طريقة احتياطية (للتوافق مع الكود القديم)
-        const user = { 
-          username, 
-          fullname, 
-          email, 
-          password,
-          createdAt: new Date().toISOString()
-        };
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('arhgo_current_user', username);
-        localStorage.setItem('loggedIn', username);
-
-        error.style.color = '#4DFFD1';
-        error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
-        
-        playFlightSoundEffect();
-        createClouds();
-        
-        setTimeout(() => {
-          window.location.href = 'index.html?t=' + Date.now();
-        }, 1500);
+      } catch (err) {
+        console.error('خطأ في التسجيل:', err);
+        error.style.color = 'var(--danger)';
+        error.textContent = 'حدث خطأ في الاتصال بالخادم. تأكد من أن WAMP/XAMPP يعمل.';
       }
     }
   </script>

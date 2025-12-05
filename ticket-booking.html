@@ -71,10 +71,11 @@
       <li><a data-nav href="hotel.html">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html">حجز المطاعم</a></li>
+      <li><a data-nav href="my-bookings.html">حجوزاتي</a></li>
     </ul>
     <div class="stack">
-      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
-      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
+      <a class="btn btn-ghost" href="login.html" data-flight-sound id="loginBtn">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound id="signupBtn">إنشاء حساب</a>
     </div>
   </nav>
   <main class="page-shell">
@@ -184,6 +185,83 @@
   </main>
 
   <script>
+    // التحقق من حالة تسجيل الدخول وتحديث الأزرار
+    function updateAuthButtons() {
+      console.log('🔄 تحديث الأزرار...');
+      const session_token = localStorage.getItem('session_token');
+      const userStr = localStorage.getItem('user');
+      const user = userStr ? JSON.parse(userStr) : {};
+      const loginBtn = document.getElementById('loginBtn');
+      const signupBtn = document.getElementById('signupBtn');
+      
+      console.log('Session token:', session_token ? 'موجود' : 'غير موجود');
+      console.log('User data:', user);
+      console.log('Login button:', loginBtn ? 'موجود' : 'غير موجود');
+      console.log('Signup button:', signupBtn ? 'موجود' : 'غير موجود');
+      
+      if (!loginBtn || !signupBtn) {
+        console.warn('⚠️ الأزرار غير موجودة بعد');
+        setTimeout(updateAuthButtons, 500);
+        return;
+      }
+      
+      if (session_token && user.full_name) {
+        // المستخدم مسجل دخول
+        loginBtn.textContent = user.full_name;
+        loginBtn.href = 'my-bookings.html';
+        loginBtn.style.color = '#37D6C0';
+        signupBtn.textContent = 'تسجيل الخروج';
+        signupBtn.href = '#';
+        signupBtn.onclick = (e) => {
+          e.preventDefault();
+          if (confirm('هل تريد تسجيل الخروج؟')) {
+            localStorage.removeItem('session_token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('arhgo_current_user');
+            localStorage.removeItem('loggedIn');
+            window.location.href = 'login.html';
+          }
+        };
+        console.log('✅ تم تحديث الأزرار - المستخدم مسجل دخول:', user.full_name);
+      } else {
+        // المستخدم غير مسجل دخول
+        loginBtn.textContent = 'تسجيل الدخول';
+        loginBtn.href = 'login.html';
+        loginBtn.style.color = '';
+        signupBtn.textContent = 'إنشاء حساب';
+        signupBtn.href = 'signup.html';
+        signupBtn.onclick = null;
+        console.log('ℹ️ المستخدم غير مسجل دخول');
+      }
+    }
+    
+    // تحديث الأزرار عند تحميل الصفحة
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', updateAuthButtons);
+    } else {
+      updateAuthButtons();
+    }
+    
+    // تحديث الأزرار عند تغيير حالة المصادقة
+    window.addEventListener('authStateChanged', updateAuthButtons);
+    window.addEventListener('storage', updateAuthButtons);
+    
+    // تحديث الأزرار عند العودة للصفحة
+    window.addEventListener('focus', updateAuthButtons);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        updateAuthButtons();
+      }
+    });
+    
+    // تحديث الأزرار عند النقر في أي مكان (للتأكد من التحديث)
+    document.addEventListener('click', () => {
+      setTimeout(updateAuthButtons, 100);
+    });
+    
+    // تحديث الأزرار كل 2 ثانية للتأكد
+    setInterval(updateAuthButtons, 2000);
+    
     let currentBooking = null;
 
     // تعيين الحد الأدنى للتاريخ (اليوم)
@@ -251,6 +329,13 @@
     document.getElementById('bookingForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const session_token = localStorage.getItem('session_token');
+      if (!session_token) {
+        alert('❌ يرجى تسجيل الدخول أولاً لحجز رحلة');
+        window.location.href = 'login.html';
+        return;
+      }
+
       const formData = {
         trip: document.getElementById('tripType').value,
         from: document.getElementById('from').value,
@@ -267,38 +352,111 @@
         notes: document.getElementById('notes').value
       };
 
-      // حساب السعر
-      const price = bookingSystem.calculateFlightPrice(
-        formData.trip,
-        formData.classType,
-        formData.pcount,
-        formData.from,
-        formData.to
-      );
-      formData.price = price;
+      // التحقق من الحقول المطلوبة
+      if (!formData.from || !formData.to || !formData.depart || !formData.classType) {
+        alert('❌ يرجى تعبئة جميع الحقول المطلوبة');
+        return;
+      }
 
-      // حفظ الحجز
+      // تحويل classType إلى التنسيق المطلوب من API
+      let class_type = formData.classType;
+      if (class_type === 'درجة رجال الأعمال') {
+        class_type = 'رجال أعمال';
+      } else if (class_type === 'الأولى') {
+        class_type = 'أولى';
+      } else if (class_type === 'اقتصادية') {
+        class_type = 'اقتصادية';
+      }
+
+      // إعداد البيانات للإرسال إلى API
+      const bookingPayload = {
+        session_token: session_token,
+        from_city: formData.from,
+        to_city: formData.to,
+        departure_date: formData.depart,
+        return_date: formData.return,
+        passengers: formData.pcount,
+        class_type: class_type,
+        special_requests: formData.notes || ''
+      };
+
+      // إظهار رسالة التحميل
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'جاري الحجز...';
+
       try {
-        currentBooking = bookingSystem.bookFlight(formData);
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
         
-        // إظهار رسالة النجاح
-        document.getElementById('bookingIdDisplay').textContent = currentBooking.id;
-        document.getElementById('successMessage').style.display = 'block';
-        document.getElementById('summaryContent').style.opacity = '0.6';
-
-        // محاولة إرسال للخادم (اختياري)
-        bookingSystem.sendToServer(currentBooking, 'http://localhost:4002/api/book').catch(() => {
-          // تم الحفظ محلياً فقط
+        console.log('📤 إرسال بيانات حجز الرحلة:', bookingPayload);
+        console.log('🌐 URL:', baseUrl + 'api/book_flight.php');
+        
+        const response = await fetch(baseUrl + 'api/book_flight.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bookingPayload)
         });
 
-        // إعادة تعيين النموذج بعد 3 ثواني
-        setTimeout(() => {
-          document.getElementById('bookingForm').reset();
-          updateSummary();
-        }, 3000);
+        console.log('📥 حالة الاستجابة:', response.status, response.statusText);
+        
+        const result = await response.json();
+        console.log('📦 النتيجة:', result);
+
+        if (result.success) {
+          console.log('✅ تم الحجز بنجاح! رقم الحجز:', result.booking_reference);
+          
+          // حفظ محلياً أيضاً للنسخ الاحتياطي
+          currentBooking = {
+            id: result.booking_reference,
+            type: 'flight',
+            ...formData,
+            price: result.total_price,
+            createdAt: new Date().toISOString(),
+            status: 'confirmed'
+          };
+          bookingSystem.bookFlight(currentBooking);
+          
+          // إظهار رسالة النجاح
+          document.getElementById('bookingIdDisplay').textContent = result.booking_reference;
+          document.getElementById('successMessage').style.display = 'block';
+          document.getElementById('summaryContent').style.opacity = '0.6';
+
+          // تحديث السعر في الملخص
+          document.getElementById('sumPrice').textContent = `$${result.total_price}`;
+
+          // إعادة تعيين النموذج بعد 3 ثواني
+          setTimeout(() => {
+            document.getElementById('bookingForm').reset();
+            updateSummary();
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }, 3000);
+        } else {
+          console.error('❌ فشل الحجز:', result);
+          throw new Error(result.error || 'فشل الحجز');
+        }
 
       } catch (error) {
-        alert('❌ حدث خطأ أثناء الحجز: ' + error.message);
+        console.error('❌ خطأ في حجز الرحلة:', error);
+        console.error('تفاصيل الخطأ:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
+        
+        let errorMessage = 'حدث خطأ أثناء الحجز';
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (error instanceof TypeError && error.message.includes('fetch')) {
+          errorMessage = 'فشل الاتصال بالخادم. تأكد من أنك تستخدم http://localhost';
+        }
+        
+        alert('❌ ' + errorMessage + '\n\nافتح Console (F12) لمعرفة التفاصيل');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
       }
     });
 

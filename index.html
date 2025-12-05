@@ -23,6 +23,7 @@
       <li><a data-nav href="hotel.html" data-translate="nav.hotels">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html" data-translate="nav.flights">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html" data-translate="nav.restaurants">مطاعم</a></li>
+      <li><a data-nav href="my-bookings.html">حجوزاتي</a></li>
       <li><a data-nav href="analytics.html">التحليلات</a></li>
       <li><a data-nav href="budget-manager.html">إدارة الميزانية</a></li>
       <li><a data-nav href="price-comparison.html">مقارنة الأسعار</a></li>
@@ -282,41 +283,18 @@
             <label for="trip-country" style="font-size: 1.1rem; font-weight: 600;">🌍 الوجهة (اختياري)</label>
             <select class="arhgo-select" id="trip-country" style="font-size: 1.1rem; padding: 14px;">
               <option value="" data-translate="form.selectDestination">أو اختر يدوياً...</option>
-              <option value="فرنسا">🇫🇷 فرنسا</option>
-              <option value="إيطاليا">🇮🇹 إيطاليا</option>
-              <option value="اليابان">🇯🇵 اليابان</option>
-              <option value="أستراليا">🇦🇺 أستراليا</option>
-              <option value="إسبانيا">🇪🇸 إسبانيا</option>
-              <option value="اليونان">🇬🇷 اليونان</option>
-              <option value="تايلاند">🇹🇭 تايلاند</option>
-              <option value="مصر">🇪🇬 مصر</option>
-              <option value="سويسرا">🇨🇭 سويسرا</option>
-              <option value="المغرب">🇲🇦 المغرب</option>
-              <option value="تركيا">🇹🇷 تركيا</option>
-              <option value="ماليزيا">🇲🇾 ماليزيا</option>
-              <option value="سنغافورة">🇸🇬 سنغافورة</option>
-              <option value="دبي">🇦🇪 دبي</option>
-              <option value="النمسا">🇦🇹 النمسا</option>
-              <option value="ألمانيا">🇩🇪 ألمانيا</option>
-              <option value="بريطانيا">🇬🇧 بريطانيا</option>
-              <option value="هولندا">🇳🇱 هولندا</option>
-              <option value="البرتغال">🇵🇹 البرتغال</option>
-              <option value="كرواتيا">🇭🇷 كرواتيا</option>
-              <option value="أيسلندا">🇮🇸 أيسلندا</option>
-              <option value="نيوزيلندا">🇳🇿 نيوزيلندا</option>
-              <option value="كندا">🇨🇦 كندا</option>
-              <option value="الولايات المتحدة">🇺🇸 الولايات المتحدة</option>
-              <option value="المكسيك">🇲🇽 المكسيك</option>
-              <option value="بيرو">🇵🇪 بيرو</option>
-              <option value="البرازيل">🇧🇷 البرازيل</option>
-              <option value="جنوب أفريقيا">🇿🇦 جنوب أفريقيا</option>
-              <option value="كينيا">🇰🇪 كينيا</option>
-              <option value="الهند">🇮🇳 الهند</option>
-              <option value="سريلانكا">🇱🇰 سريلانكا</option>
-              <option value="إندونيسيا">🇮🇩 إندونيسيا</option>
-              <option value="فيتنام">🇻🇳 فيتنام</option>
-              <option value="كمبوديا">🇰🇭 كمبوديا</option>
-              <option value="الفلبين">🇵🇭 الفلبين</option>
+              <option value="السعودية">🇸🇦 السعودية</option>
+              <option value="الإمارات">🇦🇪 الإمارات</option>
+              <option value="الكويت">🇰🇼 الكويت</option>
+              <option value="قطر">🇶🇦 قطر</option>
+              <option value="البحرين">🇧🇭 البحرين</option>
+              <option value="عُمان">🇴🇲 عُمان</option>
+              <option value="اليمن">🇾🇪 اليمن</option>
+              <option value="العراق">🇮🇶 العراق</option>
+              <option value="سوريا">🇸🇾 سوريا</option>
+              <option value="الأردن">🇯🇴 الأردن</option>
+              <option value="لبنان">🇱🇧 لبنان</option>
+              <option value="فلسطين">🇵🇸 فلسطين</option>
       </select>
     </div>
     
@@ -795,22 +773,116 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
     });
 
 
-    saveBtn.addEventListener('click', () => {
+    saveBtn.addEventListener('click', async () => {
+      const session_token = localStorage.getItem('session_token');
+      if (!session_token) {
+        showToast('⚠️ يرجى تسجيل الدخول أولاً لحفظ الخطة في حسابك');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+        return;
+      }
+
       const payload = buildTripPayload();
-      const shortCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-      const link = `https://arhgo.travel/r/${shortCode}`;
-      updateStats(payload, link);
       
-      // حفظ في قاعدة بيانات المستخدم إذا كان مسجل دخول
-      if (typeof userAuth !== 'undefined' && userAuth.isLoggedIn()) {
-        const result = userAuth.saveFormData(payload);
+      // الحصول على country_id من اسم الدولة
+      let country_id = 0;
+      try {
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
+        const countriesResponse = await fetch(baseUrl + 'api/get_countries.php');
+        const countriesData = await countriesResponse.json();
+        
+        if (countriesData.success && countriesData.data) {
+          const country = countriesData.data.find(c => 
+            c.country_name_ar === payload.country || 
+            c.country_name_en === payload.country
+          );
+          if (country) {
+            country_id = country.id;
+          }
+        }
+      } catch (error) {
+        console.error('خطأ في الحصول على country_id:', error);
+      }
+
+      // إعداد بيانات الخطة للإرسال
+      const planData = {
+        plan_name: `رحلة إلى ${payload.country}`,
+        country_id: country_id,
+        city_id: null, // يمكن إضافته لاحقاً
+        weather_preference: payload.weather || '',
+        view_preference: payload.scenery || '',
+        trip_type: payload.tripType || '',
+        budget: payload.budget || 'متوسطة',
+        start_date: null, // يمكن إضافته لاحقاً
+        end_date: null, // يمكن إضافته لاحقاً
+        duration_days: payload.days || 1,
+        estimated_cost: payload.estimatedCost || 0,
+        interests: payload.interests ? payload.interests.split('، ') : [],
+        activities: [],
+        selected_hotels: [],
+        selected_restaurants: [],
+        plan_data: payload
+      };
+
+      // إظهار رسالة التحميل
+      const originalText = saveBtn.textContent;
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'جاري الحفظ...';
+
+      try {
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
+        
+        const requestData = {
+          session_token: session_token,
+          plan_data: planData
+        };
+        
+        console.log('📤 إرسال بيانات الخطة:', requestData);
+        console.log('🌐 URL:', baseUrl + 'api/save_travel_plan.php');
+        
+        const response = await fetch(baseUrl + 'api/save_travel_plan.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        console.log('📥 حالة الاستجابة:', response.status, response.statusText);
+        
+        const result = await response.json();
+        console.log('📦 النتيجة:', result);
+
         if (result.success) {
+          console.log('✅ تم حفظ الخطة بنجاح! Plan ID:', result.plan_id);
+          const shortCode = result.share_link || Math.random().toString(36).substring(2, 8).toUpperCase();
+          const link = `https://arhgo.travel/r/${shortCode}`;
+          updateStats(payload, link);
           showToast('✅ تم حفظ الخطة في حسابك مع رابط قصير ✨');
         } else {
-          showToast('تم حفظ الخطة محلياً ✨');
+          console.error('❌ فشل حفظ الخطة:', result);
+          throw new Error(result.error || 'فشل حفظ الخطة');
         }
-      } else {
-        showToast('تم حفظ الخطة محلياً ✨ (سجّل دخولك لحفظها في حسابك)');
+      } catch (error) {
+        console.error('❌ خطأ في حفظ الخطة:', error);
+        console.error('تفاصيل الخطأ:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
+        
+        let errorMessage = 'حدث خطأ أثناء حفظ الخطة';
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (error instanceof TypeError && error.message.includes('fetch')) {
+          errorMessage = 'فشل الاتصال بالخادم. تأكد من أنك تستخدم http://localhost';
+        }
+        
+        showToast('❌ ' + errorMessage + '\n\nافتح Console (F12) لمعرفة التفاصيل');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = originalText;
       }
     });
 

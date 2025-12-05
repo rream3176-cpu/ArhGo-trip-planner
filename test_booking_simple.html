@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>اختبار بسيط - ArhGo</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #1a1f2e; color: #fff; direction: rtl; }
+        button { padding: 15px 30px; margin: 10px; background: #37D6C0; color: #1a1f2e; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        button:hover { background: #2fb8a0; }
+        #result { margin-top: 20px; padding: 20px; background: rgba(0,0,0,0.5); border-radius: 8px; white-space: pre-wrap; }
+        .success { color: #51cf66; }
+        .error { color: #ff6b6b; }
+        input { padding: 10px; margin: 5px; width: 250px; border-radius: 5px; border: 2px solid #37D6C0; background: rgba(255,255,255,0.1); color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>🧪 اختبار بسيط - ArhGo</h1>
+    
+    <div>
+        <h2>1. تسجيل الدخول</h2>
+        <input type="email" id="email" placeholder="البريد الإلكتروني" value="adffdddr@gmail.com">
+        <input type="password" id="password" placeholder="كلمة المرور">
+        <button onclick="testLogin()">تسجيل الدخول</button>
+    </div>
+    
+    <div>
+        <h2>2. اختبار الحجوزات</h2>
+        <button onclick="testHotel()">حجز فندق</button>
+        <button onclick="testRestaurant()">حجز مطعم</button>
+        <button onclick="testFlight()">حجز رحلة</button>
+        <button onclick="testPlan()">حفظ خطة</button>
+    </div>
+    
+    <div>
+        <h2>3. عرض النتائج</h2>
+        <button onclick="checkBookings()">عرض جميع الحجوزات</button>
+    </div>
+    
+    <div id="result"></div>
+    
+    <script>
+        let sessionToken = '';
+        
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const result = document.getElementById('result');
+            
+            result.innerHTML = '⏳ جاري تسجيل الدخول...';
+            
+            try {
+                const response = await fetch('api/login.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = JSON.stringify(data, null, 2);
+                
+                if (data.success) {
+                    sessionToken = data.session_token;
+                    localStorage.setItem('session_token', sessionToken);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    result.innerHTML += '\n\n✅ تم حفظ Session Token في localStorage';
+                }
+            } catch (error) {
+                result.innerHTML = '❌ خطأ: ' + error.message;
+            }
+        }
+        
+        async function testHotel() {
+            if (!sessionToken) sessionToken = localStorage.getItem('session_token');
+            if (!sessionToken) {
+                document.getElementById('result').innerHTML = '❌ يرجى تسجيل الدخول أولاً';
+                return;
+            }
+            
+            const result = document.getElementById('result');
+            result.innerHTML = '⏳ جاري حجز الفندق...';
+            
+            try {
+                const response = await fetch('api/book_hotel.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_token: sessionToken,
+                        hotel_id: 1,
+                        check_in_date: '2025-12-20',
+                        check_out_date: '2025-12-22',
+                        guests: 2,
+                        rooms: 1,
+                        special_requests: 'اختبار'
+                    })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.innerHTML = '❌ خطأ: ' + error.message;
+            }
+        }
+        
+        async function testRestaurant() {
+            if (!sessionToken) sessionToken = localStorage.getItem('session_token');
+            if (!sessionToken) {
+                document.getElementById('result').innerHTML = '❌ يرجى تسجيل الدخول أولاً';
+                return;
+            }
+            
+            const result = document.getElementById('result');
+            result.innerHTML = '⏳ جاري حجز المطعم...';
+            
+            try {
+                const response = await fetch('api/book_restaurant.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_token: sessionToken,
+                        restaurant_id: 1,
+                        booking_date: '2025-12-20',
+                        booking_time: '19:00:00',
+                        guests: 2,
+                        special_requests: 'اختبار'
+                    })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.innerHTML = '❌ خطأ: ' + error.message;
+            }
+        }
+        
+        async function testFlight() {
+            if (!sessionToken) sessionToken = localStorage.getItem('session_token');
+            if (!sessionToken) {
+                document.getElementById('result').innerHTML = '❌ يرجى تسجيل الدخول أولاً';
+                return;
+            }
+            
+            const result = document.getElementById('result');
+            result.innerHTML = '⏳ جاري حجز الرحلة...';
+            
+            try {
+                const response = await fetch('api/book_flight.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_token: sessionToken,
+                        from_city: 'بغداد',
+                        to_city: 'دبي',
+                        departure_date: '2025-12-25',
+                        return_date: null,
+                        passengers: 1,
+                        class_type: 'اقتصادية',
+                        special_requests: 'اختبار'
+                    })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.innerHTML = '❌ خطأ: ' + error.message;
+            }
+        }
+        
+        async function testPlan() {
+            if (!sessionToken) sessionToken = localStorage.getItem('session_token');
+            if (!sessionToken) {
+                document.getElementById('result').innerHTML = '❌ يرجى تسجيل الدخول أولاً';
+                return;
+            }
+            
+            const result = document.getElementById('result');
+            result.innerHTML = '⏳ جاري حفظ الخطة...';
+            
+            try {
+                const response = await fetch('api/save_travel_plan.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_token: sessionToken,
+                        plan_data: {
+                            plan_name: 'رحلة اختبار',
+                            country_id: 1,
+                            city_id: null,
+                            weather_preference: 'دافئ',
+                            view_preference: 'ساحلي',
+                            trip_type: 'متوسطة',
+                            budget: 'متوسطة',
+                            duration_days: 5,
+                            estimated_cost: 500,
+                            interests: ['سياحة'],
+                            activities: [],
+                            selected_hotels: [],
+                            selected_restaurants: []
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.innerHTML = '❌ خطأ: ' + error.message;
+            }
+        }
+        
+        async function checkBookings() {
+            if (!sessionToken) sessionToken = localStorage.getItem('session_token');
+            if (!sessionToken) {
+                document.getElementById('result').innerHTML = '❌ يرجى تسجيل الدخول أولاً';
+                return;
+            }
+            
+            const result = document.getElementById('result');
+            result.innerHTML = '⏳ جاري جلب الحجوزات...';
+            
+            try {
+                const response = await fetch('api/get_user_bookings.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_token: sessionToken })
+                });
+                
+                const data = await response.json();
+                result.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.innerHTML = '❌ خطأ: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
+
