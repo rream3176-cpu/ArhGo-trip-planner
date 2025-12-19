@@ -4,24 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | البحث عن رحلات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
   <style>
+    body {
+      background: var(--bg-primary);
+      padding-top: 80px;
+    }
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
+      gap: var(--spacing-md);
     }
     .flight-card {
-      padding: 20px;
-      border-radius: var(--radius-md);
-      background: #ffffff;
-      border: 1px solid rgba(74, 144, 226, 0.2);
-      box-shadow: var(--shadow-soft);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-lg);
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-card);
+      color: var(--text-primary);
     }
     .flight-card h3 {
       margin-bottom: 10px;
-      color: var(--primary);
+      color: var(--neon-cyan);
+      font-weight: 600;
     }
   </style>
 </head>

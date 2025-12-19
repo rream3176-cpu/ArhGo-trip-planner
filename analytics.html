@@ -4,183 +4,236 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | لوحة التحليلات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #0A1C2E 0%, #0F1722 30%, #8EA2B6 60%, #C9B27A 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
-    }
-    
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+      background: var(--bg-primary);
+      padding-top: 80px;
+      font-family: 'Cairo', sans-serif !important;
     }
     
     .analytics-container {
-      max-width: 1600px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: var(--spacing-xl) var(--spacing-lg);
     }
     
-    .analytics-header {
+    .page-header {
       text-align: center;
-      margin-bottom: 40px;
-      color: #fff;
+      margin-bottom: var(--spacing-xl);
     }
     
-    .analytics-header h1 {
-      font-size: 3.5rem;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #37D6C0, #4CA8FF, #F2F9FF);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .page-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
+      font-family: 'Cairo', sans-serif;
+    }
+    
+    .page-header p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-family: 'Cairo', sans-serif;
+    }
+    
+    .stats-section {
+      margin-bottom: var(--spacing-xl);
     }
     
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-md);
     }
     
     .stat-card {
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border-radius: 24px;
-      padding: 32px;
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
-      backdrop-filter: blur(20px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, #37D6C0, #4CA8FF);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
     }
     
     .stat-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 30px 80px rgba(10, 28, 46, 0.4);
-    }
-    
-    .stat-icon {
-      font-size: 3rem;
-      margin-bottom: 16px;
+      transform: translateY(-2px);
+      border-color: rgba(0, 229, 255, 0.4);
     }
     
     .stat-value {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #F2F9FF;
-      margin-bottom: 8px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
+      font-family: 'Cairo', sans-serif;
     }
     
     .stat-label {
-      color: #B8D4F0;
-      font-size: 1.1rem;
-      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-family: 'Cairo', sans-serif;
     }
     
-    .stat-change {
-      margin-top: 12px;
-      font-size: 0.9rem;
-      color: #10B981;
-      font-weight: 600;
+    .charts-section {
+      margin-bottom: var(--spacing-xl);
     }
     
     .charts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
-    }
-    
-    @media (max-width: 1200px) {
-      .charts-grid {
-        grid-template-columns: 1fr;
-      }
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: var(--spacing-lg);
     }
     
     .chart-card {
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border-radius: 24px;
-      padding: 32px;
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
-      backdrop-filter: blur(20px);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
     }
     
     .chart-card h3 {
-      color: #F2F9FF;
-      margin-bottom: 24px;
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-md);
+      font-family: 'Cairo', sans-serif;
     }
     
     .chart-container {
       position: relative;
-      height: 300px;
+      height: 250px;
     }
     
-    .table-container {
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border-radius: 24px;
-      padding: 32px;
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
-      backdrop-filter: blur(20px);
-      margin-bottom: 40px;
+    .table-section {
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .table-card {
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+    
+    .table-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-md);
+      font-family: 'Cairo', sans-serif;
     }
     
     .data-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 24px;
     }
     
     .data-table th,
     .data-table td {
-      padding: 16px;
+      padding: 12px;
       text-align: right;
-      border-bottom: 1px solid rgba(55, 214, 192, 0.3);
+      border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+      font-family: 'Cairo', sans-serif;
     }
     
     .data-table th {
-      background: rgba(55, 214, 192, 0.15);
-      color: #F2F9FF;
-      font-weight: 700;
-      font-size: 1.1rem;
+      background: rgba(0, 229, 255, 0.08);
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .data-table td {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
     }
     
     .data-table tr:hover {
-      background: rgba(55, 214, 192, 0.1);
+      background: rgba(0, 229, 255, 0.05);
     }
     
-    .export-buttons {
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .actions {
       display: flex;
-      gap: 16px;
-      margin-top: 24px;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-lg);
       flex-wrap: wrap;
     }
     
-    .pulse-animation {
-      animation: pulse 2s ease-in-out infinite;
+    .actions .btn {
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
     }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+    .empty-state {
+      text-align: center;
+      padding: var(--spacing-xl);
+      color: var(--text-secondary);
+      font-family: 'Cairo', sans-serif;
+    }
+    
+    @media (max-width: 768px) {
+      .analytics-container {
+        padding: var(--spacing-md);
+      }
+      
+      .page-header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: var(--spacing-sm);
+      }
+      
+      .stat-card {
+        padding: var(--spacing-md);
+      }
+      
+      .stat-value {
+        font-size: 1.5rem;
+      }
+      
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .chart-container {
+        height: 220px;
+      }
+      
+      .data-table th,
+      .data-table td {
+        padding: 8px;
+        font-size: 0.85rem;
+      }
     }
   </style>
 </head>
@@ -197,152 +250,143 @@
   </nav>
 
   <main class="analytics-container">
-    <div class="analytics-header">
-      <h1>لوحة التحليلات الذكية</h1>
-      <p style="font-size: 1.3rem; color: rgba(255,255,255,0.9); margin-bottom: 20px;">
-        إحصائيات شاملة وتحليلات متقدمة لرحلاتك
-      </p>
+    <div class="page-header">
+      <h1>لوحة التحليلات</h1>
+      <p>إحصائيات وتحليلات شاملة لرحلاتك</p>
     </div>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">✈️</div>
-        <div class="stat-value" id="totalTrips">0</div>
-        <div class="stat-label">إجمالي الرحلات</div>
-        <div class="stat-change pulse-animation">+12% هذا الشهر</div>
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="totalTrips">0</div>
+          <div class="stat-label">إجمالي الرحلات</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="totalDestinations">0</div>
+          <div class="stat-label">الوجهات المزورة</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="totalSpent">$0</div>
+          <div class="stat-label">إجمالي المصروفات</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="avgRating">0.0</div>
+          <div class="stat-label">متوسط التقييم</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="totalDays">0</div>
+          <div class="stat-label">إجمالي أيام السفر</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-value" id="savedPlans">0</div>
+          <div class="stat-label">الخطط المحفوظة</div>
+        </div>
       </div>
-      
-      <div class="stat-card">
-        <div class="stat-icon">🌍</div>
-        <div class="stat-value" id="totalDestinations">0</div>
-        <div class="stat-label">الوجهات المزورة</div>
-        <div class="stat-change pulse-animation">+5 وجهات جديدة</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-icon">💰</div>
-        <div class="stat-value" id="totalSpent">$0</div>
-        <div class="stat-label">إجمالي المصروفات</div>
-        <div class="stat-change pulse-animation">متوسط $120/يوم</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-icon">⭐</div>
-        <div class="stat-value" id="avgRating">0.0</div>
-        <div class="stat-label">متوسط التقييم</div>
-        <div class="stat-change pulse-animation">من 5.0 ⭐</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-icon">📅</div>
-        <div class="stat-value" id="totalDays">0</div>
-        <div class="stat-label">إجمالي أيام السفر</div>
-        <div class="stat-change pulse-animation">+18 يوم هذا العام</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-icon">🎯</div>
-        <div class="stat-value" id="savedPlans">0</div>
-        <div class="stat-label">الخطط المحفوظة</div>
-        <div class="stat-change pulse-animation">+3 خطط جديدة</div>
-      </div>
-    </div>
+    </section>
 
-    <div class="charts-grid">
-      <div class="chart-card">
-        <h3>📊 توزيع الرحلات حسب الوجهات</h3>
-        <div class="chart-container">
-          <canvas id="destinationsChart"></canvas>
+    <section class="charts-section">
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>توزيع الرحلات حسب الوجهات</h3>
+          <div class="chart-container">
+            <canvas id="destinationsChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <h3>المصروفات الشهرية</h3>
+          <div class="chart-container">
+            <canvas id="expensesChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <h3>اتجاهات السفر</h3>
+          <div class="chart-container">
+            <canvas id="trendsChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <h3>أنواع الرحلات</h3>
+          <div class="chart-container">
+            <canvas id="tripTypesChart"></canvas>
+          </div>
         </div>
       </div>
-      
-      <div class="chart-card">
-        <h3>💵 المصروفات الشهرية</h3>
-        <div class="chart-container">
-          <canvas id="expensesChart"></canvas>
-        </div>
-      </div>
-      
-      <div class="chart-card">
-        <h3>📈 اتجاهات السفر</h3>
-        <div class="chart-container">
-          <canvas id="trendsChart"></canvas>
-        </div>
-      </div>
-      
-      <div class="chart-card">
-        <h3>🎯 أنواع الرحلات</h3>
-        <div class="chart-container">
-          <canvas id="tripTypesChart"></canvas>
-        </div>
-      </div>
-    </div>
+    </section>
 
-    <div class="table-container">
-      <h3 style="color: #0A1C2E; margin-bottom: 24px; font-size: 1.5rem;">📋 تفاصيل الرحلات الأخيرة</h3>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>الوجهة</th>
-            <th>عدد الأيام</th>
-            <th>التكلفة</th>
-            <th>النوع</th>
-            <th>التاريخ</th>
-            <th>التقييم</th>
-          </tr>
-        </thead>
-        <tbody id="tripsTableBody">
-          <!-- سيتم ملؤها بالبيانات -->
-        </tbody>
-      </table>
-      
-      <div class="export-buttons">
-        <button class="btn btn-gradient" onclick="exportToPDF()">📄 تصدير PDF</button>
-        <button class="btn btn-ghost" onclick="exportToExcel()">📊 تصدير Excel</button>
-        <button class="btn btn-ghost" onclick="refreshAnalytics()">🔄 تحديث البيانات</button>
+    <section class="table-section">
+      <div class="table-card">
+        <h3>تفاصيل الرحلات الأخيرة</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>الوجهة</th>
+              <th>عدد الأيام</th>
+              <th>التكلفة</th>
+              <th>النوع</th>
+              <th>التاريخ</th>
+              <th>التقييم</th>
+            </tr>
+          </thead>
+          <tbody id="tripsTableBody">
+            <!-- سيتم ملؤها بالبيانات -->
+          </tbody>
+        </table>
+        
+        <div class="actions">
+          <button class="btn btn-gradient" onclick="exportToPDF()">تصدير PDF</button>
+          <button class="btn btn-ghost" onclick="exportToExcel()">تصدير Excel</button>
+          <button class="btn btn-ghost" onclick="refreshAnalytics()">تحديث البيانات</button>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <script>
-    // جمع البيانات من localStorage
     function getAnalyticsData() {
       const plans = JSON.parse(localStorage.getItem('arhgo-plans') || '[]');
       const trips = plans.map(plan => ({
-        destination: plan.country,
-        days: plan.days,
-        cost: plan.estimatedCost,
-        type: plan.tripType,
+        destination: plan.country || 'غير محدد',
+        days: plan.days || 0,
+        cost: plan.estimatedCost || 0,
+        type: plan.tripType || 'غير محدد',
         date: new Date(plan.createdAt || Date.now()).toLocaleDateString('ar'),
-        rating: (Math.random() * 2 + 3).toFixed(1) // تقييم عشوائي بين 3-5
+        rating: (Math.random() * 2 + 3).toFixed(1)
       }));
       
       return {
         trips,
         totalTrips: trips.length,
         totalDestinations: new Set(trips.map(t => t.destination)).size,
-        totalSpent: trips.reduce((sum, t) => sum + t.cost, 0),
-        totalDays: trips.reduce((sum, t) => sum + t.days, 0),
+        totalSpent: trips.reduce((sum, t) => sum + (t.cost || 0), 0),
+        totalDays: trips.reduce((sum, t) => sum + (t.days || 0), 0),
         avgRating: trips.length > 0 ? (trips.reduce((sum, t) => sum + parseFloat(t.rating), 0) / trips.length).toFixed(1) : 0,
         savedPlans: plans.length
       };
     }
 
-    // تحديث الإحصائيات
     function updateStats() {
       const data = getAnalyticsData();
       
-      animateValue('totalTrips', 0, data.totalTrips, 1500);
-      animateValue('totalDestinations', 0, data.totalDestinations, 1500);
-      animateValue('totalSpent', 0, data.totalSpent, 2000, '$');
-      animateValue('totalDays', 0, data.totalDays, 1500);
-      animateValue('avgRating', 0, parseFloat(data.avgRating), 1500, '', 1);
-      animateValue('savedPlans', 0, data.savedPlans, 1500);
+      animateValue('totalTrips', 0, data.totalTrips, 1000);
+      animateValue('totalDestinations', 0, data.totalDestinations, 1000);
+      animateValue('totalSpent', 0, data.totalSpent, 1500, '$');
+      animateValue('totalDays', 0, data.totalDays, 1000);
+      animateValue('avgRating', 0, parseFloat(data.avgRating), 1000, '', 1);
+      animateValue('savedPlans', 0, data.savedPlans, 1000);
     }
 
-    // تحريك الأرقام
     function animateValue(id, start, end, duration, prefix = '', decimals = 0) {
       const element = document.getElementById(id);
+      if (!element) return;
+      
       const range = end - start;
       const increment = range / (duration / 16);
       let current = start;
@@ -357,131 +401,187 @@
       }, 16);
     }
 
-    // رسم المخططات
     function drawCharts() {
       const data = getAnalyticsData();
       
-      // توزيع الوجهات
+      if (data.trips.length === 0) {
+        return;
+      }
+      
       const destinations = {};
       data.trips.forEach(trip => {
-        destinations[trip.destination] = (destinations[trip.destination] || 0) + 1;
+        const dest = trip.destination || 'غير محدد';
+        destinations[dest] = (destinations[dest] || 0) + 1;
       });
       
-      new Chart(document.getElementById('destinationsChart'), {
-        type: 'doughnut',
-        data: {
-          labels: Object.keys(destinations),
-          datasets: [{
-            data: Object.values(destinations),
-            backgroundColor: [
-              '#C9B27A', '#8EA2B6', '#0A1C2E', '#10B981', '#EF4444',
-              '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4', '#84CC16'
-            ]
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom' }
+      const destinationsCtx = document.getElementById('destinationsChart');
+      if (destinationsCtx) {
+        new Chart(destinationsCtx, {
+          type: 'doughnut',
+          data: {
+            labels: Object.keys(destinations),
+            datasets: [{
+              data: Object.values(destinations),
+              backgroundColor: [
+                'rgba(0, 229, 255, 0.8)',
+                'rgba(0, 207, 200, 0.8)',
+                'rgba(142, 162, 182, 0.8)',
+                'rgba(201, 178, 122, 0.8)',
+                'rgba(16, 185, 129, 0.8)'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { 
+                position: 'bottom',
+                labels: { color: 'rgba(255, 255, 255, 0.8)', font: { family: 'Cairo' } }
+              }
+            }
           }
-        }
-      });
+        });
+      }
       
-      // المصروفات الشهرية
       const monthlyExpenses = {};
       data.trips.forEach(trip => {
-        const month = new Date(trip.date).toLocaleDateString('ar', { month: 'long', year: 'numeric' });
-        monthlyExpenses[month] = (monthlyExpenses[month] || 0) + trip.cost;
-      });
-      
-      new Chart(document.getElementById('expensesChart'), {
-        type: 'bar',
-        data: {
-          labels: Object.keys(monthlyExpenses),
-          datasets: [{
-            label: 'المصروفات ($)',
-            data: Object.values(monthlyExpenses),
-            backgroundColor: 'rgba(55, 214, 192, 0.8)',
-            borderColor: '#37D6C0',
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: { beginAtZero: true }
-          }
+        try {
+          const month = new Date(trip.date).toLocaleDateString('ar', { month: 'long', year: 'numeric' });
+          monthlyExpenses[month] = (monthlyExpenses[month] || 0) + (trip.cost || 0);
+        } catch (e) {
+          const month = 'غير محدد';
+          monthlyExpenses[month] = (monthlyExpenses[month] || 0) + (trip.cost || 0);
         }
       });
       
-      // اتجاهات السفر
+      const expensesCtx = document.getElementById('expensesChart');
+      if (expensesCtx) {
+        new Chart(expensesCtx, {
+          type: 'bar',
+          data: {
+            labels: Object.keys(monthlyExpenses),
+            datasets: [{
+              label: 'المصروفات ($)',
+              data: Object.values(monthlyExpenses),
+              backgroundColor: 'rgba(0, 229, 255, 0.6)',
+              borderColor: 'rgba(0, 229, 255, 1)',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: { 
+                beginAtZero: true,
+                ticks: { color: 'rgba(255, 255, 255, 0.8)', font: { family: 'Cairo' } },
+                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+              },
+              x: {
+                ticks: { color: 'rgba(255, 255, 255, 0.8)', font: { family: 'Cairo' } },
+                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+              }
+            }
+          }
+        });
+      }
+      
       const trends = {};
       data.trips.forEach(trip => {
-        const month = new Date(trip.date).toLocaleDateString('ar', { month: 'short' });
-        trends[month] = (trends[month] || 0) + 1;
-      });
-      
-      new Chart(document.getElementById('trendsChart'), {
-        type: 'line',
-        data: {
-          labels: Object.keys(trends),
-          datasets: [{
-            label: 'عدد الرحلات',
-            data: Object.values(trends),
-            borderColor: '#8EA2B6',
-            backgroundColor: 'rgba(142, 162, 182, 0.1)',
-            tension: 0.4,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          }
+        try {
+          const month = new Date(trip.date).toLocaleDateString('ar', { month: 'short' });
+          trends[month] = (trends[month] || 0) + 1;
+        } catch (e) {
+          const month = 'غير محدد';
+          trends[month] = (trends[month] || 0) + 1;
         }
       });
       
-      // أنواع الرحلات
+      const trendsCtx = document.getElementById('trendsChart');
+      if (trendsCtx) {
+        new Chart(trendsCtx, {
+          type: 'line',
+          data: {
+            labels: Object.keys(trends),
+            datasets: [{
+              label: 'عدد الرحلات',
+              data: Object.values(trends),
+              borderColor: 'rgba(0, 229, 255, 1)',
+              backgroundColor: 'rgba(0, 229, 255, 0.1)',
+              tension: 0.4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: { 
+                beginAtZero: true,
+                ticks: { color: 'rgba(255, 255, 255, 0.8)', font: { family: 'Cairo' } },
+                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+              },
+              x: {
+                ticks: { color: 'rgba(255, 255, 255, 0.8)', font: { family: 'Cairo' } },
+                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+              }
+            }
+          }
+        });
+      }
+      
       const tripTypes = {};
       data.trips.forEach(trip => {
-        tripTypes[trip.type] = (tripTypes[trip.type] || 0) + 1;
+        const type = trip.type || 'غير محدد';
+        tripTypes[type] = (tripTypes[type] || 0) + 1;
       });
       
-      new Chart(document.getElementById('tripTypesChart'), {
-        type: 'pie',
-        data: {
-          labels: Object.keys(tripTypes),
-          datasets: [{
-            data: Object.values(tripTypes),
-            backgroundColor: [
-              '#C9B27A', '#8EA2B6', '#0A1C2E', '#10B981', '#EF4444'
-            ]
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom' }
+      const tripTypesCtx = document.getElementById('tripTypesChart');
+      if (tripTypesCtx) {
+        new Chart(tripTypesCtx, {
+          type: 'pie',
+          data: {
+            labels: Object.keys(tripTypes),
+            datasets: [{
+              data: Object.values(tripTypes),
+              backgroundColor: [
+                'rgba(0, 229, 255, 0.8)',
+                'rgba(0, 207, 200, 0.8)',
+                'rgba(142, 162, 182, 0.8)',
+                'rgba(201, 178, 122, 0.8)',
+                'rgba(16, 185, 129, 0.8)'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { 
+                position: 'bottom',
+                labels: { color: 'rgba(255, 255, 255, 0.8)', font: { family: 'Cairo' } }
+              }
+            }
           }
-        }
-      });
+        });
+      }
     }
 
-    // تحديث الجدول
     function updateTable() {
       const data = getAnalyticsData();
       const tbody = document.getElementById('tripsTableBody');
       
+      if (!tbody) return;
+      
       if (data.trips.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: #666;">لا توجد رحلات بعد. ابدأ بإنشاء خطة جديدة!</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">لا توجد رحلات بعد. ابدأ بإنشاء خطة جديدة!</td></tr>';
         return;
       }
       
@@ -492,18 +592,15 @@
           <td>$${trip.cost}</td>
           <td>${trip.type}</td>
           <td>${trip.date}</td>
-          <td>${trip.rating} ⭐</td>
+          <td>${trip.rating}</td>
         </tr>
       `).join('');
     }
 
-    // تصدير PDF
     function exportToPDF() {
       alert('سيتم إضافة ميزة تصدير PDF قريباً!');
-      // يمكن استخدام مكتبة jsPDF هنا
     }
 
-    // تصدير Excel
     function exportToExcel() {
       const data = getAnalyticsData();
       let csv = 'الوجهة,عدد الأيام,التكلفة,النوع,التاريخ,التقييم\n';
@@ -518,14 +615,12 @@
       link.click();
     }
 
-    // تحديث البيانات
     function refreshAnalytics() {
       updateStats();
       drawCharts();
       updateTable();
     }
 
-    // تهيئة الصفحة
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         updateStats();
@@ -536,4 +631,3 @@
   </script>
 </body>
 </html>
-

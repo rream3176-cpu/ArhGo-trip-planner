@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArhGo | حجوزاتي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/arhgo.css">
+  <script src="assets/js/arhgo.js" defer></script>
+  <style>
+    body {
+      background: var(--bg-primary);
+      padding-top: 80px;
+    }
+    
+    .glass-card {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .bookings-tabs {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 12px 24px;
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.6) 0%, rgba(15, 22, 36, 0.7) 100%);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      color: var(--neon-cyan);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-family: var(--font-primary);
+    }
+    .tab-btn:hover {
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      border-color: rgba(0, 229, 255, 0.4);
+      transform: translateY(-2px);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, rgba(0, 207, 200, 0.15) 100%);
+      border-color: rgba(0, 229, 255, 0.5);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+    
+    /* تحسين container الحجوزات */
+    #bookingsContainer.grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+    
+    .booking-card {
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .booking-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 229, 255, 0.6) 20%, 
+        rgba(0, 207, 200, 0.6) 50%, 
+        rgba(0, 229, 255, 0.6) 80%, 
+        transparent 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    .booking-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(0, 229, 255, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      border-color: rgba(0, 229, 255, 0.5);
+    }
+    
+    .booking-card:hover::before {
+      opacity: 1;
+    }
+    .booking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: var(--spacing-sm);
+      flex-wrap: wrap;
+      gap: var(--spacing-xs);
+    }
+    .booking-title {
+      font-size: 1.3rem;
+      color: var(--neon-cyan);
+      margin: 0;
+      font-weight: 700;
+      line-height: 1.3;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .booking-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .status-confirmed {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-pending {
+      background: rgba(251, 191, 36, 0.1);
+      color: #FBBF24;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+    .status-cancelled {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .status-completed {
+      background: rgba(59, 130, 246, 0.2);
+      color: #3B82F6;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .booking-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--spacing-sm);
+      margin: var(--spacing-sm) 0;
+    }
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .detail-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      opacity: 0.8;
+      font-weight: 500;
+    }
+    .detail-value {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .booking-reference {
+      font-family: 'Courier New', monospace;
+      background: rgba(0, 229, 255, 0.12);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      display: inline-block;
+      margin-top: var(--spacing-xs);
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+    .booking-reference:hover {
+      background: rgba(0, 229, 255, 0.2);
+      border-color: rgba(0, 229, 255, 0.4);
+    }
+    
+    .booking-card > p {
+      margin: var(--spacing-xs) 0;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    
+    .booking-card > div:last-child {
+      margin-top: var(--spacing-xs);
+      font-size: 0.8rem;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: var(--spacing-md);
+      opacity: 0.7;
+    }
+    .empty-state h3 {
+      color: var(--text-primary);
+      margin: var(--spacing-md) 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .empty-state p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--neon-cyan);
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body class="page-hidden">
+  <nav class="arhgo-nav">
+    <div class="arhgo-logo">ArhGo</div>
+    <ul>
+      <li><a data-nav href="index.html#home">الرئيسية</a></li>
+      <li><a data-nav href="hotel.html">الفنادق</a></li>
+      <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
+      <li><a data-nav href="Restuarnt.html">حجز المطاعم</a></li>
+      <li><a data-nav href="my-bookings.html" style="color: #37D6C0;">حجوزاتي</a></li>
+    </ul>
+    <div class="stack">
+      <a class="btn btn-ghost" href="login.html" data-flight-sound id="loginBtn">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound id="signupBtn">إنشاء حساب</a>
+    </div>
+  </nav>
+  <main class="page-shell">
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">حجوزاتي</h2>
+        <p class="section-subtitle">عرض جميع حجوزاتك من الفنادق والمطاعم والرحلات الجوية</p>
+      </div>
+
+      <div class="bookings-tabs">
+        <button class="tab-btn active" data-tab="all">الكل</button>
+        <button class="tab-btn" data-tab="hotels">الفنادق</button>
+        <button class="tab-btn" data-tab="restaurants">المطاعم</button>
+        <button class="tab-btn" data-tab="flights">الرحلات</button>
+        <button class="tab-btn" data-tab="plans">خطط السفر</button>
+      </div>
+
+      <div id="bookingsContainer" class="grid">
+        <div class="loading glass-card" style="text-align: center; padding: 40px;">⏳ جاري تحميل الحجوزات...</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const session_token = localStorage.getItem('session_token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    let allBookings = null;
+    let currentTab = 'all';
+
+    // التحقق من تسجيل الدخول
+    if (!session_token) {
+      document.getElementById('bookingsContainer').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">🔒</div>
+          <h3>يرجى تسجيل الدخول</h3>
+          <p>يجب تسجيل الدخول لعرض حجوزاتك</p>
+          <div class="stack" style="margin-top: 24px; justify-content: center;">
+            <a href="login.html" class="btn btn-gradient">تسجيل الدخول</a>
+          </div>
+        </div>
+      `;
+    } else {
+      // تحديث أزرار التنقل
+      if (user.full_name) {
+        document.getElementById('loginBtn').textContent = user.full_name;
+        document.getElementById('loginBtn').href = '#';
+        document.getElementById('signupBtn').textContent = 'تسجيل الخروج';
+        document.getElementById('signupBtn').href = '#';
+        document.getElementById('signupBtn').onclick = () => {
+          localStorage.removeItem('session_token');
+          localStorage.removeItem('user');
+          window.location.href = 'login.html';
+        };
+      }
+      
+      loadBookings();
+    }
+
+    // تبديل التبويبات
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.dataset.tab;
+        renderBookings();
+      });
+    });
+
+    async function loadBookings() {
+      try {
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
+        const response = await fetch(baseUrl + 'api/get_user_bookings.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ session_token })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          allBookings = result.data;
+          renderBookings();
+        } else {
+          throw new Error(result.error || 'فشل تحميل الحجوزات');
+        }
+      } catch (error) {
+        console.error('خطأ في تحميل الحجوزات:', error);
+        document.getElementById('bookingsContainer').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">❌</div>
+            <h3>حدث خطأ</h3>
+            <p>${error.message || 'فشل تحميل الحجوزات. يرجى المحاولة لاحقاً.'}</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderBookings() {
+      if (!allBookings) return;
+
+      const container = document.getElementById('bookingsContainer');
+      let bookings = [];
+
+      // فلترة حسب التبويب
+      if (currentTab === 'all') {
+        bookings = [
+          ...allBookings.hotel_bookings.map(b => ({ ...b, type: 'hotel' })),
+          ...allBookings.restaurant_bookings.map(b => ({ ...b, type: 'restaurant' })),
+          ...allBookings.flight_bookings.map(b => ({ ...b, type: 'flight' })),
+          ...allBookings.travel_plans.map(b => ({ ...b, type: 'plan' }))
+        ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      } else if (currentTab === 'hotels') {
+        bookings = allBookings.hotel_bookings.map(b => ({ ...b, type: 'hotel' }));
+      } else if (currentTab === 'restaurants') {
+        bookings = allBookings.restaurant_bookings.map(b => ({ ...b, type: 'restaurant' }));
+      } else if (currentTab === 'flights') {
+        bookings = allBookings.flight_bookings.map(b => ({ ...b, type: 'flight' }));
+      } else if (currentTab === 'plans') {
+        bookings = allBookings.travel_plans.map(b => ({ ...b, type: 'plan' }));
+      }
+
+      // التأكد من أن container لديه class grid
+      if (!container.classList.contains('grid')) {
+        container.classList.add('grid');
+      }
+      
+      if (bookings.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state glass-card" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+            <div class="empty-state-icon">📭</div>
+            <h3 style="color: var(--text-primary); margin: var(--spacing-md) 0;">لا توجد حجوزات</h3>
+            <p style="color: var(--text-secondary);">لم يتم العثور على حجوزات في هذا القسم</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = bookings.map(booking => {
+        if (booking.type === 'hotel') {
+          return renderHotelBooking(booking);
+        } else if (booking.type === 'restaurant') {
+          return renderRestaurantBooking(booking);
+        } else if (booking.type === 'flight') {
+          return renderFlightBooking(booking);
+        } else if (booking.type === 'plan') {
+          return renderTravelPlan(booking);
+        }
+      }).join('');
+    }
+
+    function renderHotelBooking(booking) {
+      const statusClass = {
+        'مؤكدة': 'status-confirmed',
+        'قيد الانتظار': 'status-pending',
+        'ملغاة': 'status-cancelled',
+        'مكتملة': 'status-completed'
+      }[booking.status] || 'status-pending';
+
+      return `
+        <div class="booking-card">
+          <div class="booking-header">
+            <h3 class="booking-title">🏨 ${booking.hotel_name || 'فندق'}</h3>
+            <span class="booking-status ${statusClass}">${booking.status}</span>
+          </div>
+          <div class="booking-details">
+            <div class="detail-item">
+              <span class="detail-label">الموقع</span>
+              <span class="detail-value">${booking.hotel_location || 'غير محدد'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">تاريخ الوصول</span>
+              <span class="detail-value">${formatDate(booking.check_in_date)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">تاريخ المغادرة</span>
+              <span class="detail-value">${formatDate(booking.check_out_date)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">عدد الغرف</span>
+              <span class="detail-value">${booking.rooms}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">عدد الضيوف</span>
+              <span class="detail-value">${booking.guests}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">السعر الإجمالي</span>
+              <span class="detail-value" style="color: #37D6C0;">$${parseFloat(booking.total_price).toFixed(2)}</span>
+            </div>
+          </div>
+          ${booking.special_requests ? `<p style="color: var(--text-secondary); margin-top: var(--spacing-xs); font-size: 0.85rem; line-height: 1.4;"><strong>ملاحظات:</strong> ${booking.special_requests}</p>` : ''}
+          <div class="booking-reference">رقم الحجز: ${booking.booking_reference}</div>
+          <div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7;">تاريخ الحجز: ${formatDateTime(booking.created_at)}</div>
+        </div>
+      `;
+    }
+
+    function renderRestaurantBooking(booking) {
+      const statusClass = {
+        'مؤكدة': 'status-confirmed',
+        'قيد الانتظار': 'status-pending',
+        'ملغاة': 'status-cancelled',
+        'مكتملة': 'status-completed'
+      }[booking.status] || 'status-pending';
+
+      return `
+        <div class="booking-card">
+          <div class="booking-header">
+            <h3 class="booking-title">🍽️ ${booking.restaurant_name || 'مطعم'}</h3>
+            <span class="booking-status ${statusClass}">${booking.status}</span>
+          </div>
+          <div class="booking-details">
+            <div class="detail-item">
+              <span class="detail-label">الموقع</span>
+              <span class="detail-value">${booking.restaurant_location || 'غير محدد'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">نوع الطعام</span>
+              <span class="detail-value">${booking.food_type || 'غير محدد'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">التاريخ</span>
+              <span class="detail-value">${formatDate(booking.booking_date)}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">الوقت</span>
+              <span class="detail-value">${booking.booking_time}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">عدد الأشخاص</span>
+              <span class="detail-value">${booking.guests}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">السعر الإجمالي</span>
+              <span class="detail-value" style="color: #37D6C0;">$${parseFloat(booking.total_price).toFixed(2)}</span>
+            </div>
+          </div>
+          ${booking.special_requests ? `<p style="color: var(--text-secondary); margin-top: var(--spacing-xs); font-size: 0.85rem; line-height: 1.4;"><strong>ملاحظات:</strong> ${booking.special_requests}</p>` : ''}
+          <div class="booking-reference">رقم الحجز: ${booking.booking_reference}</div>
+          <div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7;">تاريخ الحجز: ${formatDateTime(booking.created_at)}</div>
+        </div>
+      `;
+    }
+
+    function renderFlightBooking(booking) {
+      const statusClass = {
+        'مؤكدة': 'status-confirmed',
+        'قيد الانتظار': 'status-pending',
+        'ملغاة': 'status-cancelled',
+        'مكتملة': 'status-completed'
+      }[booking.status] || 'status-pending';
+
+      return `
+        <div class="booking-card">
+          <div class="booking-header">
+            <h3 class="booking-title">✈️ رحلة جوية</h3>
+            <span class="booking-status ${statusClass}">${booking.status}</span>
+          </div>
+          <div class="booking-details">
+            <div class="detail-item">
+              <span class="detail-label">من</span>
+              <span class="detail-value">${booking.from_city}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">إلى</span>
+              <span class="detail-value">${booking.to_city}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">تاريخ المغادرة</span>
+              <span class="detail-value">${formatDate(booking.departure_date)}</span>
+            </div>
+            ${booking.return_date ? `
+            <div class="detail-item">
+              <span class="detail-label">تاريخ العودة</span>
+              <span class="detail-value">${formatDate(booking.return_date)}</span>
+            </div>
+            ` : ''}
+            <div class="detail-item">
+              <span class="detail-label">عدد المسافرين</span>
+              <span class="detail-value">${booking.passengers}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">الدرجة</span>
+              <span class="detail-value">${booking.class_type}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">السعر الإجمالي</span>
+              <span class="detail-value" style="color: #37D6C0;">$${parseFloat(booking.total_price).toFixed(2)}</span>
+            </div>
+          </div>
+          ${booking.special_requests ? `<p style="color: var(--text-secondary); margin-top: var(--spacing-xs); font-size: 0.85rem; line-height: 1.4;"><strong>ملاحظات:</strong> ${booking.special_requests}</p>` : ''}
+          <div class="booking-reference">رقم الحجز: ${booking.booking_reference}</div>
+          <div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7;">تاريخ الحجز: ${formatDateTime(booking.created_at)}</div>
+        </div>
+      `;
+    }
+
+    function renderTravelPlan(booking) {
+      return `
+        <div class="booking-card">
+          <div class="booking-header">
+            <h3 class="booking-title">🗺️ ${booking.plan_name || 'خطة سفر'}</h3>
+          </div>
+          <div class="booking-details">
+            <div class="detail-item">
+              <span class="detail-label">الدولة</span>
+              <span class="detail-value">${booking.country_name_ar || 'غير محدد'}</span>
+            </div>
+            ${booking.city_name_ar ? `
+            <div class="detail-item">
+              <span class="detail-label">المدينة</span>
+              <span class="detail-value">${booking.city_name_ar}</span>
+            </div>
+            ` : ''}
+            <div class="detail-item">
+              <span class="detail-label">المدة</span>
+              <span class="detail-value">${booking.duration_days} يوم</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">نوع الرحلة</span>
+              <span class="detail-value">${booking.trip_type || 'غير محدد'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">الميزانية</span>
+              <span class="detail-value">${booking.budget || 'غير محدد'}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">التكلفة التقديرية</span>
+              <span class="detail-value" style="color: #37D6C0;">$${parseFloat(booking.estimated_cost || 0).toFixed(2)}</span>
+            </div>
+          </div>
+          ${booking.share_link ? `<div class="booking-reference">رابط المشاركة: ${booking.share_link}</div>` : ''}
+          <div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7;">تاريخ الإنشاء: ${formatDateTime(booking.created_at)}</div>
+        </div>
+      `;
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return 'غير محدد';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('ar-IQ', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function formatDateTime(dateString) {
+      if (!dateString) return 'غير محدد';
+      const date = new Date(dateString);
+      return date.toLocaleString('ar-IQ', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+  </script>
+</body>
+</html>
+

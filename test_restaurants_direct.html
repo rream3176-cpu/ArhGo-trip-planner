@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار المطاعم المباشر</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1a2a3a;
+      color: #fff;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #37D6C0;
+    }
+    .restaurant-card {
+      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
+      border: 2px solid rgba(55, 214, 192, 0.4);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+    .restaurant-card h3 {
+      color: #37D6C0;
+      margin-top: 0;
+    }
+    .info {
+      background: #17a2b8;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    .error {
+      background: #dc3545;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    .success {
+      background: #28a745;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    button {
+      background: #37D6C0;
+      color: #1a2a3a;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #4DFFD1;
+    }
+    pre {
+      background: #2a3a4a;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 اختبار المطاعم - مباشر</h1>
+    
+    <div class="info">
+      <h3>تعليمات:</h3>
+      <p>1. اضغط على "جلب جميع المطاعم" لرؤية جميع المطاعم</p>
+      <p>2. افتح Console (F12) لرؤية التفاصيل</p>
+    </div>
+    
+    <button onclick="loadRestaurants()">جلب جميع المطاعم</button>
+    <button onclick="loadRestaurantsWithFilter('عربي')">جلب المطاعم العربية</button>
+    <button onclick="clearResults()">مسح النتائج</button>
+    
+    <div id="status"></div>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    function getBaseUrl() {
+      return window.location.protocol === 'file:' 
+        ? 'http://localhost/ArhGo-trip-planner/' 
+        : './';
+    }
+
+    async function loadRestaurants(foodType = '') {
+      const statusDiv = document.getElementById('status');
+      const resultsDiv = document.getElementById('results');
+      
+      statusDiv.innerHTML = '<div class="info">⏳ جاري جلب المطاعم...</div>';
+      resultsDiv.innerHTML = '';
+
+      try {
+        const baseUrl = getBaseUrl();
+        let url = baseUrl + 'api/get_restaurants.php';
+        if (foodType) {
+          url += '?food_type=' + encodeURIComponent(foodType);
+        }
+        
+        console.log('🔍 URL:', url);
+        console.log('🌐 Base URL:', baseUrl);
+        console.log('🌐 Protocol:', window.location.protocol);
+
+        const response = await fetch(url);
+        console.log('📥 Response status:', response.status);
+        console.log('📥 Response headers:', response.headers);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('📦 Result:', result);
+        console.log('📊 Success:', result.success);
+        console.log('📊 Count:', result.count);
+        console.log('📊 Total in DB:', result.total_in_db);
+        console.log('📊 Data length:', result.data ? result.data.length : 0);
+
+        if (result.success && result.data && result.data.length > 0) {
+          statusDiv.innerHTML = `<div class="success">✅ تم جلب ${result.data.length} مطعم (إجمالي في قاعدة البيانات: ${result.total_in_db || 'غير معروف'})</div>`;
+          
+          resultsDiv.innerHTML = result.data.map((rest, index) => {
+            return `
+              <div class="restaurant-card">
+                <h3>${index + 1}. ${rest.name || 'بدون اسم'}</h3>
+                <p><strong>الوصف:</strong> ${rest.description || 'لا يوجد وصف'}</p>
+                <p><strong>الموقع:</strong> ${rest.location || 'غير محدد'}</p>
+                <p><strong>المدينة:</strong> ${rest.city_name_ar || rest.location || 'غير محدد'}</p>
+                <p><strong>الدولة:</strong> ${rest.country_name_ar || 'غير محدد'}</p>
+                <p><strong>نوع الطعام:</strong> ${rest.food_type || 'غير محدد'}</p>
+                <p><strong>التقييم:</strong> ${rest.rating || 0} ⭐</p>
+                <p><strong>السعر:</strong> ${rest.price_range || '$'}</p>
+                <p><strong>ساعات العمل:</strong> ${rest.open_hour || 10}:00 - ${rest.close_hour || 22}:00</p>
+                <p><strong>ID:</strong> ${rest.id}</p>
+              </div>
+            `;
+          }).join('');
+        } else {
+          statusDiv.innerHTML = `<div class="error">❌ لا توجد مطاعم في النتيجة. إجمالي في قاعدة البيانات: ${result.total_in_db || 0}</div>`;
+          resultsDiv.innerHTML = '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+        }
+      } catch (error) {
+        console.error('❌ Error:', error);
+        statusDiv.innerHTML = `<div class="error">❌ خطأ: ${error.message}</div>`;
+        resultsDiv.innerHTML = '<pre>' + error.stack + '</pre>';
+      }
+    }
+
+    function loadRestaurantsWithFilter(foodType) {
+      loadRestaurants(foodType);
+    }
+
+    function clearResults() {
+      document.getElementById('status').innerHTML = '';
+      document.getElementById('results').innerHTML = '';
+    }
+
+    // تحميل تلقائي عند فتح الصفحة
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('📄 الصفحة جاهزة');
+      loadRestaurants();
+    });
+  </script>
+</body>
+</html>
+

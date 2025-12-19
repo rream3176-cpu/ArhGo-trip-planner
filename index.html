@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo — المنصّة الذكية لتخطيط السفر</title>
-  <!-- GE SS Two Font -->
-  <link rel="preconnect" href="https://arbfonts.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/user-auth.js" defer></script>
   <script src="assets/js/arhgo.js" defer></script>
   <script src="assets/js/countries-database.js" defer></script>
   <script src="assets/js/smart-country-suggestor.js" defer></script>
+  <script src="assets/js/globe-interaction.js" defer></script>
 </head>
 <body class="page-hidden">
   <nav class="arhgo-nav">
     <div class="arhgo-logo">ArhGo</div>
-    <ul>
-      <li><a data-nav href="index.html#home" data-translate="nav.home">الرئيسية</a></li>
-      <li><a data-nav href="index.html#features" data-translate="nav.features">المزايا</a></li>
-      <li><a data-nav href="index.html#planner" data-translate="nav.planner">خطط رحلتك</a></li>
-      <li><a data-nav href="index.html#destinations" data-translate="nav.destinations">الوجهات</a></li>
+      <ul>
+        <li><a data-nav href="index.html#home" data-translate="nav.home">الرئيسية</a></li>
       <li><a data-nav href="hotel.html" data-translate="nav.hotels">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html" data-translate="nav.flights">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html" data-translate="nav.restaurants">مطاعم</a></li>
+      <li><a data-nav href="my-bookings.html">حجوزاتي</a></li>
       <li><a data-nav href="analytics.html">التحليلات</a></li>
       <li><a data-nav href="budget-manager.html">إدارة الميزانية</a></li>
       <li><a data-nav href="price-comparison.html">مقارنة الأسعار</a></li>
@@ -32,11 +32,9 @@
       <a class="btn btn-ghost" href="login.html" data-flight-sound data-translate="nav.login" id="loginBtn">تسجيل الدخول</a>
       <a class="btn btn-gradient" href="signup.html" data-flight-sound data-translate="nav.signup" id="signupBtn">إنشاء حساب</a>
     </div>
-    <div class="stack" id="userProfile" style="display: none;">
-      <div style="padding: 12px 16px; background: linear-gradient(135deg, rgba(55, 214, 192, 0.15), rgba(76, 168, 255, 0.1)); border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.4); text-align: center;">
-        <span style="color: #37D6C0; font-weight: 700; text-shadow: 0 1px 4px rgba(14, 31, 51, 0.5); display: block; margin-bottom: 12px;" id="userNameDisplay">المستخدم</span>
-        <button class="btn btn-ghost" onclick="userAuth.logout(); location.reload();" style="width: 100%; padding: 10px 16px; font-size: 0.9rem;">تسجيل الخروج</button>
-      </div>
+    <div class="stack" id="userProfile" style="display: none; align-items: center; gap: var(--spacing-sm);">
+      <span class="user-name" id="userNameDisplay" style="color: var(--neon-cyan); font-weight: 700; font-size: 1rem; white-space: nowrap; text-shadow: 0 0 10px var(--neon-cyan-glow);">المستخدم</span>
+      <button class="btn btn-ghost" onclick="userAuth.logout(); location.reload();" style="padding: 8px 16px; font-size: 0.85rem; white-space: nowrap;">تسجيل الخروج</button>
     </div>
 </nav>
 
@@ -44,8 +42,8 @@
 <section class="hero" id="home">
       <div class="hero-grid">
         <div class="hero-main">
-          <h1 data-translate="hero.title">منصّة ذكية لتخطيط رحلاتك بكل سهولة</h1>
-          <p data-translate="hero.subtitle">ArhGo تقدّم لك لوحة قيادة مظلمة، صوت إقلاع فوري، وخطط فخمة تُعرض كرحلة جوية خاصة في كل مرة.</p>
+          <h1 data-translate="hero.title">Your Smart Travel Experience Starts Here</h1>
+          <p data-translate="hero.subtitle">منصة ذكية لتخطيط رحلاتك بكل سهولة وأناقة. خطط مخصصة، اقتراحات ذكية، ومشاركة فورية.</p>
           <div class="hero-highlights">
             <div class="highlight-chip">
               <em>✦</em> <span data-translate="hero.highlight1">خطة أولى جاهزة خلال دقيقة واحدة</span>
@@ -54,128 +52,31 @@
               <em>⟲</em> <span data-translate="hero.highlight2">مزاج السفر يتغير بلمسة واحدة</span>
             </div>
           </div>
-          <div class="deco-line"></div>
           <div class="hero-actions">
             <button class="btn btn-gradient" id="hero-cta" data-flight-sound data-translate="hero.cta">ابدأ التخطيط الآن</button>
             <a class="btn btn-ghost" href="smart-planner.html" data-flight-sound data-translate="hero.ai">مولد خطط ذكي</a>
             <a class="btn btn-ghost" href="analytics.html" data-flight-sound>لوحة التحليلات</a>
           </div>
-          <div class="hero-controls">
-            <button class="sound-toggle" type="button" data-toggle-sound aria-pressed="true">
-              <span class="accent-chip">✈️</span>
-              <span data-sound-label data-translate="hero.sound.on">الصوت مفعل</span>
-            </button>
-            <div class="accent-chip" data-translate="hero.sound.desc">انطلق مع مؤثرات الإقلاع في كل صفحة</div>
-          </div>
         </div>
-        <div class="hero-visual">
-          <div class="hero-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&h=800&fit=crop&q=90" alt="Travel Planning" class="hero-main-image" loading="lazy" />
-            <div class="hero-image-overlay"></div>
-          </div>
-          <div class="hero-sparkles">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <svg viewBox="0 0 320 200" class="hero-plane">
-            <path d="M20 120 Q 80 60 160 90 T 300 65" fill="none" stroke="rgba(30,58,95,0.5)" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 8"/>
-            <g class="plane">
-              <path d="M0 -6 L20 0 L0 6 Z" fill="#1e3a5f"/>
-              <rect x="4" y="-3" width="8" height="6" fill="#c0c0c0"/>
-            </g>
-          </svg>
-          <div class="hero-orbits">
-            <div class="orbit-ring"></div>
-            <div class="orbit-ring"></div>
-            <div class="orbit-ring"></div>
-          </div>
-          <div class="orb one"></div>
-          <div class="orb two"></div>
-          <div class="orb three"></div>
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <span data-count="72">0</span>
-              <span data-translate="stats.destinations">وجهة جاهزة</span>
-            </div>
-            <div class="hero-stat">
-              <span data-count="320">0</span>
-              <span data-translate="stats.plans">خطة محفوظة</span>
-            </div>
-            <div class="hero-stat">
-              <span data-count="18">0</span>
-              <span data-translate="stats.api">تكامل API</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="features">
-      <div class="section-header">
-        <h2 class="section-title" data-translate="sections.features.title">كل ما تحتاجه لرحلة فخمة</h2>
-        <p class="section-subtitle" data-translate="sections.features.subtitle">منصة موحدة لتوليد الخطة، عرضها على الخريطة، اقتراح الحجوزات، ومشاركتها مع الأصدقاء برابط قصير.</p>
-      </div>
-      <div class="grid">
-        <article class="glass-card floating-card">
-          <div class="feature-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&q=90" alt="Smart Daily Plan" loading="lazy" />
-          </div>
-          <div class="pill-small">1</div>
-          <h3 data-translate="sections.features.card1.title">خطة يومية ذكية</h3>
-          <p data-translate="sections.features.card1.desc">خوارزمية متقدمة تولّد جدولًا متوازنًا للأيام والأماكن والأنشطة وفق اهتماماتك.</p>
-        </article>
-        <article class="glass-card floating-card" style="animation-delay:.3s">
-          <div class="feature-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=600&fit=crop&q=90" alt="Interactive Map" loading="lazy" />
-          </div>
-          <div class="pill-small">2</div>
-          <h3 data-translate="sections.features.card2.title">خريطة تفاعلية</h3>
-          <p data-translate="sections.features.card2.desc">ارتباط مباشر مع خرائط Mapbox/Google لعرض المسارات والمحطات مع تحديد المواقع الدقيقة.</p>
-        </article>
-        <article class="glass-card floating-card" style="animation-delay:.6s">
-          <div class="feature-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&q=90" alt="Hotels & Restaurants" loading="lazy" />
-          </div>
-          <div class="pill-small">3</div>
-          <h3 data-translate="sections.features.card3.title">اقتراحات فندقية وغذائية</h3>
-          <p data-translate="sections.features.card3.desc">تكامل مع TripAdvisor و Google Places لاقتراح فنادق، مطاعم، وأنشطة محلية موثوقة.</p>
-        </article>
-        <article class="glass-card floating-card" style="animation-delay:.9s">
-          <div class="feature-image-wrapper">
-            <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&h=600&fit=crop&q=90" alt="Save & Share" loading="lazy" />
-          </div>
-          <div class="pill-small">4</div>
-          <h3 data-translate="sections.features.card4.title">حفظ ومشاركة</h3>
-          <p data-translate="sections.features.card4.desc">حفظ خططك على حسابك مع توليد رابط قصير قابل للمشاركة فورًا مع الأصدقاء.</p>
-        </article>
-      </div>
-</section>
-
-    <section class="section" id="mood">
-      <div class="section-header">
-        <h2 class="section-title" data-translate="sections.mood.title">مزاج السفر الخاص بك</h2>
-        <p class="section-subtitle" data-translate="sections.mood.subtitle">اختر مزاج الرحلة لنقترح صياغة بصرية وقصة قصيرة يمكنك استخدامها في العرض.</p>
-      </div>
-      <div class="mood-panel">
-        <div class="mood-controls">
-          <button type="button" class="active" data-mood="relax" data-translate="sections.mood.relax">نسيم المدن الساحلية</button>
-          <button type="button" data-mood="urban" data-translate="sections.mood.urban">نبض المدن العصرية</button>
-          <button type="button" data-mood="heritage" data-translate="sections.mood.heritage">حكايات التاريخ</button>
-          <button type="button" data-mood="adventure" data-translate="sections.mood.adventure">مغامرات طبيعية</button>
-        </div>
-        <div class="glass-card mood-details" id="mood-details">
-          <div class="mood-image-wrapper">
-            <img id="mood-image" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop&q=90" alt="Travel Mood" loading="lazy" />
-          </div>
-          <span class="pill" id="mood-label" translate="yes">مزاج مختار</span>
-          <h3 id="mood-title" translate="yes">عنوان المزاج</h3>
-          <p id="mood-text" translate="yes">سيظهر هنا وصف قصير يشرح رؤية هذا المزاج وكيف نقدمه في ArhGo.</p>
-          <ul id="mood-list"></ul>
-        </div>
-  </div>
-</section>
+          <div class="hero-visual">
+           <div class="globe-container">
+             <div class="globe-wrapper">
+               <div class="globe">
+                 <div class="globe-sphere">
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg" alt="World Map" class="world-map-texture" />
+                 </div>
+                 <div class="globe-shine"></div>
+               </div>
+               <div class="globe-rings">
+                 <div class="ring ring-1"></div>
+                 <div class="ring ring-2"></div>
+                 <div class="ring ring-3"></div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </section>
 
     <section class="section" id="planner">
       <div class="section-header">
@@ -184,156 +85,133 @@
       </div>
       <div class="split" style="position: relative; z-index: 10;">
         <form class="arhgo-form" id="trip-form" style="position: relative; z-index: 10;">
-    <div class="field">
-            <label for="trip-name" style="font-size: 1.1rem; font-weight: 600;">👤 اسمك</label>
-            <input class="arhgo-input" type="text" id="trip-name" placeholder="مثال: علي محمد" style="font-size: 1.1rem; padding: 14px;">
+    <div class="field full-width">
+            <label for="trip-name">اسمك</label>
+            <input class="arhgo-input" type="text" id="trip-name" placeholder="مثال: علي محمد">
     </div>
     
     <div class="field">
-            <label for="trip-weather" style="font-size: 1.1rem; font-weight: 600;">🌤️ الجو المفضل</label>
-            <select class="arhgo-select" id="trip-weather" style="font-size: 1.1rem; padding: 14px;">
+            <label for="trip-weather">الجو المفضل</label>
+            <select class="arhgo-select" id="trip-weather">
               <option value="">اختر الجو المفضل...</option>
-              <option value="دافئ">☀️ دافئ</option>
-              <option value="معتدل">🌤️ معتدل</option>
-              <option value="بارد">❄️ بارد</option>
-              <option value="حار">🔥 حار</option>
+              <option value="دافئ">دافئ</option>
+              <option value="معتدل">معتدل</option>
+              <option value="بارد">بارد</option>
+              <option value="حار">حار</option>
             </select>
     </div>
     
     <div class="field">
-            <label for="trip-scenery" style="font-size: 1.1rem; font-weight: 600;">🏞️ المنظر المفضل</label>
-            <select class="arhgo-select" id="trip-scenery" style="font-size: 1.1rem; padding: 14px;">
+            <label for="trip-scenery">المنظر المفضل</label>
+            <select class="arhgo-select" id="trip-scenery">
               <option value="">اختر المنظر المفضل...</option>
-              <option value="مدينة">🏙️ مدينة</option>
-              <option value="بحر">🏖️ بحر</option>
-              <option value="طبيعة">🌲 طبيعة</option>
-              <option value="جبال">⛰️ جبال</option>
-              <option value="صحراء">🏜️ صحراء</option>
-              <option value="تاريخ">🏛️ تاريخ</option>
+              <option value="مدينة">مدينة</option>
+              <option value="بحر">بحر</option>
+              <option value="طبيعة">طبيعة</option>
+              <option value="جبال">جبال</option>
+              <option value="صحراء">صحراء</option>
+              <option value="تاريخ">تاريخ</option>
             </select>
     </div>
     
     <div class="field">
-            <label for="trip-type" style="font-size: 1.1rem; font-weight: 600;">🎯 نوع الرحلة</label>
-            <select class="arhgo-select" id="trip-type" style="font-size: 1.1rem; padding: 14px;">
+            <label for="trip-type">نوع الرحلة</label>
+            <select class="arhgo-select" id="trip-type">
               <option value="">اختر نوع الرحلة...</option>
-              <option value="ثقافي">🎨 ثقافي</option>
-              <option value="مغامرة">🧗 مغامرة</option>
-              <option value="رومانسي">💕 رومانسي</option>
-              <option value="تسوق">🛍️ تسوق</option>
-              <option value="طعام">🍽️ طعام</option>
-              <option value="تاريخ">📜 تاريخ</option>
-              <option value="ترفيه">🎮 ترفيه</option>
-              <option value="عوائل">👨‍👩‍👧‍👦 عوائل</option>
-              <option value="طلاب">🎓 طلاب</option>
-              <option value="بحر">🏖️ بحر</option>
-              <option value="طبيعة">🌲 طبيعة</option>
+              <option value="ثقافي">ثقافي</option>
+              <option value="مغامرة">مغامرة</option>
+              <option value="رومانسي">رومانسي</option>
+              <option value="تسوق">تسوق</option>
+              <option value="طعام">طعام</option>
+              <option value="تاريخ">تاريخ</option>
+              <option value="ترفيه">ترفيه</option>
+              <option value="عوائل">عوائل</option>
+              <option value="طلاب">طلاب</option>
+              <option value="بحر">بحر</option>
+              <option value="طبيعة">طبيعة</option>
             </select>
     </div>
     
     <div class="field">
-            <label for="trip-interests" style="font-size: 1.1rem; font-weight: 600;">❤️ اهتماماتك الرئيسية</label>
-            <select class="arhgo-select" id="trip-interests" multiple style="font-size: 1.1rem; padding: 14px; min-height: 100px;">
-              <option value="ثقافة">🎭 ثقافة</option>
-              <option value="تاريخ">🏛️ تاريخ</option>
-              <option value="طعام">🍜 طعام</option>
-              <option value="طبيعة">🌳 طبيعة</option>
-              <option value="بحر">🌊 بحر</option>
-              <option value="تسوق">🛒 تسوق</option>
-              <option value="مغامرة">⛰️ مغامرة</option>
-              <option value="فن">🎨 فن</option>
-              <option value="رياضة">⚽ رياضة</option>
-              <option value="استرخاء">🧘 استرخاء</option>
-            </select>
-            <small style="color: #B8D4F0; font-size: 0.9rem;">اضغط Ctrl/Cmd لاختيار أكثر من واحد</small>
-    </div>
-    
-    <div class="field">
-            <label for="trip-budget" style="font-size: 1.1rem; font-weight: 600;">💰 الميزانية</label>
-            <select class="arhgo-select" id="trip-budget" style="font-size: 1.1rem; padding: 14px;">
+            <label for="trip-budget">الميزانية</label>
+            <select class="arhgo-select" id="trip-budget">
               <option value="">اختر الميزانية...</option>
-              <option value="low">💵 منخفضة (اقتصادية)</option>
-              <option value="medium">💶 متوسطة</option>
-              <option value="high">💎 فاخرة</option>
+              <option value="low">منخفضة (اقتصادية)</option>
+              <option value="medium">متوسطة</option>
+              <option value="high">فاخرة</option>
             </select>
     </div>
     
-    <div class="field">
-            <label for="trip-people" style="font-size: 1.1rem; font-weight: 600;">👥 عدد الأشخاص</label>
-            <input class="arhgo-input" type="number" id="trip-people" min="1" placeholder="مثال: 2" style="font-size: 1.1rem; padding: 14px;">
+    <div class="field full-width">
+            <label for="trip-interests">اهتماماتك الرئيسية</label>
+            <select class="arhgo-select" id="trip-interests" multiple>
+              <option value="ثقافة">ثقافة</option>
+              <option value="تاريخ">تاريخ</option>
+              <option value="طعام">طعام</option>
+              <option value="طبيعة">طبيعة</option>
+              <option value="بحر">بحر</option>
+              <option value="تسوق">تسوق</option>
+              <option value="مغامرة">مغامرة</option>
+              <option value="فن">فن</option>
+              <option value="رياضة">رياضة</option>
+              <option value="استرخاء">استرخاء</option>
+            </select>
+            <small class="field-hint">اضغط Ctrl/Cmd لاختيار أكثر من واحد</small>
     </div>
     
     <div class="field">
-            <label for="trip-days" style="font-size: 1.1rem; font-weight: 600;">📅 عدد الأيام</label>
-            <input class="arhgo-input" type="number" id="trip-days" min="1" placeholder="مثال: 5" style="font-size: 1.1rem; padding: 14px;">
+            <label for="trip-people">عدد الأشخاص</label>
+            <input class="arhgo-input" type="number" id="trip-people" min="1" placeholder="مثال: 2">
     </div>
     
-    <div class="field" style="background: rgba(55, 214, 192, 0.15); padding: 20px; border-radius: 12px; border: 2px solid rgba(55, 214, 192, 0.4); margin: 20px 0;">
-            <label style="font-size: 1.1rem; font-weight: 700; color: #F2F9FF; margin-bottom: 12px; display: block;">✨ الدولة المقترحة (ذكية)</label>
-            <div id="suggested-country" style="font-size: 1.3rem; font-weight: 700; color: #37D6C0; margin: 12px 0; min-height: 40px; display: flex; align-items: center; gap: 12px;">
+    <div class="field">
+            <label for="trip-days">عدد الأيام</label>
+            <input class="arhgo-input" type="number" id="trip-days" min="1" placeholder="مثال: 5">
+    </div>
+    
+    <div class="field suggested-country-field full-width">
+            <label>الدولة المقترحة (ذكية)</label>
+            <div id="suggested-country">
               <span id="suggested-country-name">املأ الحقول أعلاه للحصول على اقتراح ذكي</span>
             </div>
-            <button type="button" class="btn btn-ghost" id="use-suggested-btn" onclick="useSuggestedCountry()" style="width: 100%; margin-top: 12px; display: none;">
-              ✓ استخدم هذا الاقتراح
+            <button type="button" class="btn btn-ghost" id="use-suggested-btn" onclick="useSuggestedCountry()" style="display: none;">
+              استخدم هذا الاقتراح
             </button>
     </div>
     
     <div class="field">
-            <label for="trip-country" style="font-size: 1.1rem; font-weight: 600;">🌍 الوجهة (اختياري)</label>
-            <select class="arhgo-select" id="trip-country" style="font-size: 1.1rem; padding: 14px;">
+            <label for="trip-country">الوجهة (اختياري)</label>
+            <select class="arhgo-select" id="trip-country">
               <option value="" data-translate="form.selectDestination">أو اختر يدوياً...</option>
-              <option value="فرنسا">🇫🇷 فرنسا</option>
-              <option value="إيطاليا">🇮🇹 إيطاليا</option>
-              <option value="اليابان">🇯🇵 اليابان</option>
-              <option value="أستراليا">🇦🇺 أستراليا</option>
-              <option value="إسبانيا">🇪🇸 إسبانيا</option>
-              <option value="اليونان">🇬🇷 اليونان</option>
-              <option value="تايلاند">🇹🇭 تايلاند</option>
-              <option value="مصر">🇪🇬 مصر</option>
-              <option value="سويسرا">🇨🇭 سويسرا</option>
-              <option value="المغرب">🇲🇦 المغرب</option>
-              <option value="تركيا">🇹🇷 تركيا</option>
-              <option value="ماليزيا">🇲🇾 ماليزيا</option>
-              <option value="سنغافورة">🇸🇬 سنغافورة</option>
-              <option value="دبي">🇦🇪 دبي</option>
-              <option value="النمسا">🇦🇹 النمسا</option>
-              <option value="ألمانيا">🇩🇪 ألمانيا</option>
-              <option value="بريطانيا">🇬🇧 بريطانيا</option>
-              <option value="هولندا">🇳🇱 هولندا</option>
-              <option value="البرتغال">🇵🇹 البرتغال</option>
-              <option value="كرواتيا">🇭🇷 كرواتيا</option>
-              <option value="أيسلندا">🇮🇸 أيسلندا</option>
-              <option value="نيوزيلندا">🇳🇿 نيوزيلندا</option>
-              <option value="كندا">🇨🇦 كندا</option>
-              <option value="الولايات المتحدة">🇺🇸 الولايات المتحدة</option>
-              <option value="المكسيك">🇲🇽 المكسيك</option>
-              <option value="بيرو">🇵🇪 بيرو</option>
-              <option value="البرازيل">🇧🇷 البرازيل</option>
-              <option value="جنوب أفريقيا">🇿🇦 جنوب أفريقيا</option>
-              <option value="كينيا">🇰🇪 كينيا</option>
-              <option value="الهند">🇮🇳 الهند</option>
-              <option value="سريلانكا">🇱🇰 سريلانكا</option>
-              <option value="إندونيسيا">🇮🇩 إندونيسيا</option>
-              <option value="فيتنام">🇻🇳 فيتنام</option>
-              <option value="كمبوديا">🇰🇭 كمبوديا</option>
-              <option value="الفلبين">🇵🇭 الفلبين</option>
+              <option value="السعودية">السعودية</option>
+              <option value="الإمارات">الإمارات</option>
+              <option value="الكويت">الكويت</option>
+              <option value="قطر">قطر</option>
+              <option value="البحرين">البحرين</option>
+              <option value="عُمان">عُمان</option>
+              <option value="اليمن">اليمن</option>
+              <option value="العراق">العراق</option>
+              <option value="سوريا">سوريا</option>
+              <option value="الأردن">الأردن</option>
+              <option value="لبنان">لبنان</option>
+              <option value="فلسطين">فلسطين</option>
       </select>
     </div>
     
     <div class="field">
-            <label for="trip-email" style="font-size: 1.1rem; font-weight: 600;">📧 البريد الإلكتروني (اختياري)</label>
-            <input class="arhgo-input" type="email" id="trip-email" placeholder="you@email.com" style="font-size: 1.1rem; padding: 14px;">
+            <label for="trip-email">البريد الإلكتروني (اختياري)</label>
+            <input class="arhgo-input" type="email" id="trip-email" placeholder="you@email.com">
     </div>
     
-    <div class="field">
-            <label for="trip-notes" style="font-size: 1.1rem; font-weight: 600;">📝 ملاحظات إضافية (اختياري)</label>
-            <textarea class="arhgo-textarea" id="trip-notes" placeholder="أي تفاصيل إضافية..." style="font-size: 1.1rem; padding: 14px; min-height: 100px;"></textarea>
+    <div class="field full-width">
+            <label for="trip-notes">ملاحظات إضافية (اختياري)</label>
+            <textarea class="arhgo-textarea" id="trip-notes" placeholder="أي تفاصيل إضافية..."></textarea>
     </div>
     
-          <div class="stack">
-            <button type="button" class="btn btn-gradient" id="create-trip-btn" data-flight-sound style="font-size: 1.2rem; padding: 16px; font-weight: 700;">✈️ أنشئ الخطة</button>
-            <button type="button" class="btn btn-ghost" id="smart-planner-btn" data-flight-sound style="font-size: 1.1rem; padding: 14px;">🤖 مولد خطط ذكي</button>
-            <button type="button" class="btn btn-ghost" id="save-plan-btn" style="font-size: 1.1rem; padding: 14px;">💾 حفظ خطتي</button>
+          <div class="form-actions full-width">
+            <button type="button" class="btn btn-gradient" id="create-trip-btn" data-flight-sound>أنشئ الخطة</button>
+            <button type="button" class="btn btn-ghost" id="smart-planner-btn" data-flight-sound>مولد خطط ذكي</button>
+            <button type="button" class="btn btn-ghost" id="save-plan-btn">حفظ خطتي</button>
     </div>
         </form>
 
@@ -385,63 +263,6 @@
   <div id="toast" style="position:fixed;bottom:30px;right:30px;padding:16px 24px;border-radius:18px;background:linear-gradient(135deg, rgba(30,58,95,0.95), rgba(26,46,74,0.95));color:#fff;box-shadow:0 20px 60px rgba(192,192,192,0.3);opacity:0;transform:translateY(20px);transition:.4s;z-index:9999;border:2px solid rgba(192,192,192,0.4);"></div>
 
 <script>
-const moodData = {
-  relax: {
-    label: 'نسيم بحر',
-    title: 'نسيم المدن الساحلية',
-    text: 'ننسق الخطط بنبرة باستيل لكل من يحب الهدوء والأنشطة الخفيفة على الواجهة البحرية.',
-    bullets: ['فطور على الواجهة البحرية', 'جولة دراجات قصيرة', 'عشاء بموسيقى حية'],
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop&q=90'
-  },
-  urban: {
-    label: 'نبض',
-    title: 'نبض المدن العصرية',
-    text: 'جدول سريع يعرض التنقل عبر المترو الذكي، المقاهي الإبداعية، ومساحات العمل الفنية.',
-    bullets: ['متحف رقمي', 'غداء على السطح', 'ليلة في حي الإضاءات'],
-    image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=500&fit=crop&q=90'
-  },
-  heritage: {
-    label: 'تراث',
-    title: 'حكايات التاريخ',
-    text: 'نماذج محتوى مستوحاة من الكتب القديمة، مع مسارات المتاحف والأسواق الشعبية.',
-    bullets: ['زيارة مرشد محلي', 'ورشة خط عربي', 'خريطة آثار تفاعلية'],
-    image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800&h=500&fit=crop&q=90'
-  },
-  adventure: {
-    label: 'مغامرة',
-    title: 'مغامرات طبيعية',
-    text: 'مزيج من مسارات GPS، نصائح المعدات، ووقت للراحة حول النار في نهاية اليوم.',
-    bullets: ['مسار جبلي', 'جلسة باراشوت', 'مساء حول النار'],
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=500&fit=crop&q=90'
-  }
-};
-
-const moodButtons = document.querySelectorAll('[data-mood]');
-const moodTitle = document.getElementById('mood-title');
-const moodText = document.getElementById('mood-text');
-const moodList = document.getElementById('mood-list');
-const moodLabel = document.getElementById('mood-label');
-const moodImage = document.getElementById('mood-image');
-
-function setMood(key) {
-  const mood = moodData[key];
-  if (!mood) return;
-  moodButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.mood === key));
-  moodTitle.textContent = mood.title;
-  moodTitle.setAttribute('translate', 'yes');
-  moodText.textContent = mood.text;
-  moodText.setAttribute('translate', 'yes');
-  moodLabel.textContent = mood.label;
-  moodLabel.setAttribute('translate', 'yes');
-  moodList.innerHTML = mood.bullets.map(item => `<li translate="yes">${item}</li>`).join('');
-  if (moodImage && mood.image) {
-    moodImage.src = mood.image;
-  }
-}
-
-setMood('relax');
-moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.dataset.mood)));
-
     // لإضافة صورة خلفية للـ hero، ضع مسار الصورة هنا:
     // انسخ الصورة إلى مجلد assets/images/ ثم استخدم المسار التالي:
     const heroBackgroundImage = 'assets/images/photo_2025-11-25_18-20-52.jpg'; // إذا كانت الصورة في مكان آخر، غيّر المسار هنا
@@ -492,6 +313,15 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       notes: document.getElementById('trip-notes')
     };
     
+    // حفظ الدولة المختارة في localStorage عند تغييرها
+    if (inputs.country) {
+      inputs.country.addEventListener('change', (e) => {
+        if (e.target.value) {
+          localStorage.setItem('selectedCountry', e.target.value);
+        }
+      });
+    }
+    
     let suggestedCountry = null;
     
     // تحديث اقتراح الدولة تلقائياً
@@ -514,9 +344,6 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
           
           suggestedEl.innerHTML = `🎯 ${suggestedCountry} <span style="font-size: 0.9rem; color: #B8D4F0;">(مطابقة ${suggestions[0].match}%)</span>`;
           useBtn.style.display = 'block';
-          
-          // تحديث الخلفية تلقائياً
-          changeBackgroundForCountry(suggestedCountry);
         }
       } else {
         document.getElementById('suggested-country-name').textContent = 'املأ الحقول أعلاه للحصول على اقتراح ذكي';
@@ -528,22 +355,14 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
     window.useSuggestedCountry = function() {
       if (suggestedCountry) {
         inputs.country.value = suggestedCountry;
-        changeBackgroundForCountry(suggestedCountry);
+        localStorage.setItem('selectedCountry', suggestedCountry);
         showToast(`تم اختيار ${suggestedCountry} كوجهة رحلتك ✨`);
       }
     };
     
-    // تغيير الخلفية حسب الدولة
+    // تغيير الخلفية حسب الدولة - تم إزالة الصورة
     function changeBackgroundForCountry(country) {
-      const plannerSection = document.getElementById('planner');
-      const countryImage = getCountryImage(country);
-      
-      if (plannerSection && countryImage) {
-        plannerSection.style.backgroundImage = `linear-gradient(rgba(10, 28, 46, 0.85), rgba(15, 23, 34, 0.85)), url('${countryImage}')`;
-        plannerSection.style.backgroundSize = 'cover';
-        plannerSection.style.backgroundPosition = 'center';
-        plannerSection.style.transition = 'background-image 0.3s ease';
-      }
+      // لا شيء - تم إزالة فكرة الصورة
     }
     
     // استماع لتغييرات الحقول (debounced)
@@ -559,11 +378,11 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       }
     });
     
-    // تغيير الخلفية عند اختيار الدولة يدوياً
+    // حفظ الدولة عند اختيارها يدوياً
     inputs.country.addEventListener('change', function() {
       const selectedCountry = this.value;
       if (selectedCountry) {
-        changeBackgroundForCountry(selectedCountry);
+        localStorage.setItem('selectedCountry', selectedCountry);
       }
     });
     
@@ -654,123 +473,15 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
       
       updateStats(payload);
       
-      // تشغيل صوت الطائرة وإظهار الغيوم
-      if (window.ArhGo?.playFlightSound) {
-        window.ArhGo.playFlightSound();
+      // الانتقال مباشرة
+      const url = `trip-summary.html?days=${payload.days}&type=${encodeURIComponent(payload.tripType)}&country=${encodeURIComponent(payload.country)}&cost=${payload.estimatedCost}`;
+      if (window.ArhGo?.delayedNavigate) {
+        window.ArhGo.delayedNavigate(url);
+      } else {
+        window.location.href = url;
       }
-      showColoredClouds();
-      
-      // الانتقال بعد 3-5 ثواني
-      setTimeout(() => {
-        const url = `trip-summary.html?days=${payload.days}&type=${encodeURIComponent(payload.tripType)}&country=${encodeURIComponent(payload.country)}&cost=${payload.estimatedCost}`;
-        if (window.ArhGo?.delayedNavigate) {
-          window.ArhGo.delayedNavigate(url);
-        } else {
-          window.location.href = url;
-        }
-      }, 4000);
     });
     
-    // دالة إظهار الغيوم الملونة
-    function showColoredClouds() {
-      const cloudsContainer = document.getElementById('colored-clouds');
-      if (!cloudsContainer) {
-        const container = document.createElement('div');
-        container.id = 'colored-clouds';
-        container.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden;';
-        document.body.appendChild(container);
-        
-        // إنشاء غيوم ملونة
-        const colors = ['#87CEEB', '#FFB6C1', '#DDA0DD', '#98D8C8', '#F7DC6F'];
-        for (let i = 0; i < 15; i++) {
-          const cloud = document.createElement('div');
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          const size = Math.random() * 150 + 100;
-          const left = Math.random() * 100;
-          const delay = Math.random() * 2;
-          const duration = Math.random() * 3 + 4;
-          
-          cloud.style.cssText = `
-            position: absolute;
-            width: ${size}px;
-            height: ${size * 0.6}px;
-            background: ${color};
-            border-radius: ${size}px;
-            opacity: 0.7;
-            filter: blur(20px);
-            left: ${left}%;
-            top: 100%;
-            animation: cloudFloatUp ${duration}s ease-out ${delay}s forwards;
-          `;
-          
-          container.appendChild(cloud);
-        }
-        
-        // إزالة الغيوم بعد 5 ثواني
-        setTimeout(() => {
-          container.remove();
-        }, 5000);
-      }
-    }
-    
-    // إضافة animation للغيوم الملونة
-    if (!document.getElementById('cloud-animations')) {
-      const style = document.createElement('style');
-      style.id = 'cloud-animations';
-      style.textContent = `
-        @keyframes cloudFloatUp {
-          0% {
-            transform: translateY(0) translateX(0) scale(0.8) rotate(0deg);
-            opacity: 0.7;
-          }
-          25% {
-            transform: translateY(-25vh) translateX(${Math.random() * 30 - 15}px) scale(1) rotate(2deg);
-            opacity: 0.8;
-          }
-          50% {
-            transform: translateY(-50vh) translateX(${Math.random() * 50 - 25}px) scale(1.2) rotate(-2deg);
-            opacity: 0.9;
-          }
-          75% {
-            transform: translateY(-75vh) translateX(${Math.random() * 40 - 20}px) scale(1.3) rotate(1deg);
-            opacity: 0.8;
-          }
-          100% {
-            transform: translateY(-100vh) translateX(${Math.random() * 60 - 30}px) scale(1.5) rotate(0deg);
-            opacity: 0;
-          }
-        }
-        
-        /* تحسين شكل الغيوم */
-        #colored-clouds div {
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        #colored-clouds div::before,
-        #colored-clouds div::after {
-          content: '';
-          position: absolute;
-          background: inherit;
-          border-radius: inherit;
-          filter: blur(15px);
-        }
-        
-        #colored-clouds div::before {
-          width: 60%;
-          height: 60%;
-          top: -20%;
-          left: 10%;
-        }
-        
-        #colored-clouds div::after {
-          width: 50%;
-          height: 50%;
-          top: -15%;
-          right: 10%;
-        }
-      `;
-      document.head.appendChild(style);
-    }
 
     smartPlannerBtn.addEventListener('click', () => {
       const payload = buildTripPayload();
@@ -786,6 +497,11 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
         }
       }
       
+      // حفظ الدولة المختارة في localStorage
+      if (payload.country) {
+        localStorage.setItem('selectedCountry', payload.country);
+      }
+      
       const smartUrl = `smart-planner.html?country=${encodeURIComponent(payload.country)}&days=${payload.days}&interests=${encodeURIComponent(payload.interests)}&budget=${encodeURIComponent(payload.budget)}&notes=${encodeURIComponent(payload.notes)}`;
       if (window.ArhGo?.delayedNavigate) {
         window.ArhGo.delayedNavigate(smartUrl);
@@ -795,38 +511,132 @@ moodButtons.forEach(btn => btn.addEventListener('click', () => setMood(btn.datas
     });
 
 
-    saveBtn.addEventListener('click', () => {
+    saveBtn.addEventListener('click', async () => {
+      const session_token = localStorage.getItem('session_token');
+      if (!session_token) {
+        showToast('⚠️ يرجى تسجيل الدخول أولاً لحفظ الخطة في حسابك');
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+        return;
+      }
+
       const payload = buildTripPayload();
-      const shortCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-      const link = `https://arhgo.travel/r/${shortCode}`;
-      updateStats(payload, link);
       
-      // حفظ في قاعدة بيانات المستخدم إذا كان مسجل دخول
-      if (typeof userAuth !== 'undefined' && userAuth.isLoggedIn()) {
-        const result = userAuth.saveFormData(payload);
+      // الحصول على country_id من اسم الدولة
+      let country_id = 0;
+      try {
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
+        const countriesResponse = await fetch(baseUrl + 'api/get_countries.php');
+        const countriesData = await countriesResponse.json();
+        
+        if (countriesData.success && countriesData.data) {
+          const country = countriesData.data.find(c => 
+            c.country_name_ar === payload.country || 
+            c.country_name_en === payload.country
+          );
+          if (country) {
+            country_id = country.id;
+          }
+        }
+      } catch (error) {
+        console.error('خطأ في الحصول على country_id:', error);
+      }
+
+      // إعداد بيانات الخطة للإرسال
+      const planData = {
+        plan_name: `رحلة إلى ${payload.country}`,
+        country_id: country_id,
+        city_id: null, // يمكن إضافته لاحقاً
+        weather_preference: payload.weather || '',
+        view_preference: payload.scenery || '',
+        trip_type: payload.tripType || '',
+        budget: payload.budget || 'متوسطة',
+        start_date: null, // يمكن إضافته لاحقاً
+        end_date: null, // يمكن إضافته لاحقاً
+        duration_days: payload.days || 1,
+        estimated_cost: payload.estimatedCost || 0,
+        interests: payload.interests ? payload.interests.split('، ') : [],
+        activities: [],
+        selected_hotels: [],
+        selected_restaurants: [],
+        plan_data: payload
+      };
+
+      // إظهار رسالة التحميل
+      const originalText = saveBtn.textContent;
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'جاري الحفظ...';
+
+      try {
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
+        
+        const requestData = {
+          session_token: session_token,
+          plan_data: planData
+        };
+        
+        console.log('📤 إرسال بيانات الخطة:', requestData);
+        console.log('🌐 URL:', baseUrl + 'api/save_travel_plan.php');
+        
+        const response = await fetch(baseUrl + 'api/save_travel_plan.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        console.log('📥 حالة الاستجابة:', response.status, response.statusText);
+        
+        const result = await response.json();
+        console.log('📦 النتيجة:', result);
+
         if (result.success) {
+          console.log('✅ تم حفظ الخطة بنجاح! Plan ID:', result.plan_id);
+          const shortCode = result.share_link || Math.random().toString(36).substring(2, 8).toUpperCase();
+          const link = `https://arhgo.travel/r/${shortCode}`;
+          updateStats(payload, link);
           showToast('✅ تم حفظ الخطة في حسابك مع رابط قصير ✨');
         } else {
-          showToast('تم حفظ الخطة محلياً ✨');
+          console.error('❌ فشل حفظ الخطة:', result);
+          throw new Error(result.error || 'فشل حفظ الخطة');
         }
-      } else {
-        showToast('تم حفظ الخطة محلياً ✨ (سجّل دخولك لحفظها في حسابك)');
+      } catch (error) {
+        console.error('❌ خطأ في حفظ الخطة:', error);
+        console.error('تفاصيل الخطأ:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
+        
+        let errorMessage = 'حدث خطأ أثناء حفظ الخطة';
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (error instanceof TypeError && error.message.includes('fetch')) {
+          errorMessage = 'فشل الاتصال بالخادم. تأكد من أنك تستخدم http://localhost';
+        }
+        
+        showToast('❌ ' + errorMessage + '\n\nافتح Console (F12) لمعرفة التفاصيل');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = originalText;
       }
     });
 
     const destinations = [
-      { name: 'فرنسا', tips: ['برج إيفل ليلاً', 'متحف اللوفر', 'كروز على نهر السين'] },
-      { name: 'اليابان', tips: ['كيوتو التاريخية', 'منطقة شيبويا', 'جبل فوجي'] },
-      { name: 'سويسرا', tips: ['قطار الألب', 'بحيرة لوسيرن', 'قمم زيرمات'] },
-      { name: 'مصر', tips: ['الأهرامات', 'خان الخليلي', 'رحلة نيلية'] },
-      { name: 'إيطاليا', tips: ['الكولوسيوم', 'قناة البندقية', 'برج بيزا المائل'] },
-      { name: 'إسبانيا', tips: ['قصر الحمراء', 'ساغرادا فاميليا', 'ساحل كوستا برافا'] },
-      { name: 'دبي', tips: ['برج خليفة', 'دبي مول', 'جزيرة النخيل'] },
-      { name: 'تايلاند', tips: ['معبد وات آرون', 'شواطئ بوكيت', 'سوق تشاتوتشاك'] },
-      { name: 'أستراليا', tips: ['دار الأوبرا', 'الحاجز المرجاني', 'أولورو'] },
-      { name: 'تركيا', tips: ['آيا صوفيا', 'كابادوكيا', 'البوسفور'] },
-      { name: 'اليونان', tips: ['الأكروبوليس', 'جزر سانتوريني', 'شواطئ ميكونوس'] },
-      { name: 'الهند', tips: ['تاج محل', 'القصر الأحمر', 'معبد الذهبي'] }
+      { name: 'السعودية', tips: ['الكعبة المشرفة', 'جبل النور', 'وادي الرمة', 'مدائن صالح'] },
+      { name: 'الإمارات', tips: ['برج خليفة', 'دبي مول', 'جزيرة النخيل', 'مسجد الشيخ زايد'] },
+      { name: 'الكويت', tips: ['أبراج الكويت', 'المتحف الوطني', 'جزيرة فيلكا', 'سوق المباركية'] },
+      { name: 'قطر', tips: ['متحف الفن الإسلامي', 'اللؤلؤة قطر', 'سوق واقف', 'كورنيش الدوحة'] },
+      { name: 'البحرين', tips: ['شجرة الحياة', 'قلعة البحرين', 'سوق المنامة', 'جسر الملك فهد'] },
+      { name: 'عُمان', tips: ['قلعة نزوى', 'وادي شاب', 'جبل شمس', 'سوق مطرح'] },
+      { name: 'اليمن', tips: ['صنعاء القديمة', 'جزيرة سقطرى', 'شبام حضرموت', 'جبل صبر'] },
+      { name: 'العراق', tips: ['بابل الأثرية', 'المسجد الكاظمي', 'أهوار الجنوب', 'زقورة أور'] },
+      { name: 'سوريا', tips: ['قلعة حلب', 'تدمر الأثرية', 'المسجد الأموي', 'بصرى الشام'] },
+      { name: 'الأردن', tips: ['البتراء', 'وادي رم', 'البحر الميت', 'قلعة عمان'] },
+      { name: 'لبنان', tips: ['جونيه', 'بيت الدين', 'غابة الأرز', 'صيدا القديمة'] },
+      { name: 'فلسطين', tips: ['المسجد الأقصى', 'كنيسة المهد', 'البحر الميت', 'جبل الزيتون'] }
     ];
 
     const tabs = document.getElementById('destinations-tabs');

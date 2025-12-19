@@ -2,111 +2,307 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | إنشاء حساب</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
+  <script src="assets/js/cosmic-animations.js" defer></script>
   <script src="assets/js/user-auth.js"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #0E1F33 0%, #163A5F 50%, #0E1F33 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
+      background: var(--bg-primary);
+      min-height: 100vh;
       position: relative;
       overflow-x: hidden;
-      overflow-y: auto;
-      min-height: 100vh;
     }
     
-    html {
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
-    
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    
-    .auth-shell {
+    .signup-container {
       min-height: 100vh;
       display: grid;
-      place-items: center;
-      padding: 40px 16px;
+      grid-template-columns: 1fr 1fr;
       position: relative;
       z-index: 1;
     }
     
-    .signup-card {
-      width: min(520px, 96vw);
-      padding: 48px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: 
-        0 20px 60px rgba(14, 31, 51, 0.4),
-        0 0 40px rgba(55, 214, 192, 0.3);
-      backdrop-filter: blur(20px) saturate(180%);
-      color: #F2F9FF;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Left Side - Signup Form */
+    .signup-form-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-xl);
+      position: relative;
+      overflow-y: auto;
     }
     
-    .signup-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 
-        0 30px 80px rgba(14, 31, 51, 0.5),
-        0 0 60px rgba(55, 214, 192, 0.4);
-      border-color: rgba(55, 214, 192, 0.6);
+    .signup-form-wrapper {
+      width: 100%;
+      max-width: 500px;
     }
+    
+    .signup-glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      padding: var(--spacing-xl);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .signup-glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-primary);
+      opacity: 0.6;
+    }
+    
+    .signup-logo {
+      text-align: center;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .signup-logo h1 {
+      font-size: 2.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--spacing-xs);
+      font-weight: 700;
+    }
+    
+    .signup-logo p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    
+    .signup-form-wrapper h2 {
+      font-size: 1.75rem;
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    
+    .signup-form-wrapper .subtitle {
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-lg);
+      font-size: 1rem;
+    }
+    
     .signup-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
     }
-    .signup-card h2 {
-      text-align: center;
-      margin-bottom: 12px;
-      font-family: var(--font-elegant);
-      font-weight: 700;
-      font-size: 2rem;
-      color: var(--primary);
-      font-style: normal;
+    
+    .form-group {
+      margin-bottom: var(--spacing-md);
     }
-    .signup-card p {
-      text-align: center;
-      color: #B8D4F0;
-      margin-bottom: 32px;
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-    #error {
-      color: var(--danger);
-      text-align: center;
-      min-height: 20px;
-      margin-top: 16px;
+    
+    .form-group label {
+      display: block;
+      margin-bottom: var(--spacing-xs);
+      color: var(--neon-cyan);
       font-weight: 500;
+      font-size: 0.9rem;
     }
-    .signup-card .pill {
-      margin-bottom: 20px;
-      display: inline-block;
+    
+    .auth-form {
+      margin-top: var(--spacing-lg);
     }
-    .auth-logo {
-      margin-bottom: 32px;
+    
+    .auth-form .btn {
+      width: 100%;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .error {
+      min-height: 24px;
+      color: #ff6b6b;
+      margin-top: var(--spacing-sm);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    .terms-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+      margin: var(--spacing-md) 0;
+      padding: var(--spacing-md);
+      background: rgba(0, 229, 255, 0.08);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+    }
+    
+    .terms-checkbox input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: var(--neon-cyan);
+    }
+    
+    .terms-checkbox label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      cursor: pointer;
+    }
+    
+    .terms-checkbox a {
+      color: var(--neon-cyan);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    
+    .terms-checkbox a:hover {
+      color: var(--neon-teal);
+    }
+    
+    /* Right Side - Welcome Message */
+    .welcome-panel {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 12px;
-      animation: float 3s ease-in-out infinite;
+      padding: var(--spacing-xl);
+      background: 
+        radial-gradient(circle at 30% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(0, 207, 200, 0.08) 0%, transparent 50%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .welcome-content {
+      max-width: 500px;
+      text-align: center;
+      z-index: 2;
+    }
+    
+    .welcome-content h1 {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-md);
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    
+    .welcome-content p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .welcome-features {
+      list-style: none;
+      text-align: right;
+      margin-top: var(--spacing-xl);
+    }
+    
+    .welcome-features li {
+      padding: var(--spacing-sm) 0;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .welcome-features li::before {
+      content: '✓';
+      color: var(--neon-cyan);
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-shadow: 0 0 10px var(--neon-cyan-glow);
+    }
+    
+    /* Geometric Shapes */
+    .geometric-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .shape {
+      position: absolute;
+      border: 1px solid rgba(0, 229, 255, 0.1);
+    }
+    
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 10%;
+      border-radius: 50%;
+      animation: rotate 20s linear infinite;
+    }
+    
+    .shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: 20%;
+      right: 15%;
+      border-radius: 50%;
+      animation: rotate 15s linear infinite reverse;
+    }
+    
+    .shape-3 {
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      right: 20%;
+      transform: rotate(45deg);
+      border-radius: 8px;
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
     
     @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      0%, 100% { transform: translateY(0px) rotate(45deg); }
+      50% { transform: translateY(-10px) rotate(45deg); }
     }
     
-    .auth-logo img {
-      width: 140px;
-      height: auto;
-      max-width: 100%;
+    /* Responsive */
+    @media (max-width: 968px) {
+      .signup-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .welcome-panel {
+        display: none;
+      }
+      
+      .signup-form-panel {
+        padding: var(--spacing-lg);
+      }
+      
+      .signup-grid {
+        grid-template-columns: 1fr;
+      }
     }
     
     /* تأثير الغيوم المحسّن */
@@ -240,52 +436,81 @@
   </style>
 </head>
 <body class="page-hidden">
-  <main class="auth-shell">
-    <section class="signup-card glass-card">
-      <div class="auth-logo">
-        <img src="assets/images/logo1.png" alt="ArhGo Logo" />
+  <div class="geometric-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  
+  <div class="signup-container">
+    <!-- Left Side - Signup Form -->
+    <div class="signup-form-panel">
+      <div class="signup-form-wrapper">
+        <div class="signup-glass-card">
+          <div class="signup-logo">
+            <h1>ArhGo</h1>
+            <p>Smart Travel Planner</p>
+          </div>
+          
+          <h2>أنشئ حسابك المميز</h2>
+          <p class="subtitle">احتفظ بكل خطط السفر في حساب واحد، واستمتع بالمشاركة الفورية</p>
+          
+          <form class="auth-form" id="signupForm" onsubmit="event.preventDefault(); signup();">
+            <div class="signup-grid">
+              <div class="form-group">
+                <label for="username">اسم المستخدم</label>
+                <input class="arhgo-input" type="text" id="username" name="username" placeholder="اسم المستخدم" required>
+              </div>
+              <div class="form-group">
+                <label for="fullname">الاسم الكامل</label>
+                <input class="arhgo-input" type="text" id="fullname" name="fullname" placeholder="الاسم الكامل" required>
+              </div>
+              <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input class="arhgo-input" type="email" id="email" name="email" placeholder="email@example.com" required>
+              </div>
+              <div class="form-group">
+                <label for="password">كلمة المرور</label>
+                <input class="arhgo-input" type="password" id="password" name="password" placeholder="••••••••" required minlength="8">
+              </div>
+              <div class="form-group">
+                <label for="confirm">تأكيد كلمة المرور</label>
+                <input class="arhgo-input" type="password" id="confirm" name="confirm" placeholder="••••••••" required>
+              </div>
+            </div>
+            
+            <div class="terms-checkbox">
+              <input type="checkbox" id="terms" name="terms" required>
+              <label for="terms">
+                أوافق على <a href="#" onclick="event.preventDefault(); showTerms();">الشروط والأحكام</a> و
+                <a href="#" onclick="event.preventDefault(); showPrivacy();">سياسة الخصوصية</a>
+              </label>
+            </div>
+            
+            <button type="submit" class="btn btn-gradient" data-flight-sound>إنشاء الحساب</button>
+            <a class="btn btn-ghost" href="login.html" data-flight-sound style="display:block; text-align:center;">لديك حساب؟ تسجيل الدخول</a>
+            <div id="error" class="error"></div>
+          </form>
+        </div>
       </div>
-      <h2>أنشئ حسابك المميز</h2>
-      <p>احتفظ بكل خطط السفر في حساب واحد، واستمتع بالمشاركة الفورية وروابط AI.</p>
-      
-      <form class="auth-form" id="signupForm" onsubmit="event.preventDefault(); signup();">
-        <div class="signup-grid">
-          <div class="form-group">
-            <label for="username">اسم المستخدم</label>
-            <input class="arhgo-input" type="text" id="username" name="username" placeholder="اسم المستخدم" required>
-          </div>
-          <div class="form-group">
-            <label for="fullname">الاسم الكامل</label>
-            <input class="arhgo-input" type="text" id="fullname" name="fullname" placeholder="الاسم الكامل" required>
-          </div>
-          <div class="form-group">
-            <label for="email">البريد الإلكتروني</label>
-            <input class="arhgo-input" type="email" id="email" name="email" placeholder="email@example.com" required>
-          </div>
-          <div class="form-group">
-            <label for="password">كلمة المرور</label>
-            <input class="arhgo-input" type="password" id="password" name="password" placeholder="كلمة المرور (8 أحرف على الأقل)" required minlength="8">
-          </div>
-          <div class="form-group">
-            <label for="confirm">تأكيد كلمة المرور</label>
-            <input class="arhgo-input" type="password" id="confirm" name="confirm" placeholder="تأكيد كلمة المرور" required>
-          </div>
-        </div>
+    </div>
+    
+    <!-- Right Side - Welcome Message -->
+    <div class="welcome-panel">
+      <div class="welcome-content">
+        <h1>Join the Future of Travel Planning</h1>
+        <p>ابدأ رحلتك مع منصة تخطيط السفر الأكثر ذكاءً وأناقة</p>
         
-        <div class="terms-checkbox">
-          <input type="checkbox" id="terms" name="terms" required>
-          <label for="terms">
-            أوافق على <a href="#" onclick="event.preventDefault(); showTerms();">الشروط والأحكام</a> و
-            <a href="#" onclick="event.preventDefault(); showPrivacy();">سياسة الخصوصية</a>
-          </label>
-        </div>
-        
-        <button type="submit" class="btn btn-gradient" data-flight-sound>إنشاء الحساب</button>
-        <a class="btn btn-ghost" href="login.html" data-flight-sound style="text-align:center;">لديك حساب؟ تسجيل الدخول</a>
-        <div id="error"></div>
-      </form>
-    </section>
-  </main>
+        <ul class="welcome-features">
+          <li>حساب مجاني مدى الحياة</li>
+          <li>حفظ غير محدود للخطط</li>
+          <li>مشاركة فورية مع الأصدقاء</li>
+          <li>اقتراحات ذكية مخصصة</li>
+          <li>مزامنة على جميع الأجهزة</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <div class="clouds-overlay" id="cloudsOverlay"></div>
 
@@ -480,7 +705,7 @@
       alert('سياسة الخصوصية:\n\n1. نحن نحترم خصوصيتك ونحمي بياناتك الشخصية\n2. بياناتك محفوظة محلياً في متصفحك فقط\n3. لا نشارك بياناتك مع أي طرف ثالث\n4. يمكنك حذف حسابك في أي وقت');
     }
     
-    function signup() {
+    async function signup() {
       const username = document.getElementById('username').value.trim();
       const fullname = document.getElementById('fullname').value.trim();
       const email = document.getElementById('email').value.trim().toLowerCase();
@@ -499,9 +724,9 @@
       }
       
       // التحقق من كلمة المرور
-      if (password.length < 8) {
+      if (password.length < 6) {
         error.style.color = 'var(--danger)';
-        error.textContent = "كلمة المرور يجب أن تكون 8 أحرف على الأقل.";
+        error.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
         return;
       }
       
@@ -526,23 +751,55 @@
         return;
       }
 
-      // حفظ الحساب باستخدام نظام المصادقة الجديد
-      if (typeof userAuth !== 'undefined') {
-        const result = userAuth.saveUser({ 
-          username, 
-          fullname, 
-          email, 
-          password
+      try {
+        // تحديد URL الأساسي
+        let baseUrl = '';
+        if (window.location.protocol === 'file:') {
+          baseUrl = 'http://localhost/ArhGo-trip-planner/';
+        }
+        
+        // تسجيل المستخدم الجديد
+        const response = await fetch(baseUrl + 'api/register.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            full_name: fullname,
+            email: email,
+            password: password,
+            phone: '',
+            country: '',
+            city: ''
+          })
         });
-
+        
+        const result = await response.json();
+        
         if (result.success) {
           // تسجيل الدخول تلقائياً
-          const loginResult = userAuth.login(email, password);
+          const loginResponse = await fetch(baseUrl + 'api/login.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+          });
+          
+          const loginResult = await loginResponse.json();
           
           if (loginResult.success) {
-            // التأكد من حفظ البيانات
-            localStorage.setItem('arhgo_current_user', loginResult.user.username);
-            localStorage.setItem('loggedIn', loginResult.user.username);
+            // حفظ بيانات الجلسة والمستخدم
+            localStorage.setItem('session_token', loginResult.session_token);
+            localStorage.setItem('user', JSON.stringify(loginResult.user));
+            localStorage.setItem('arhgo_current_user', loginResult.user.full_name);
+            localStorage.setItem('loggedIn', loginResult.user.full_name);
+            
+            // إرسال event لتحديث الصفحات الأخرى
+            window.dispatchEvent(new Event('authStateChanged'));
             
             error.style.color = '#4DFFD1';
             error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
@@ -553,40 +810,22 @@
             // إظهار الغيوم
             createClouds();
             
-            // الانتقال بعد 1.5 ثانية مع إضافة timestamp لمنع cache
+            // الانتقال بعد 1.5 ثانية
             setTimeout(() => {
               window.location.href = 'index.html?t=' + Date.now();
             }, 1500);
           } else {
             error.style.color = 'var(--danger)';
-            error.textContent = "تم إنشاء الحساب لكن فشل تسجيل الدخول. يرجى تسجيل الدخول يدوياً.";
+            error.textContent = loginResult.error || "تم إنشاء الحساب لكن فشل تسجيل الدخول. يرجى تسجيل الدخول يدوياً.";
           }
         } else {
           error.style.color = 'var(--danger)';
-          error.textContent = result.message;
+          error.textContent = result.error || 'حدث خطأ أثناء إنشاء الحساب';
         }
-      } else {
-        // طريقة احتياطية (للتوافق مع الكود القديم)
-        const user = { 
-          username, 
-          fullname, 
-          email, 
-          password,
-          createdAt: new Date().toISOString()
-        };
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('arhgo_current_user', username);
-        localStorage.setItem('loggedIn', username);
-
-        error.style.color = '#4DFFD1';
-        error.textContent = "تم إنشاء الحساب بنجاح! جاري التحويل...";
-        
-        playFlightSoundEffect();
-        createClouds();
-        
-        setTimeout(() => {
-          window.location.href = 'index.html?t=' + Date.now();
-        }, 1500);
+      } catch (err) {
+        console.error('خطأ في التسجيل:', err);
+        error.style.color = 'var(--danger)';
+        error.textContent = 'حدث خطأ في الاتصال بالخادم. تأكد من أن WAMP/XAMPP يعمل.';
       }
     }
   </script>

@@ -4,110 +4,332 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | حجز المطاعم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
   <script src="assets/js/booking-system.js" defer></script>
-  <script src="assets/js/restaurants-database.js" defer></script>
   <style>
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    body {
+      background: var(--bg-primary);
+      padding-top: 80px;
     }
-    .filters select, .filters input {
-      min-width: 160px;
+    
+    /* تحسين لوحة البحث - تقليل العرض */
+    .search-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
     }
+    
+    .search-panel .field {
+      margin-bottom: 0;
+    }
+    
+    .search-panel .field label {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+    
+    .search-panel .arhgo-input,
+    .search-panel .arhgo-select {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      color: var(--text-primary) !important;
+      background: linear-gradient(135deg, rgba(11, 15, 26, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%) !important;
+    }
+    
+    .search-panel .arhgo-input:focus {
+      background: linear-gradient(135deg, rgba(30, 40, 60, 0.95) 0%, rgba(35, 45, 70, 1) 100%) !important;
+      border-color: rgba(0, 229, 255, 0.4) !important;
+    }
+    
+    .search-panel .arhgo-select:focus {
+      background: linear-gradient(135deg, rgba(30, 40, 60, 0.95) 0%, rgba(35, 45, 70, 1) 100%) !important;
+      border-color: rgba(0, 229, 255, 0.4) !important;
+    }
+    
+    .search-panel .arhgo-select option {
+      background: rgba(30, 40, 60, 0.95) !important;
+      color: var(--text-primary) !important;
+      padding: 12px;
+    }
+    
+    .search-panel .arhgo-select option:checked,
+    .search-panel .arhgo-select option:hover {
+      background: rgba(0, 229, 255, 0.3) !important;
+      color: var(--neon-cyan) !important;
+    }
+    
+    /* إصلاح ألوان autocomplete dropdowns */
+    .search-panel .arhgo-input::-webkit-autofill,
+    .search-panel .arhgo-input::-webkit-autofill:hover,
+    .search-panel .arhgo-input::-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--text-primary) !important;
+      -webkit-box-shadow: 0 0 0px 1000px rgba(30, 40, 60, 0.95) inset !important;
+      background: linear-gradient(135deg, rgba(30, 40, 60, 0.95) 0%, rgba(35, 45, 70, 1) 100%) !important;
+      border-color: rgba(0, 229, 255, 0.4) !important;
+    }
+    
+    /* إصلاح ألوان datalist dropdown */
+    .search-panel datalist option {
+      background: rgba(30, 40, 60, 0.95) !important;
+      color: var(--text-primary) !important;
+      padding: 12px;
+    }
+    
+    /* إصلاح placeholder text */
+    .search-panel .arhgo-input::placeholder {
+      color: var(--text-muted) !important;
+      opacity: 0.7 !important;
+    }
+    
+    /* إصلاح قائمة autocomplete للمتصفحات */
+    .search-panel .arhgo-input::-webkit-contacts-auto-fill-button,
+    .search-panel .arhgo-input::-webkit-credentials-auto-fill-button {
+      background-color: rgba(30, 40, 60, 0.95) !important;
+    }
+    
+    /* إصلاح قائمة autocomplete في Firefox */
+    .search-panel .arhgo-input:-moz-autofill {
+      background-color: rgba(30, 40, 60, 0.95) !important;
+      color: var(--text-primary) !important;
+    }
+    
+    /* إصلاح قائمة autocomplete في Edge/Chrome */
+    .search-panel .arhgo-input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px rgba(30, 40, 60, 0.95) inset !important;
+      -webkit-text-fill-color: var(--text-primary) !important;
+      background-color: rgba(30, 40, 60, 0.95) !important;
+    }
+    
+    /* إصلاح قائمة الاقتراحات (suggestions list) */
+    input[list]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      opacity: 0.7;
+    }
+    
+    /* إصلاح لون النص في input */
+    .search-panel .arhgo-input {
+      color: var(--text-primary) !important;
+      background-color: transparent !important;
+    }
+    
+    .search-panel .arhgo-input:-webkit-autofill,
+    .search-panel .arhgo-input:-webkit-autofill:hover,
+    .search-panel .arhgo-input:-webkit-autofill:focus,
+    .search-panel .arhgo-input:-webkit-autofill:active {
+      -webkit-text-fill-color: var(--text-primary) !important;
+      -webkit-box-shadow: 0 0 0px 1000px rgba(30, 40, 60, 0.95) inset !important;
+      transition: background-color 5000s ease-in-out 0s;
+      background-color: rgba(30, 40, 60, 0.95) !important;
+    }
+    
+    /* إخفاء قائمة Saved info البيضاء من المتصفح */
+    .search-panel .arhgo-input::-webkit-credentials-auto-fill-button,
+    .search-panel .arhgo-input::-webkit-contacts-auto-fill-button {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+    
+    /* منع عرض قائمة autocomplete البيضاء */
+    .search-panel .arhgo-input {
+      -webkit-autofill-predictions: none !important;
+    }
+    
+    /* إخفاء أي popup من المتصفح */
+    .search-panel .arhgo-input::before,
+    .search-panel .arhgo-input::after {
+      display: none !important;
+    }
+    
+    .glass-card {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* تحسين بطاقات المطاعم */
+    #list.grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+    
     .restaurant-card {
-      padding: 24px;
-      border-radius: var(--radius-md);
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: var(--shadow-soft);
-      transition: all 0.3s ease;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .restaurant-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 229, 255, 0.6) 20%, 
+        rgba(0, 207, 200, 0.6) 50%, 
+        rgba(0, 229, 255, 0.6) 80%, 
+        transparent 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
     .restaurant-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(55, 214, 192, 0.6);
+      transform: translateY(-6px);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(0, 229, 255, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      border-color: rgba(0, 229, 255, 0.5);
     }
+    
+    .restaurant-card:hover::before {
+      opacity: 1;
+    }
+    
     .restaurant-card h3 {
-      margin-bottom: 12px;
-      color: #37D6C0;
-      font-size: 1.4rem;
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--neon-cyan);
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .restaurant-card p {
-      color: #F2F9FF;
-      line-height: 1.7;
-      margin-bottom: 12px;
+    
+    .restaurant-card > p:first-of-type {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: var(--spacing-sm);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+    
+    .restaurant-card > p:last-of-type {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: var(--spacing-md) 0;
+      font-size: 0.9rem;
+      min-height: 60px;
+    }
+    
     .badges {
       display: flex;
-      gap: 8px;
       flex-wrap: wrap;
-      margin: 16px 0;
+      gap: 8px;
+      margin: var(--spacing-md) 0;
+      min-height: 40px;
     }
+    
     .badge {
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: rgba(0, 229, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      transition: all 0.3s ease;
     }
+    
+    .badge:hover {
+      background: rgba(0, 229, 255, 0.2);
+      border-color: rgba(0, 229, 255, 0.4);
+      transform: scale(1.05);
+    }
+    
     .badge-info {
-      background: rgba(59, 130, 246, 0.1);
-      color: #37D6C0;
-      border: 1px solid rgba(55, 214, 192, 0.4);
+      background: rgba(0, 229, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.25);
     }
+    
     .badge-success {
-      background: rgba(16, 185, 129, 0.1);
-      color: var(--success);
+      background: rgba(16, 185, 129, 0.15);
+      color: #10B981;
       border: 1px solid rgba(16, 185, 129, 0.3);
     }
+    
     .badge-closed {
-      background: rgba(239, 68, 68, 0.1);
-      color: var(--danger);
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
       border: 1px solid rgba(239, 68, 68, 0.3);
     }
-    .booking-modal {
+    
+    .restaurant-card .btn {
+      margin-top: var(--spacing-md);
+      width: 100%;
+      padding: 14px 24px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
       z-index: 2000;
     }
-    .booking-box {
-      width: min(520px, 95vw);
+    .modal-content {
+      width: min(550px, 95vw);
       max-height: 90vh;
       overflow-y: auto;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(242, 244, 247, 0.95));
-      border-radius: var(--radius-lg);
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      padding: 30px;
-      box-shadow: var(--shadow-elevated);
-    }
-    .booking-box h3 {
-      margin-top: 0;
-      color: #37D6C0;
-      font-size: 1.6rem;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      padding: var(--spacing-xl);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      color: var(--text-primary);
     }
     .success-message {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-      border: 2px solid rgba(16, 185, 129, 0.3);
-      padding: 20px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: var(--spacing-md);
       border-radius: var(--radius-md);
-      margin-top: 20px;
+      margin-top: var(--spacing-md);
       text-align: center;
+      color: var(--text-primary);
     }
     .booking-id {
       font-family: 'Courier New', monospace;
-      background: rgba(59, 130, 246, 0.1);
+      background: rgba(0, 229, 255, 0.1);
       padding: 8px 12px;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       margin-top: 10px;
       display: inline-block;
+      color: var(--neon-cyan);
+      border: 1px solid var(--glass-border);
     }
   </style>
 </head>
@@ -122,10 +344,11 @@
       <li><a data-nav href="hotel.html">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html">حجز المطاعم</a></li>
+      <li><a data-nav href="my-bookings.html">حجوزاتي</a></li>
     </ul>
     <div class="stack">
-      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
-      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
+      <a class="btn btn-ghost" href="login.html" data-flight-sound id="loginBtn">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound id="signupBtn">إنشاء حساب</a>
     </div>
   </nav>
   <main class="page-shell">
@@ -135,42 +358,58 @@
         <p class="section-subtitle">ابحث عن أفضل المطاعم واحجز طاولتك بسهولة. جميع الحجوزات تُحفظ تلقائياً.</p>
       </div>
       <div class="glass-card">
-        <div class="filters">
-          <select class="arhgo-select" id="visitType">
-            <option value="">نوع الزيارة</option>
-            <option value="family">عائلية</option>
-            <option value="single">فردية</option>
-            <option value="business">عمل</option>
-            <option value="romantic">رومانسية</option>
-          </select>
-          <input class="arhgo-input" type="number" id="budget" min="1" placeholder="الميزانية ($)">
-          <select class="arhgo-select" id="foodType">
-            <option value="">نوع الأكل</option>
-            <option value="arabic">شرقي</option>
-            <option value="western">غربي</option>
-            <option value="seafood">بحري</option>
-            <option value="asian">آسيوي</option>
-            <option value="fastfood">وجبات سريعة</option>
-            <option value="italian">إيطالي</option>
-            <option value="mexican">مكسيكي</option>
-          </select>
-          <input class="arhgo-input" type="text" id="location" placeholder="المدينة (اختياري)">
+        <div class="search-panel">
+          <div class="field">
+            <label>نوع الزيارة</label>
+            <select class="arhgo-select" id="visitType">
+              <option value="">اختر نوع الزيارة</option>
+              <option value="family">عائلية</option>
+              <option value="single">فردية</option>
+              <option value="business">عمل</option>
+              <option value="romantic">رومانسية</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>الميزانية ($)</label>
+            <input class="arhgo-input" type="number" id="budget" min="1" placeholder="مثال: 50" autocomplete="off" data-form-type="other">
+          </div>
+          <div class="field">
+            <label>نوع الأكل</label>
+            <select class="arhgo-select" id="foodType">
+              <option value="">اختر نوع الأكل</option>
+              <option value="عربي">عربي</option>
+              <option value="غربي">غربي</option>
+              <option value="بحري">بحري</option>
+              <option value="آسيوي">آسيوي</option>
+              <option value="وجبات سريعة">وجبات سريعة</option>
+              <option value="إيطالي">إيطالي</option>
+              <option value="مكسيكي">مكسيكي</option>
+              <option value="حلويات">حلويات</option>
+              <option value="مشروبات">مشروبات</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>المدينة</label>
+            <input class="arhgo-input" type="text" id="location" placeholder="مثال: دبي، بغداد، الرياض" autocomplete="off" data-form-type="other">
+          </div>
         </div>
-        <div class="stack" style="margin-top:16px;justify-content:flex-end;">
-          <button class="btn btn-gradient" id="searchBtn">بحث عن مطاعم</button>
+        <div class="stack" style="margin-top: var(--spacing-md); justify-content: flex-end;">
+          <button class="btn btn-gradient" id="searchBtn" style="min-width: 160px; padding: 12px 24px; font-size: 0.95rem;">
+            <span>🔍</span> بحث
+          </button>
         </div>
       </div>
-      <div id="list" class="grid" style="margin-top:28px;"></div>
+      <div id="list" class="grid"></div>
       <div id="empty" class="glass-card" style="display:none; text-align: center; padding: 40px;">
-        <p style="font-size: 1.1rem; color: var(--muted);">لم يتم العثور على نتائج. جرّب تغيير الفلاتر.</p>
+        <p style="font-size: 1.1rem; color: var(--muted);">لم يتم العثور على مطاعم. جرّب تغيير معايير البحث.</p>
       </div>
     </section>
   </main>
 
-  <div id="bookingModal" class="booking-modal">
-    <div class="booking-box">
+  <div id="bookingModal" class="modal">
+    <div class="modal-content">
       <button class="btn btn-ghost" id="closeModal" style="position:absolute;top:10px;left:10px;">✕</button>
-      <h3 id="modalRestaurantName">احجز طاولتك</h3>
+      <h3 style="margin-top:0; color: var(--primary);" id="modalRestaurantName">تفاصيل الحجز</h3>
       <form id="bookingForm">
         <div class="field">
           <label>الاسم الكامل *</label>
@@ -211,11 +450,107 @@
   </div>
 
   <script>
+    // التحقق من حالة تسجيل الدخول وتحديث الأزرار
+    function updateAuthButtons() {
+      console.log('🔄 تحديث الأزرار...');
+      const session_token = localStorage.getItem('session_token');
+      const userStr = localStorage.getItem('user');
+      const user = userStr ? JSON.parse(userStr) : {};
+      const loginBtn = document.getElementById('loginBtn');
+      const signupBtn = document.getElementById('signupBtn');
+      
+      console.log('Session token:', session_token ? 'موجود' : 'غير موجود');
+      console.log('User data:', user);
+      console.log('Login button:', loginBtn ? 'موجود' : 'غير موجود');
+      console.log('Signup button:', signupBtn ? 'موجود' : 'غير موجود');
+      
+      if (!loginBtn || !signupBtn) {
+        console.warn('⚠️ الأزرار غير موجودة بعد');
+        setTimeout(updateAuthButtons, 500);
+        return;
+      }
+      
+      if (session_token && user.full_name) {
+        // المستخدم مسجل دخول
+        loginBtn.textContent = user.full_name;
+        loginBtn.href = 'my-bookings.html';
+        loginBtn.style.color = '#37D6C0';
+        signupBtn.textContent = 'تسجيل الخروج';
+        signupBtn.href = '#';
+        signupBtn.onclick = (e) => {
+          e.preventDefault();
+          if (confirm('هل تريد تسجيل الخروج؟')) {
+            localStorage.removeItem('session_token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('arhgo_current_user');
+            localStorage.removeItem('loggedIn');
+            window.location.href = 'login.html';
+          }
+        };
+        console.log('✅ تم تحديث الأزرار - المستخدم مسجل دخول:', user.full_name);
+      } else {
+        // المستخدم غير مسجل دخول
+        loginBtn.textContent = 'تسجيل الدخول';
+        loginBtn.href = 'login.html';
+        loginBtn.style.color = '';
+        signupBtn.textContent = 'إنشاء حساب';
+        signupBtn.href = 'signup.html';
+        signupBtn.onclick = null;
+        console.log('ℹ️ المستخدم غير مسجل دخول');
+      }
+    }
+    
+    // تحديث الأزرار عند تحميل الصفحة
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', updateAuthButtons);
+    } else {
+      updateAuthButtons();
+    }
+    
+    // تحديث الأزرار عند تغيير حالة المصادقة
+    window.addEventListener('authStateChanged', updateAuthButtons);
+    window.addEventListener('storage', updateAuthButtons);
+    
+    // تحديث الأزرار عند العودة للصفحة
+    window.addEventListener('focus', updateAuthButtons);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        updateAuthButtons();
+      }
+    });
+    
+    // تحديث الأزرار عند النقر في أي مكان (للتأكد من التحديث)
+    document.addEventListener('click', () => {
+      setTimeout(updateAuthButtons, 100);
+    });
+    
+    // تحديث الأزرار كل 2 ثانية للتأكد
+    setInterval(updateAuthButtons, 2000);
+    
     const $ = (id) => document.getElementById(id);
     const list = $('list');
     const empty = $('empty');
     let currentBooking = null;
     let currentRestaurant = null;
+    
+    // التأكد من أن list لديه class grid
+    if (list && !list.classList.contains('grid')) {
+      list.classList.add('grid');
+    }
+    
+    // التحقق من وجود العناصر
+    console.log('🔍 التحقق من العناصر:');
+    console.log('  - list element:', list);
+    console.log('  - empty element:', empty);
+    console.log('  - list موجود؟', list !== null);
+    console.log('  - empty موجود؟', empty !== null);
+    
+    if (!list) {
+      console.error('❌ عنصر list غير موجود!');
+    }
+    if (!empty) {
+      console.error('❌ عنصر empty غير موجود!');
+    }
 
     // استخدام قاعدة البيانات الشاملة من الملف الخارجي
 
@@ -229,89 +564,299 @@
     };
 
     function renderList(data) {
-      if (!data.length) {
-        list.innerHTML = '';
-        empty.style.display = 'block';
+      console.log('🎨 renderList استدعي مع', data ? data.length : 0, 'مطعم');
+      console.log('📋 قائمة المطاعم:', data);
+      
+      if (!list) {
+        console.error('❌ عنصر list غير موجود!');
         return;
       }
-      empty.style.display = 'none';
-      list.innerHTML = data.map(item => `
-        <article class="restaurant-card">
-          <h3>${item.name}</h3>
-          <p>${item.desc}</p>
-          <div class="badges">
-            <span class="badge badge-info">${stars(item.rating)} ${item.rating.toFixed(1)}</span>
-            <span class="badge ${isOpen(item.hours) ? 'badge-success' : 'badge-closed'}">
-              ${isOpen(item.hours) ? '🟢 مفتوح الآن' : '🔴 مغلق'}
-            </span>
-            <span class="badge badge-info">${item.priceRange}</span>
-            <span class="badge badge-info">📍 ${item.location}${item.country ? ', ' + item.country : ''}</span>
-          </div>
-          <div class="stack" style="margin-top:16px;">
-            <button class="btn btn-gradient" onclick="openBooking(${item.id}, '${item.name}', '${item.foodType}')" style="flex: 1;">احجز الآن</button>
-          </div>
-        </article>
-      `).join('');
+      
+      if (!data || !data.length) {
+        console.warn('⚠️ renderList: القائمة فارغة');
+        list.innerHTML = '';
+        if (empty) empty.style.display = 'block';
+        return;
+      }
+      
+      if (empty) empty.style.display = 'none';
+      
+      // التأكد من أن list لديه class grid
+      if (!list.classList.contains('grid')) {
+        list.classList.add('grid');
+      }
+      
+      try {
+        const html = data.map((item, index) => {
+          // التأكد من وجود جميع الحقول المطلوبة
+          const itemName = item.name || 'مطعم بدون اسم';
+          const itemDesc = item.desc || item.description || '';
+          const itemRating = parseFloat(item.rating) || 0;
+          const itemPriceRange = item.priceRange || item.price_range || '$';
+          const itemLocation = item.location || '';
+          const itemCountry = item.country || '';
+          const itemFoodType = item.foodType || item.food_type || '';
+          const itemId = item.id || 0;
+          
+          // التأكد من وجود hours
+          const itemHours = item.hours || {
+            open: parseInt(item.open_hour) || 10,
+            close: parseInt(item.close_hour) || 22
+          };
+          
+          const itemNameEscaped = itemName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          const foodTypeEscaped = itemFoodType.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          
+          return `
+          <article class="restaurant-card">
+            <h3>${itemName}</h3>
+            <p>📍 ${itemLocation}${itemCountry ? ', ' + itemCountry : ''} — ${stars(itemRating)} ${itemRating.toFixed(1)}</p>
+            <p>${itemDesc || ''}</p>
+            <div class="badges">
+              <span class="badge ${isOpen(itemHours) ? 'badge-success' : 'badge-closed'}">
+                ${isOpen(itemHours) ? '🟢 مفتوح الآن' : '🔴 مغلق'}
+              </span>
+              <span class="badge badge-info">${itemPriceRange}</span>
+              ${itemFoodType ? `<span class="badge badge-info">${itemFoodType}</span>` : ''}
+            </div>
+            <div class="stack" style="margin-top:16px;">
+              <button class="btn btn-gradient" onclick="openBooking(${itemId}, '${itemNameEscaped}', '${foodTypeEscaped}')" style="flex: 1;">احجز الآن</button>
+            </div>
+          </article>
+        `;
+        }).join('');
+        
+        console.log('✅ HTML تم إنشاؤه، الطول:', html.length);
+        console.log('🔍 HTML (أول 300 حرف):', html.substring(0, 300));
+        
+        if (!list) {
+          console.error('❌ عنصر list غير موجود في renderList!');
+          return;
+        }
+        
+        // التأكد من أن list لديه class grid
+        if (!list.classList.contains('grid')) {
+          list.classList.add('grid');
+          console.log('✅ تم إضافة class grid إلى list');
+        }
+        
+        // تعيين HTML
+        list.innerHTML = html;
+        console.log('✅ تم تعيين HTML إلى list');
+        console.log('✅ list.innerHTML.length:', list.innerHTML.length);
+        
+        // التحقق من البطاقات
+        const cards = list.querySelectorAll('.restaurant-card');
+        console.log('✅ عدد البطاقات في DOM:', cards.length);
+        
+        if (cards.length === 0 && html.length > 0) {
+          console.error('❌ HTML موجود لكن البطاقات لم تظهر!');
+          console.error('list.style.display:', window.getComputedStyle(list).display);
+          console.error('list.style.visibility:', window.getComputedStyle(list).visibility);
+          console.error('list.offsetHeight:', list.offsetHeight);
+          console.error('list.offsetWidth:', list.offsetWidth);
+        }
+        
+      } catch (error) {
+        console.error('❌ Error in renderList:', error);
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack
+        });
+        list.innerHTML = `<div class='glass-card' style='text-align: center; padding: 40px; color: var(--danger);'>❌ حدث خطأ أثناء عرض المطاعم: ${error.message}</div>`;
+      }
     }
 
     async function applyFilters() {
-      list.innerHTML = "<div class='glass-card' style='text-align: center; padding: 40px;'>⏳ جاري البحث عن المطاعم...</div>";
-      empty.style.display = 'none';
+      console.log('🚀 بدء applyFilters...');
       
-      // محاكاة البحث (يمكن استبدالها بخادم)
-      setTimeout(() => {
-        const visitType = $('visitType').value;
+      // التحقق من وجود العناصر
+      if (!list) {
+        console.error('❌ عنصر list غير موجود!');
+        alert('خطأ: عنصر list غير موجود في الصفحة!');
+        return;
+      }
+      
+      if (!empty) {
+        console.warn('⚠️ عنصر empty غير موجود!');
+      }
+      
+      // إخفاء رسالة "لا توجد نتائج" عند بدء البحث
+      if (empty) empty.style.display = 'none';
+      
+      // التأكد من أن list لديه class grid
+      if (!list.classList.contains('grid')) {
+        list.classList.add('grid');
+        console.log('✅ تم إضافة class grid إلى list');
+      }
+      
+      // إظهار رسالة التحميل
+      list.innerHTML = "<div class='glass-card' style='text-align: center; padding: 40px;'>⏳ جاري البحث عن المطاعم...</div>";
+      console.log('✅ تم عرض رسالة التحميل');
+      
+      try {
+        // بناء URL للبحث
+        const params = new URLSearchParams();
         const foodType = $('foodType').value;
-        const budget = parseFloat($('budget').value);
-        const location = $('location').value.toLowerCase().trim();
-
-        let filtered = restaurantsDatabase.filter(rest => {
-          // فلترة حسب نوع الطعام
-          if (foodType && rest.foodType !== foodType) return false;
-          
-          // فلترة حسب الموقع (بحث مرن في المدينة والدولة)
-          if (location) {
-            const locationMatch = 
-              rest.location.toLowerCase().includes(location) ||
-              (rest.country && rest.country.toLowerCase().includes(location)) ||
-              rest.name.toLowerCase().includes(location);
-            if (!locationMatch) return false;
-          }
-          
-          // فلترة حسب الميزانية (اختياري)
-          if (budget) {
-            const priceMap = { '$': 30, '$$': 60, '$$$': 100 };
-            const maxPrice = priceMap[rest.priceRange] || 50;
-            if (budget < maxPrice * 0.7) return false; // مرونة في السعر
-          }
-          
-          return true;
-        });
-
-        // إذا لم توجد نتائج والبحث عن موقع، جرب البحث بدون فلتر الموقع
-        if (filtered.length === 0 && location) {
-          filtered = restaurantsDatabase.filter(rest => {
-            if (foodType && rest.foodType !== foodType) return false;
-            return true;
-          }).slice(0, 10); // عرض أول 10 نتائج
+        const location = $('location').value.trim();
+        
+        if (foodType) params.append('food_type', foodType);
+        if (location) params.append('location', location);
+        
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
+        const apiUrl = baseUrl + `api/get_restaurants.php?${params.toString()}`;
+        
+        console.log('🔍 البحث عن المطاعم:', apiUrl);
+        console.log('🌐 البروتوكول:', window.location.protocol);
+        
+        const response = await fetch(apiUrl);
+        console.log('📥 حالة الاستجابة:', response.status, response.statusText);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        renderList(filtered);
-      }, 500);
+        
+        const result = await response.json();
+        console.log('📦 النتيجة من API:', result);
+        console.log('📊 عدد المطاعم:', result.count || 0);
+        console.log('📊 إجمالي المطاعم في قاعدة البيانات:', result.total_in_db || 'غير معروف');
+        console.log('📋 البيانات:', result.data);
+        
+        if (result.success && result.data) {
+          console.log('✅ API نجح، عدد المطاعم:', result.data.length);
+          
+          if (result.data.length === 0) {
+            console.warn('⚠️ لا توجد مطاعم في النتيجة');
+            list.innerHTML = '';
+            empty.style.display = 'block';
+            empty.innerHTML = '<p style="font-size: 1.1rem; color: var(--muted);">لم يتم العثور على مطاعم. تأكد من أن قاعدة البيانات تحتوي على بيانات أو جرّب تغيير معايير البحث.</p>';
+            return;
+          }
+          
+          // تحويل البيانات من MySQL إلى التنسيق المطلوب
+          const restaurants = result.data.map(rest => ({
+            id: rest.id,
+            name: rest.name,
+            desc: rest.description || '',
+            location: rest.city_name_ar || rest.location || '',
+            country: rest.country_name_ar || '',
+            foodType: rest.food_type || '',
+            rating: parseFloat(rest.rating) || 0,
+            priceRange: rest.price_range || '$',
+            open_hour: rest.open_hour || 10,
+            close_hour: rest.close_hour || 22,
+            hours: {
+              open: parseInt(rest.open_hour) || 10,
+              close: parseInt(rest.close_hour) || 22
+            }
+          }));
+          
+          console.log('🏨 المطاعم بعد التحويل:', restaurants);
+          console.log('📏 عدد المطاعم بعد التحويل:', restaurants.length);
+          
+          // فلترة حسب الميزانية (إذا تم تحديدها)
+          const budget = parseFloat($('budget').value);
+          let filtered = restaurants;
+          
+          if (budget) {
+            const priceMap = { '$': 30, '$$': 60, '$$$': 100, '$$$$': 200 };
+            filtered = restaurants.filter(rest => {
+              const maxPrice = priceMap[rest.priceRange] || 50;
+              return budget >= maxPrice * 0.7; // مرونة في السعر
+            });
+            console.log('💰 بعد فلترة الميزانية:', filtered.length);
+          }
+          
+          if (filtered.length === 0) {
+            console.warn('⚠️ لا توجد مطاعم بعد الفلترة');
+            list.innerHTML = '';
+            empty.style.display = 'block';
+            empty.innerHTML = '<p style="font-size: 1.1rem; color: var(--muted);">لم يتم العثور على مطاعم تطابق معايير البحث. جرّب تغيير الميزانية أو نوع الطعام.</p>';
+          } else {
+            console.log('✅ سيتم عرض', filtered.length, 'مطعم');
+            console.log('🔍 قبل استدعاء renderList - filtered:', filtered);
+            console.log('🔍 قبل استدعاء renderList - list element:', list);
+            console.log('🔍 قبل استدعاء renderList - list موجود؟', list !== null);
+            
+            if (!list) {
+              console.error('❌ عنصر list غير موجود!');
+              alert('خطأ: عنصر list غير موجود في الصفحة!');
+              return;
+            }
+            
+            renderList(filtered);
+            
+            // التحقق بعد العرض
+            setTimeout(() => {
+              const cards = list.querySelectorAll('.restaurant-card');
+              console.log('🔍 بعد renderList - عدد البطاقات:', cards.length);
+              console.log('🔍 بعد renderList - list.innerHTML.length:', list.innerHTML.length);
+              
+              if (cards.length === 0 && filtered.length > 0) {
+                console.error('❌ المشكلة: البيانات موجودة لكن البطاقات لم تظهر!');
+                console.error('HTML (أول 500 حرف):', list.innerHTML.substring(0, 500));
+                alert(`تم العثور على ${filtered.length} مطعم لكن لم تظهر في الصفحة. تحقق من Console (F12) للتفاصيل.`);
+              } else if (cards.length > 0) {
+                console.log('✅ تم عرض', cards.length, 'بطاقة بنجاح!');
+              }
+            }, 200);
+          }
+        } else {
+          console.error('❌ API فشل:', result.error || 'لا توجد بيانات');
+          throw new Error(result.error || 'خطأ في جلب البيانات');
+        }
+      } catch (error) {
+        console.error('❌ خطأ في البحث:', error);
+        console.error('تفاصيل الخطأ:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
+        
+        list.innerHTML = '';
+        empty.style.display = 'block';
+        
+        let errorMessage = error.message || 'يرجى المحاولة مرة أخرى أو التحقق من قاعدة البيانات';
+        let tipMessage = '💡 نصيحة: تأكد من أن قاعدة البيانات تحتوي على بيانات المطاعم';
+        
+        // معالجة خاصة لأخطاء CORS أو Network
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError') || error.name === 'TypeError') {
+          errorMessage = 'فشل الاتصال بالخادم';
+          tipMessage = '💡 نصيحة: تأكد من فتح الملف من <a href="http://localhost/ArhGo-trip-planner/Restuarnt.html" style="color: #37D6C0;">http://localhost/ArhGo-trip-planner/Restuarnt.html</a> وليس مباشرة من النظام';
+        }
+        
+        empty.innerHTML = `
+          <div style='text-align: center; padding: 40px;'>
+            <p style="font-size: 1.1rem; color: var(--danger); margin-bottom: 10px;">❌ حدث خطأ أثناء البحث</p>
+            <p style="font-size: 0.9rem; color: var(--muted);">${errorMessage}</p>
+            <p style="font-size: 0.85rem; color: var(--muted); margin-top: 10px;">${tipMessage}</p>
+            ${window.location.protocol === 'file:' ? '<p style="font-size: 0.85rem; color: #37D6C0; margin-top: 15px;"><strong>🔗 <a href="http://localhost/ArhGo-trip-planner/Restuarnt.html" style="color: #37D6C0;">اضغط هنا لفتح الصفحة من localhost</a></strong></p>' : ''}
+          </div>
+        `;
+      }
     }
 
     window.openBooking = (id, name, foodType) => {
-      currentRestaurant = { id, name, foodType };
-      $('modalRestaurantName').textContent = `احجز طاولتك في ${name}`;
-      $('bookingForm').reset();
-      $('successMessage').style.display = 'none';
-      
-      // تعيين الحد الأدنى للتاريخ (اليوم)
-      const now = new Date();
-      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-      $('bookDate').setAttribute('min', now.toISOString().slice(0, 16));
-      
-      $('bookingModal').style.display = 'flex';
+      try {
+        console.log('فتح نافذة حجز المطعم:', { id, name, foodType });
+        currentRestaurant = { id, name, foodType };
+        $('modalRestaurantName').textContent = `احجز طاولتك في ${name}`;
+        $('bookingForm').reset();
+        $('bookingForm').style.display = 'block';
+        $('successMessage').style.display = 'none';
+        
+        // تعيين الحد الأدنى للتاريخ (اليوم)
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        $('bookDate').setAttribute('min', now.toISOString().slice(0, 16));
+        
+        // إظهار النافذة
+        $('bookingModal').style.display = 'flex';
+        console.log('✅ تم فتح نافذة حجز المطعم بنجاح');
+      } catch (error) {
+        console.error('❌ خطأ في فتح نافذة حجز المطعم:', error);
+        alert('حدث خطأ في فتح نافذة الحجز. يرجى المحاولة مرة أخرى.');
+      }
     };
 
     $('closeModal').addEventListener('click', closeBookingModal);
@@ -326,52 +871,123 @@
       currentBooking = null;
     }
 
-    $('bookingForm').addEventListener('submit', (e) => {
+    $('bookingForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      const session_token = localStorage.getItem('session_token');
+      if (!session_token) {
+        alert('❌ يرجى تسجيل الدخول أولاً لحجز مطعم');
+        window.location.href = 'login.html';
+        return;
+      }
       
       const name = $('bookName').value.trim();
       const phone = $('bookPhone').value.trim();
       const email = $('bookEmail').value.trim();
       const people = parseInt($('bookPeople').value);
-      const date = $('bookDate').value;
+      const dateTime = $('bookDate').value;
       const notes = $('bookNotes').value.trim();
 
-      if (!name || !phone || !people || !date) {
+      if (!name || !phone || !people || !dateTime) {
         alert('يرجى ملء جميع الحقول المطلوبة');
         return;
       }
 
-      // حساب السعر
-      const price = bookingSystem.calculateRestaurantPrice(
-        currentRestaurant.id,
-        people,
-        currentRestaurant.foodType
-      );
+      // فصل التاريخ والوقت
+      const [bookingDate, bookingTime] = dateTime.split('T');
+      if (!bookingDate || !bookingTime) {
+        alert('يرجى إدخال التاريخ والوقت بشكل صحيح');
+        return;
+      }
 
-      // حفظ الحجز
-      const bookingData = {
-        restaurantId: currentRestaurant.id,
-        restaurantName: currentRestaurant.name,
-        name,
-        phone,
-        email: email || null,
-        people,
-        date,
-        notes: notes || null,
-        price
-      };
+      // إظهار رسالة التحميل
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'جاري الحجز...';
 
-      currentBooking = bookingSystem.bookRestaurant(bookingData);
-      
-      // إظهار رسالة النجاح
-      $('bookingIdDisplay').textContent = currentBooking.id;
-      $('successMessage').style.display = 'block';
-      $('bookingForm').style.display = 'none';
+      try {
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
+        
+        const bookingData = {
+          session_token: session_token,
+          restaurant_id: currentRestaurant.id,
+          booking_date: bookingDate,
+          booking_time: bookingTime,
+          guests: people,
+          special_requests: notes || ''
+        };
+        
+        console.log('📤 إرسال بيانات حجز المطعم:', bookingData);
+        console.log('🌐 URL:', baseUrl + 'api/book_restaurant.php');
+        
+        const response = await fetch(baseUrl + 'api/book_restaurant.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bookingData)
+        });
 
-      // محاولة إرسال للخادم (اختياري)
-      bookingSystem.sendToServer(currentBooking, 'http://localhost:3080/api/restaurants/book').catch(() => {
-        // تم الحفظ محلياً فقط
-      });
+        console.log('📥 حالة الاستجابة:', response.status, response.statusText);
+        
+        const result = await response.json();
+        console.log('📦 النتيجة:', result);
+
+        if (result.success) {
+          console.log('✅ تم الحجز بنجاح! رقم الحجز:', result.booking_reference);
+          
+          // حفظ محلياً أيضاً للنسخ الاحتياطي
+          const localBookingData = {
+            restaurantId: currentRestaurant.id,
+            restaurantName: currentRestaurant.name,
+            name,
+            phone,
+            email: email || null,
+            people,
+            date: dateTime,
+            notes: notes || null,
+            price: result.total_price
+          };
+          currentBooking = bookingSystem.bookRestaurant(localBookingData);
+          
+          // إظهار رسالة النجاح
+          $('bookingIdDisplay').textContent = result.booking_reference;
+          $('successMessage').style.display = 'block';
+          $('bookingForm').style.display = 'none';
+
+          // إعادة تعيين النموذج بعد 3 ثواني
+          setTimeout(() => {
+            $('bookingForm').reset();
+            $('successMessage').style.display = 'none';
+            $('bookingForm').style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            closeBookingModal();
+          }, 3000);
+        } else {
+          console.error('❌ فشل الحجز:', result);
+          throw new Error(result.error || 'فشل الحجز');
+        }
+      } catch (error) {
+        console.error('❌ خطأ في حجز المطعم:', error);
+        console.error('تفاصيل الخطأ:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
+        
+        let errorMessage = 'حدث خطأ أثناء الحجز';
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (error instanceof TypeError && error.message.includes('fetch')) {
+          errorMessage = 'فشل الاتصال بالخادم. تأكد من أنك تستخدم http://localhost';
+        }
+        
+        alert('❌ ' + errorMessage + '\n\nافتح Console (F12) لمعرفة التفاصيل');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     });
 
     function printRestaurantBooking() {
@@ -380,7 +996,85 @@
       }
     }
 
-    $('searchBtn').addEventListener('click', applyFilters);
+    // منع عرض قائمة autocomplete البيضاء (Saved info)
+    const budgetInput = $('budget');
+    const locationInput = $('location');
+    
+    if (budgetInput) {
+      budgetInput.setAttribute('autocomplete', 'off');
+      budgetInput.setAttribute('data-form-type', 'other');
+      budgetInput.setAttribute('data-lpignore', 'true');
+      budgetInput.setAttribute('data-1p-ignore', 'true');
+      // منع autocomplete عند الكتابة
+      budgetInput.addEventListener('focus', function() {
+        this.setAttribute('autocomplete', 'new-password');
+      });
+      budgetInput.addEventListener('blur', function() {
+        this.setAttribute('autocomplete', 'off');
+      });
+    }
+    
+    if (locationInput) {
+      locationInput.setAttribute('autocomplete', 'off');
+      locationInput.setAttribute('data-form-type', 'other');
+      locationInput.setAttribute('data-lpignore', 'true');
+      locationInput.setAttribute('data-1p-ignore', 'true');
+      // منع autocomplete عند الكتابة
+      locationInput.addEventListener('focus', function() {
+        this.setAttribute('autocomplete', 'new-password');
+      });
+      locationInput.addEventListener('blur', function() {
+        this.setAttribute('autocomplete', 'off');
+      });
+    }
+    
+    // دالة لإعداد زر البحث
+    function setupSearchButton() {
+      const searchBtn = $('searchBtn');
+      if (!searchBtn) {
+        console.error('❌ زر البحث غير موجود!');
+        // إعادة المحاولة بعد 500ms
+        setTimeout(setupSearchButton, 500);
+        return;
+      }
+      
+      console.log('✅ زر البحث موجود');
+      
+      // إزالة event listener القديم إن وجد
+      const newSearchBtn = searchBtn.cloneNode(true);
+      searchBtn.parentNode.replaceChild(newSearchBtn, searchBtn);
+      
+      // إضافة event listener جديد
+      newSearchBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('🔘 تم الضغط على زر البحث');
+        console.log('🔍 معايير البحث:', {
+          foodType: $('foodType') ? $('foodType').value : 'غير موجود',
+          location: $('location') ? $('location').value : 'غير موجود',
+          budget: $('budget') ? $('budget').value : 'غير موجود',
+          visitType: $('visitType') ? $('visitType').value : 'غير موجود'
+        });
+        
+        // التحقق من أن applyFilters موجود
+        if (typeof applyFilters === 'function') {
+          console.log('✅ applyFilters موجود، جاري الاستدعاء...');
+          applyFilters();
+        } else {
+          console.error('❌ applyFilters غير موجود!');
+          alert('خطأ: دالة applyFilters غير موجودة!');
+        }
+      });
+      
+      console.log('✅ تم إعداد زر البحث بنجاح');
+    }
+    
+    // إعداد زر البحث عند تحميل الصفحة
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupSearchButton);
+    } else {
+      setupSearchButton();
+    }
 
     // البحث التلقائي عند الضغط Enter
     ['visitType', 'budget', 'foodType', 'location'].forEach(id => {
@@ -392,8 +1086,8 @@
       }
     });
 
-    // تحميل المطاعم عند فتح الصفحة
-    applyFilters();
+    // لا تحميل المطاعم تلقائياً - فقط عند البحث
+    // applyFilters(); // تم تعطيله
   </script>
 </body>
 </html>

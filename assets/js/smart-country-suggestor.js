@@ -1,151 +1,135 @@
 // خوارزمية ذكية لاقتراح الدولة المناسبة
 // بدون AI - منطق من صنعنا
+// تقترح فقط الدول العربية في آسيا
 
-// قاعدة بيانات خصائص الدول
+// قائمة الدول العربية في آسيا فقط
+const arabCountriesInAsia = [
+  'السعودية', 'الإمارات', 'الكويت', 'البحرين', 'قطر', 'عُمان', 
+  'اليمن', 'الأردن', 'لبنان', 'سوريا', 'العراق', 'فلسطين'
+];
+
+// قاعدة بيانات خصائص الدول العربية في آسيا
 const countryFeatures = {
-  'فرنسا': {
-    weather: ['معتدل', 'بارد'],
-    scenery: ['مدينة', 'تاريخ', 'ثقافة'],
-    tripTypes: ['ثقافي', 'رومانسي', 'تسوق', 'طعام'],
-    interests: ['ثقافة', 'تاريخ', 'فن', 'طعام', 'تسوق'],
-    budget: 'medium',
-    bestSeason: ['ربيع', 'صيف', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&h=1080&fit=crop'
-  },
-  'إيطاليا': {
-    weather: ['معتدل', 'دافئ'],
-    scenery: ['مدينة', 'تاريخ', 'ساحل'],
-    tripTypes: ['ثقافي', 'رومانسي', 'طعام', 'تاريخ'],
-    interests: ['ثقافة', 'تاريخ', 'طعام', 'فن'],
-    budget: 'medium',
-    bestSeason: ['ربيع', 'صيف', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=1920&h=1080&fit=crop'
-  },
-  'اليابان': {
-    weather: ['معتدل', 'بارد', 'دافئ'],
-    scenery: ['مدينة', 'طبيعة', 'ثقافة'],
-    tripTypes: ['ثقافي', 'طبيعة', 'طعام', 'تسوق'],
-    interests: ['ثقافة', 'طعام', 'طبيعة', 'تكنولوجيا'],
-    budget: 'high',
-    bestSeason: ['ربيع', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1920&h=1080&fit=crop'
-  },
-  'دبي': {
+  'السعودية': {
     weather: ['دافئ', 'حار'],
-    scenery: ['مدينة', 'صحراء', 'حديث'],
+    scenery: ['مدينة', 'صحراء', 'تاريخ', 'بحر'],
+    tripTypes: ['ثقافي', 'ديني', 'مغامرة', 'تاريخ'],
+    interests: ['ثقافة', 'تاريخ', 'دين', 'مغامرة', 'صحراء'],
+    budget: 'medium',
+    bestSeason: ['شتاء', 'ربيع', 'خريف'],
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
+  },
+  'الإمارات': {
+    weather: ['دافئ', 'حار'],
+    scenery: ['مدينة', 'صحراء', 'حديث', 'بحر'],
     tripTypes: ['تسوق', 'ترفيه', 'عوائل', 'فاخر'],
     interests: ['تسوق', 'ترفيه', 'مغامرة', 'فاخر'],
     budget: 'high',
     bestSeason: ['شتاء', 'ربيع'],
     image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&h=1080&fit=crop'
   },
-  'مصر': {
+  'الكويت': {
     weather: ['دافئ', 'حار'],
-    scenery: ['تاريخ', 'صحراء', 'بحر'],
-    tripTypes: ['تاريخ', 'ثقافي', 'مغامرة', 'بحر'],
-    interests: ['تاريخ', 'ثقافة', 'مغامرة', 'بحر'],
-    budget: 'low',
-    bestSeason: ['شتاء', 'ربيع', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1539650116579-7ae0a4f53f98?w=1920&h=1080&fit=crop'
+    scenery: ['مدينة', 'بحر', 'حديث'],
+    tripTypes: ['ثقافي', 'تسوق', 'عوائل', 'بحر'],
+    interests: ['ثقافة', 'تسوق', 'بحر', 'طعام'],
+    budget: 'medium',
+    bestSeason: ['شتاء', 'ربيع'],
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
   },
-  'تايلاند': {
+  'البحرين': {
     weather: ['دافئ', 'حار'],
-    scenery: ['بحر', 'طبيعة', 'مدينة'],
-    tripTypes: ['مغامرة', 'بحر', 'طبيعة', 'اقتصادي'],
-    interests: ['بحر', 'طبيعة', 'طعام', 'مغامرة'],
+    scenery: ['مدينة', 'بحر', 'تاريخ'],
+    tripTypes: ['ثقافي', 'تاريخ', 'بحر', 'تسوق'],
+    interests: ['ثقافة', 'تاريخ', 'بحر', 'طعام'],
+    budget: 'medium',
+    bestSeason: ['شتاء', 'ربيع'],
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
+  },
+  'قطر': {
+    weather: ['دافئ', 'حار'],
+    scenery: ['مدينة', 'بحر', 'حديث'],
+    tripTypes: ['ثقافي', 'فاخر', 'عوائل', 'تسوق'],
+    interests: ['ثقافة', 'فن', 'تسوق', 'طعام'],
+    budget: 'high',
+    bestSeason: ['شتاء', 'ربيع'],
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
+  },
+  'عُمان': {
+    weather: ['دافئ', 'حار'],
+    scenery: ['مدينة', 'صحراء', 'بحر', 'جبال'],
+    tripTypes: ['مغامرة', 'طبيعة', 'ثقافي', 'بحر'],
+    interests: ['مغامرة', 'طبيعة', 'ثقافة', 'بحر'],
+    budget: 'medium',
+    bestSeason: ['شتاء', 'ربيع'],
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
+  },
+  'اليمن': {
+    weather: ['دافئ', 'حار'],
+    scenery: ['مدينة', 'تاريخ', 'جبال', 'بحر'],
+    tripTypes: ['تاريخ', 'ثقافي', 'مغامرة'],
+    interests: ['تاريخ', 'ثقافة', 'مغامرة', 'طعام'],
     budget: 'low',
     bestSeason: ['شتاء', 'ربيع'],
-    image: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=1920&h=1080&fit=crop'
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
   },
-  'تركيا': {
+  'الأردن': {
     weather: ['معتدل', 'دافئ'],
-    scenery: ['تاريخ', 'مدينة', 'بحر'],
-    tripTypes: ['تاريخ', 'ثقافي', 'بحر', 'اقتصادي'],
-    interests: ['تاريخ', 'ثقافة', 'بحر', 'طعام'],
-    budget: 'low',
-    bestSeason: ['ربيع', 'صيف', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7203?w=1920&h=1080&fit=crop'
+    scenery: ['تاريخ', 'صحراء', 'بحر', 'مدينة'],
+    tripTypes: ['تاريخ', 'ثقافي', 'مغامرة', 'بحر'],
+    interests: ['تاريخ', 'ثقافة', 'مغامرة', 'بحر'],
+    budget: 'medium',
+    bestSeason: ['ربيع', 'خريف'],
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
   },
-  'سويسرا': {
-    weather: ['بارد', 'معتدل'],
-    scenery: ['طبيعة', 'جبال', 'بحيرات'],
-    tripTypes: ['طبيعة', 'مغامرة', 'رومانسي', 'فاخر'],
-    interests: ['طبيعة', 'جبال', 'مغامرة', 'استرخاء'],
-    budget: 'high',
-    bestSeason: ['صيف', 'شتاء'],
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'
-  },
-  'إسبانيا': {
-    weather: ['دافئ', 'معتدل'],
-    scenery: ['مدينة', 'ساحل', 'تاريخ'],
+  'لبنان': {
+    weather: ['معتدل', 'دافئ'],
+    scenery: ['مدينة', 'بحر', 'جبال', 'تاريخ'],
     tripTypes: ['ثقافي', 'بحر', 'طعام', 'ترفيه'],
     interests: ['ثقافة', 'بحر', 'طعام', 'ترفيه'],
     budget: 'medium',
     bestSeason: ['ربيع', 'صيف', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=1920&h=1080&fit=crop'
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
   },
-  'اليونان': {
-    weather: ['دافئ', 'معتدل'],
-    scenery: ['بحر', 'جزر', 'تاريخ'],
-    tripTypes: ['بحر', 'تاريخ', 'رومانسي', 'اقتصادي'],
-    interests: ['بحر', 'تاريخ', 'ثقافة', 'استرخاء'],
-    budget: 'medium',
-    bestSeason: ['صيف', 'ربيع', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&h=1080&fit=crop'
-  },
-  'المغرب': {
-    weather: ['دافئ', 'معتدل'],
-    scenery: ['صحراء', 'مدينة', 'تاريخ'],
-    tripTypes: ['ثقافي', 'مغامرة', 'تاريخ', 'اقتصادي'],
-    interests: ['ثقافة', 'تاريخ', 'مغامرة', 'طعام'],
+  'سوريا': {
+    weather: ['معتدل', 'دافئ'],
+    scenery: ['تاريخ', 'مدينة', 'ثقافة'],
+    tripTypes: ['تاريخ', 'ثقافي', 'مغامرة'],
+    interests: ['تاريخ', 'ثقافة', 'مغامرة', 'طعام'],
     budget: 'low',
     bestSeason: ['ربيع', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1539650116579-7ae0a4f53f98?w=1920&h=1080&fit=crop'
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
   },
-  'ماليزيا': {
+  'العراق': {
     weather: ['دافئ', 'حار'],
-    scenery: ['طبيعة', 'بحر', 'مدينة'],
-    tripTypes: ['طبيعة', 'بحر', 'تسوق', 'اقتصادي'],
-    interests: ['طبيعة', 'بحر', 'تسوق', 'طعام'],
+    scenery: ['تاريخ', 'مدينة', 'ثقافة'],
+    tripTypes: ['تاريخ', 'ثقافي', 'ديني'],
+    interests: ['تاريخ', 'ثقافة', 'دين', 'طعام'],
     budget: 'low',
     bestSeason: ['شتاء', 'ربيع'],
-    image: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=1920&h=1080&fit=crop'
+    image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
   },
-  'أستراليا': {
-    weather: ['دافئ', 'معتدل'],
-    scenery: ['طبيعة', 'بحر', 'مدينة'],
-    tripTypes: ['مغامرة', 'طبيعة', 'بحر', 'عوائل'],
-    interests: ['طبيعة', 'بحر', 'مغامرة', 'حيوانات'],
-    budget: 'high',
-    bestSeason: ['صيف', 'ربيع', 'خريف'],
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'
-  },
-  'أيسلندا': {
-    weather: ['بارد'],
-    scenery: ['طبيعة', 'جبال', 'أضواء'],
-    tripTypes: ['مغامرة', 'طبيعة', 'رومانسي'],
-    interests: ['طبيعة', 'مغامرة', 'أضواء', 'استرخاء'],
-    budget: 'high',
-    bestSeason: ['صيف', 'شتاء'],
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop'
-  },
-  'الهند': {
-    weather: ['دافئ', 'حار'],
-    scenery: ['تاريخ', 'ثقافة', 'طبيعة'],
-    tripTypes: ['ثقافي', 'تاريخ', 'روحاني', 'اقتصادي'],
-    interests: ['ثقافة', 'تاريخ', 'روحاني', 'طعام'],
+  'فلسطين': {
+    weather: ['معتدل', 'دافئ'],
+    scenery: ['تاريخ', 'ديني', 'مدينة'],
+    tripTypes: ['ديني', 'تاريخ', 'ثقافي'],
+    interests: ['دين', 'تاريخ', 'ثقافة', 'طعام'],
     budget: 'low',
-    bestSeason: ['شتاء', 'ربيع'],
+    bestSeason: ['ربيع', 'خريف'],
     image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&h=1080&fit=crop'
   }
 };
 
-// خوارزمية اقتراح الدولة الذكية
+// خوارزمية اقتراح الدولة الذكية - فقط الدول العربية في آسيا
 function suggestCountry(weather, scenery, tripType, interests, budget, numPeople) {
   const scores = {};
   
-  // حساب النقاط لكل دولة
+  // حساب النقاط لكل دولة عربية في آسيا فقط
   Object.keys(countryFeatures).forEach(country => {
+    // التأكد من أن الدولة عربية في آسيا
+    if (!arabCountriesInAsia.includes(country)) {
+      return; // تخطي الدول غير العربية في آسيا
+    }
     let score = 0;
     const features = countryFeatures[country];
     

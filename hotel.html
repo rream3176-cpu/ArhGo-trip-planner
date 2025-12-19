@@ -4,64 +4,195 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | حجز الفنادق</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
   <script src="assets/js/booking-system.js" defer></script>
-  <script src="assets/js/hotels-database.js" defer></script>
   <style>
+    body {
+      background: var(--bg-primary);
+      padding-top: 80px;
+    }
+    
+    /* تحسين لوحة البحث - تقليل العرض */
     .search-panel {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
     }
+    
+    .search-panel .field {
+      margin-bottom: 0;
+    }
+    
+    .search-panel .field label {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+    
+    .search-panel .arhgo-input,
+    .search-panel .arhgo-select {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      color: var(--text-primary) !important;
+      background: linear-gradient(135deg, rgba(11, 15, 26, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%) !important;
+    }
+    
+    .search-panel .arhgo-select:focus {
+      background: linear-gradient(135deg, rgba(30, 40, 60, 0.95) 0%, rgba(35, 45, 70, 1) 100%) !important;
+      border-color: rgba(0, 229, 255, 0.4) !important;
+    }
+    
+    .search-panel .arhgo-select option {
+      background: rgba(30, 40, 60, 0.95) !important;
+      color: var(--text-primary) !important;
+      padding: 12px;
+    }
+    
+    .search-panel .arhgo-select option:checked,
+    .search-panel .arhgo-select option:hover {
+      background: rgba(0, 229, 255, 0.3) !important;
+      color: var(--neon-cyan) !important;
+    }
+    
+    .glass-card {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* تحسين بطاقات الفنادق */
+    #hotelsContainer.grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+    
     .hotel-card {
-      border-radius: var(--radius-md);
-      padding: 24px;
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: var(--shadow-soft);
-      transition: all 0.3s ease;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .hotel-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 229, 255, 0.6) 20%, 
+        rgba(0, 207, 200, 0.6) 50%, 
+        rgba(0, 229, 255, 0.6) 80%, 
+        transparent 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
     .hotel-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(55, 214, 192, 0.6);
+      transform: translateY(-6px);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(0, 229, 255, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      border-color: rgba(0, 229, 255, 0.5);
     }
+    
+    .hotel-card:hover::before {
+      opacity: 1;
+    }
+    
     .hotel-card h3 {
-      margin-bottom: 12px;
-      color: #37D6C0;
-      font-size: 1.4rem;
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--neon-cyan);
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .hotel-card p {
-      color: #F2F9FF;
-      line-height: 1.7;
-      margin-bottom: 12px;
+    
+    .hotel-card > p:first-of-type {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: var(--spacing-sm);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+    
+    .hotel-card > p:last-of-type {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: var(--spacing-md) 0;
+      font-size: 0.9rem;
+      min-height: 60px;
+    }
+    
     .hotel-features {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 16px 0;
+      margin: var(--spacing-md) 0;
+      min-height: 40px;
     }
+    
     .feature-badge {
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
-      font-size: 0.85rem;
-      background: rgba(59, 130, 246, 0.1);
-      color: #37D6C0;
-      border: 1px solid rgba(55, 214, 192, 0.4);
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: rgba(0, 229, 255, 0.12);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      transition: all 0.3s ease;
     }
+    
+    .feature-badge:hover {
+      background: rgba(0, 229, 255, 0.2);
+      border-color: rgba(0, 229, 255, 0.4);
+      transform: scale(1.05);
+    }
+    
     .price-tag {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      color: #37D6C0;
-      margin: 12px 0;
+      color: var(--neon-cyan);
+      margin: var(--spacing-md) 0;
+      text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+      letter-spacing: 0.5px;
+    }
+    
+    .hotel-card .btn {
+      margin-top: var(--spacing-md);
+      width: 100%;
+      padding: 14px 24px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -72,28 +203,34 @@
       width: min(550px, 95vw);
       max-height: 90vh;
       overflow-y: auto;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(242, 244, 247, 0.95));
-      border-radius: var(--radius-lg);
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      padding: 30px;
-      box-shadow: var(--shadow-elevated);
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--glass-border);
+      padding: var(--spacing-xl);
+      box-shadow: var(--shadow-card);
       position: relative;
+      color: var(--text-primary);
     }
     .success-message {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-      border: 2px solid rgba(16, 185, 129, 0.3);
-      padding: 20px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: var(--spacing-md);
       border-radius: var(--radius-md);
-      margin-top: 20px;
+      margin-top: var(--spacing-md);
       text-align: center;
+      color: var(--text-primary);
     }
     .booking-id {
       font-family: 'Courier New', monospace;
-      background: rgba(59, 130, 246, 0.1);
+      background: rgba(0, 229, 255, 0.1);
       padding: 8px 12px;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       margin-top: 10px;
       display: inline-block;
+      color: var(--neon-cyan);
+      border: 1px solid var(--glass-border);
     }
   </style>
 </head>
@@ -103,15 +240,15 @@
     <ul>
       <li><a data-nav href="index.html#home">الرئيسية</a></li>
       <li><a data-nav href="index.html#features">المزايا</a></li>
-      <li><a data-nav href="index.html#planner">خطط رحلتك</a></li>
       <li><a data-nav href="index.html#destinations">الوجهات</a></li>
       <li><a data-nav href="hotel.html">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html">حجز المطاعم</a></li>
+      <li><a data-nav href="my-bookings.html">حجوزاتي</a></li>
     </ul>
     <div class="stack">
-      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
-      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
+      <a class="btn btn-ghost" href="login.html" data-flight-sound id="loginBtn">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound id="signupBtn">إنشاء حساب</a>
     </div>
   </nav>
   <main class="page-shell">
@@ -122,28 +259,45 @@
       </div>
       <div class="glass-card">
         <div class="search-panel">
-          <input class="arhgo-input" id="destination" type="text" placeholder="الدولة أو المدينة (مثال: دبي، بغداد، إسطنبول)">
-          <input class="arhgo-input" id="checkin" type="date" placeholder="تاريخ الوصول">
-          <input class="arhgo-input" id="checkout" type="date" placeholder="تاريخ المغادرة">
-          <select class="arhgo-select" id="budget">
-            <option value="">الميزانية</option>
-            <option value="منخفضة">منخفضة ($50-100)</option>
-            <option value="متوسطة">متوسطة ($100-200)</option>
-            <option value="عالية">عالية ($200+)</option>
-          </select>
-          <select class="arhgo-select" id="guests">
-            <option value="1">1 شخص</option>
-            <option value="2" selected>2 أشخاص</option>
-            <option value="3">3 أشخاص</option>
-            <option value="4">4 أشخاص</option>
-            <option value="5+">5+ أشخاص</option>
-          </select>
+          <div class="field">
+            <label>الدولة أو المدينة</label>
+            <input class="arhgo-input" id="destination" type="text" placeholder="مثال: دبي، بغداد، الرياض">
+          </div>
+          <div class="field">
+            <label>تاريخ الوصول</label>
+            <input class="arhgo-input" id="checkin" type="date" placeholder="تاريخ الوصول">
+          </div>
+          <div class="field">
+            <label>تاريخ المغادرة</label>
+            <input class="arhgo-input" id="checkout" type="date" placeholder="تاريخ المغادرة">
+          </div>
+          <div class="field">
+            <label>الميزانية</label>
+            <select class="arhgo-select" id="budget">
+              <option value="">اختر الميزانية</option>
+              <option value="منخفضة">منخفضة ($50-100)</option>
+              <option value="متوسطة">متوسطة ($100-200)</option>
+              <option value="عالية">عالية ($200+)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>عدد الأشخاص</label>
+            <select class="arhgo-select" id="guests">
+              <option value="1">1 شخص</option>
+              <option value="2" selected>2 أشخاص</option>
+              <option value="3">3 أشخاص</option>
+              <option value="4">4 أشخاص</option>
+              <option value="5+">5+ أشخاص</option>
+            </select>
+          </div>
         </div>
-        <div class="stack" style="margin-top:18px;justify-content:flex-end;">
-          <button class="btn btn-gradient" id="searchBtn">بحث عن فنادق</button>
+        <div class="stack" style="margin-top: var(--spacing-md); justify-content: flex-end;">
+          <button class="btn btn-gradient" id="searchBtn" style="min-width: 160px; padding: 12px 24px; font-size: 0.95rem;">
+            <span>🔍</span> بحث
+          </button>
         </div>
       </div>
-      <div id="hotelsContainer" class="grid" style="margin-top:30px;"></div>
+      <div id="hotelsContainer" class="grid"></div>
       <div id="empty" class="glass-card" style="display:none; text-align: center; padding: 40px;">
         <p style="font-size: 1.1rem; color: var(--muted);">لم يتم العثور على فنادق. جرّب تغيير معايير البحث.</p>
       </div>
@@ -177,15 +331,15 @@
         </div>
         <div class="field">
           <label>عدد الأشخاص *</label>
-          <input class="arhgo-input" type="number" id="guests" min="1" max="20" value="2" required>
+          <input class="arhgo-input" type="number" id="bookingGuests" min="1" max="20" value="2" required>
         </div>
         <div class="field">
           <label>تاريخ الوصول *</label>
-          <input class="arhgo-input" type="date" id="checkin" required>
+          <input class="arhgo-input" type="date" id="bookingCheckin" required>
         </div>
         <div class="field">
           <label>تاريخ المغادرة *</label>
-          <input class="arhgo-input" type="date" id="checkout" required>
+          <input class="arhgo-input" type="date" id="bookingCheckout" required>
         </div>
         <div class="field">
           <label>طريقة الدفع *</label>
@@ -219,6 +373,96 @@
   </div>
 
   <script>
+    // التحقق من حالة تسجيل الدخول وتحديث الأزرار
+    function updateAuthButtons() {
+      console.log('🔄 تحديث الأزرار...');
+      const session_token = localStorage.getItem('session_token');
+      const userStr = localStorage.getItem('user');
+      const user = userStr ? JSON.parse(userStr) : {};
+      const loginBtn = document.getElementById('loginBtn');
+      const signupBtn = document.getElementById('signupBtn');
+      
+      console.log('Session token:', session_token ? 'موجود' : 'غير موجود');
+      console.log('User data:', user);
+      console.log('Login button:', loginBtn ? 'موجود' : 'غير موجود');
+      console.log('Signup button:', signupBtn ? 'موجود' : 'غير موجود');
+      
+      if (!loginBtn || !signupBtn) {
+        console.warn('⚠️ الأزرار غير موجودة بعد');
+        setTimeout(updateAuthButtons, 500);
+        return;
+      }
+      
+      if (session_token && user.full_name) {
+        // المستخدم مسجل دخول
+        loginBtn.textContent = user.full_name;
+        loginBtn.href = 'my-bookings.html';
+        loginBtn.style.color = '#37D6C0';
+        signupBtn.textContent = 'تسجيل الخروج';
+        signupBtn.href = '#';
+        signupBtn.onclick = (e) => {
+          e.preventDefault();
+          if (confirm('هل تريد تسجيل الخروج؟')) {
+            localStorage.removeItem('session_token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('arhgo_current_user');
+            localStorage.removeItem('loggedIn');
+            window.location.href = 'login.html';
+          }
+        };
+        console.log('✅ تم تحديث الأزرار - المستخدم مسجل دخول:', user.full_name);
+      } else {
+        // المستخدم غير مسجل دخول
+        loginBtn.textContent = 'تسجيل الدخول';
+        loginBtn.href = 'login.html';
+        loginBtn.style.color = '';
+        signupBtn.textContent = 'إنشاء حساب';
+        signupBtn.href = 'signup.html';
+        signupBtn.onclick = null;
+        console.log('ℹ️ المستخدم غير مسجل دخول');
+      }
+    }
+    
+    // تحديث الأزرار عند تحميل الصفحة
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', updateAuthButtons);
+    } else {
+      updateAuthButtons();
+    }
+    
+    // تحديث الأزرار عند تغيير حالة المصادقة
+    window.addEventListener('authStateChanged', updateAuthButtons);
+    window.addEventListener('storage', updateAuthButtons);
+    
+    // تحديث الأزرار عند العودة للصفحة
+    window.addEventListener('focus', updateAuthButtons);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        updateAuthButtons();
+      }
+    });
+    
+    // تحديث الأزرار عند النقر في أي مكان (للتأكد من التحديث)
+    document.addEventListener('click', () => {
+      setTimeout(updateAuthButtons, 100);
+    });
+    
+    // تحديث الأزرار كل 2 ثانية للتأكد
+    setInterval(updateAuthButtons, 2000);
+    
+    // تحذير إذا كان الملف مفتوح من النظام مباشرة
+    if (window.location.protocol === 'file:') {
+      console.warn('⚠️ الملف مفتوح من النظام مباشرة. يجب فتحه من http://localhost');
+      const warningDiv = document.createElement('div');
+      warningDiv.style.cssText = 'position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: rgba(239, 68, 68, 0.95); color: white; padding: 15px 25px; border-radius: 8px; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); text-align: center; max-width: 90%;';
+      warningDiv.innerHTML = `
+        <strong>⚠️ تحذير:</strong> يجب فتح الملف من <a href="http://localhost/ArhGo-trip-planner/hotel.html" style="color: #37D6C0; text-decoration: underline;">http://localhost/ArhGo-trip-planner/hotel.html</a>
+        <br><small>لا يمكن للبحث أن يعمل عند فتح الملف مباشرة من النظام</small>
+      `;
+      document.body.appendChild(warningDiv);
+      setTimeout(() => warningDiv.remove(), 10000);
+    }
+
     const container = document.getElementById('hotelsContainer');
     const modal = document.getElementById('bookingModal');
     const bookingForm = document.getElementById('bookingForm');
@@ -254,96 +498,197 @@
     });
 
     async function searchHotels(destination, budget, checkin, checkout, guests) {
-      if (!destination) {
-        alert('الرجاء كتابة الدولة أو المدينة!');
+      // إخفاء رسالة "لا توجد نتائج" عند بدء البحث
+      document.getElementById('empty').style.display = 'none';
+      
+      // إظهار رسالة التحميل فقط إذا كان هناك بحث فعلي
+      if (destination || budget || checkin || checkout) {
+        container.innerHTML = "<div class='glass-card' style='text-align: center; padding: 40px;'>⏳ جاري البحث عن الفنادق...</div>";
+      } else {
+        // إذا لم يكن هناك معايير بحث، لا تعرض شيء
+        container.innerHTML = '';
+        document.getElementById('empty').style.display = 'block';
+        document.getElementById('empty').innerHTML = '<p style="font-size: 1.1rem; color: var(--muted);">يرجى إدخال معايير البحث للعثور على الفنادق</p>';
         return;
       }
       
-      container.innerHTML = "<div class='glass-card' style='text-align: center; padding: 40px;'>⏳ جاري البحث عن الفنادق...</div>";
-      document.getElementById('empty').style.display = 'none';
-      
-      // محاكاة البحث (يمكن استبدالها بخادم)
-      setTimeout(() => {
-        const destLower = destination.toLowerCase().trim();
+      try {
+        // بناء URL للبحث
+        const params = new URLSearchParams();
+        if (destination) params.append('location', destination);
+        if (budget) params.append('budget', budget);
         
-        let filtered = hotelsDatabase.filter(hotel => {
-          // فلترة حسب الميزانية
-          if (budget && hotel.budget !== budget) return false;
-          
-          // بحث مرن في الموقع (المدينة أو الدولة)
-          if (destination) {
-            const locationMatch = 
-              hotel.location.toLowerCase().includes(destLower) ||
-              (hotel.country && hotel.country.toLowerCase().includes(destLower)) ||
-              hotel.name.toLowerCase().includes(destLower);
-            if (!locationMatch) return false;
-          }
-          
-          return true;
-        });
-
-        // إذا لم توجد نتائج والبحث عن موقع، جرب البحث بدون فلتر الموقع
-        if (filtered.length === 0 && destination) {
-          filtered = hotelsDatabase.filter(hotel => {
-            if (budget && hotel.budget !== budget) return false;
-            return true;
-          }).slice(0, 12); // عرض أول 12 فندق
+        // تحديد المسار الصحيح للـ API
+        let apiUrl;
+        if (window.location.protocol === 'file:') {
+          // إذا كان الملف مفتوح من النظام، استخدم localhost
+          apiUrl = `http://localhost/ArhGo-trip-planner/api/get_hotels.php?${params.toString()}`;
+        } else {
+          // إذا كان من localhost، استخدم المسار النسبي
+          apiUrl = `api/get_hotels.php?${params.toString()}`;
         }
-
-        renderHotels(filtered, checkin, checkout, guests);
-      }, 500);
+        
+        console.log('🔍 البحث عن الفنادق:', apiUrl);
+        console.log('🌐 البروتوكول:', window.location.protocol);
+        console.log('📍 الموقع الحالي:', window.location.href);
+        
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        console.log('📦 النتيجة من API:', result);
+        console.log('📊 عدد الفنادق:', result.count || 0);
+        console.log('📋 البيانات:', result.data);
+        
+        if (result.success && result.data) {
+          console.log('✅ API نجح، عدد الفنادق:', result.data.length);
+          // تحويل البيانات من MySQL إلى التنسيق المطلوب
+          const hotels = result.data.map(hotel => ({
+            id: hotel.id,
+            name: hotel.name,
+            desc: hotel.description || '',
+            location: hotel.city_name_ar || hotel.location || '',
+            country: hotel.country_name_ar || '',
+            budget: hotel.budget || '',
+            rating: parseFloat(hotel.rating) || 0,
+            features: hotel.features || (() => {
+              const features = [];
+              if (hotel.wifi) features.push('واي فاي مجاني');
+              if (hotel.pool) features.push('مسبح');
+              if (hotel.spa) features.push('سبا');
+              if (hotel.restaurant) features.push('مطعم');
+              if (hotel.gym) features.push('جيم');
+              if (hotel.beach_access) features.push('شاطئ خاص');
+              if (hotel.concierge) features.push('كونسيرج');
+              return features;
+            })(),
+            price: parseFloat(hotel.price) || 0
+          }));
+          
+          console.log('🏨 الفنادق بعد التحويل:', hotels);
+          console.log('📏 عدد الفنادق بعد التحويل:', hotels.length);
+          
+          if (hotels.length === 0) {
+            console.warn('⚠️ لا توجد فنادق بعد التحويل');
+            container.innerHTML = '';
+            document.getElementById('empty').style.display = 'block';
+            document.getElementById('empty').innerHTML = '<p style="font-size: 1.1rem; color: var(--muted);">لم يتم العثور على فنادق. تأكد من أن قاعدة البيانات تحتوي على بيانات أو جرّب تغيير معايير البحث.</p>';
+          } else {
+            console.log('✅ سيتم عرض', hotels.length, 'فندق');
+            renderHotels(hotels, checkin, checkout, guests);
+          }
+        } else {
+          console.error('❌ API فشل:', result.error || 'لا توجد بيانات');
+          throw new Error(result.error || 'خطأ في جلب البيانات');
+        }
+      } catch (error) {
+        console.error('خطأ في البحث:', error);
+        container.innerHTML = '';
+        document.getElementById('empty').style.display = 'block';
+        
+        let errorMessage = error.message || 'يرجى المحاولة مرة أخرى أو التحقق من قاعدة البيانات';
+        let tipMessage = '💡 نصيحة: تأكد من أن قاعدة البيانات تحتوي على بيانات الفنادق';
+        
+        // معالجة خاصة لأخطاء CORS أو Network
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError') || error.name === 'TypeError') {
+          errorMessage = 'فشل الاتصال بالخادم';
+          tipMessage = '💡 نصيحة: تأكد من فتح الملف من <a href="http://localhost/ArhGo-trip-planner/hotel.html" style="color: #37D6C0;">http://localhost/ArhGo-trip-planner/hotel.html</a> وليس مباشرة من النظام';
+        }
+        
+        document.getElementById('empty').innerHTML = `
+          <div style='text-align: center; padding: 40px;'>
+            <p style="font-size: 1.1rem; color: var(--danger); margin-bottom: 10px;">❌ حدث خطأ أثناء البحث</p>
+            <p style="font-size: 0.9rem; color: var(--muted);">${errorMessage}</p>
+            <p style="font-size: 0.85rem; color: var(--muted); margin-top: 10px;">${tipMessage}</p>
+            ${window.location.protocol === 'file:' ? '<p style="font-size: 0.85rem; color: #37D6C0; margin-top: 15px;"><strong>🔗 <a href="http://localhost/ArhGo-trip-planner/hotel.html" style="color: #37D6C0;">اضغط هنا لفتح الصفحة من localhost</a></strong></p>' : ''}
+          </div>
+        `;
+      }
     }
 
     function renderHotels(list, checkin, checkout, guests) {
-      if (!list.length) {
+      console.log('🎨 renderHotels استدعي مع', list.length, 'فندق');
+      console.log('📋 قائمة الفنادق:', list);
+      
+      if (!list || !list.length) {
+        console.warn('⚠️ renderHotels: القائمة فارغة');
         container.innerHTML = '';
         document.getElementById('empty').style.display = 'block';
         return;
       }
       
       document.getElementById('empty').style.display = 'none';
-      container.innerHTML = list.map(hotel => {
+      const html = list.map(hotel => {
         const stars = '★'.repeat(Math.floor(hotel.rating)) + '☆'.repeat(5 - Math.floor(hotel.rating));
+        const features = Array.isArray(hotel.features) ? hotel.features : [];
+        const hotelNameEscaped = hotel.name.replace(/'/g, "\\'");
         return `
           <article class="hotel-card">
             <h3>${hotel.name}</h3>
             <p>📍 ${hotel.location}${hotel.country ? ', ' + hotel.country : ''} — ${stars} ${hotel.rating.toFixed(1)}</p>
-            <p>${hotel.desc}</p>
+            <p>${hotel.desc || ''}</p>
             <div class="hotel-features">
-              ${hotel.features.map(f => `<span class="feature-badge">${f}</span>`).join('')}
+              ${features.map(f => `<span class="feature-badge">${f}</span>`).join('')}
             </div>
             <div class="price-tag">من $${hotel.price}/ليلة</div>
-            <button class="btn btn-gradient" onclick="openBooking(${hotel.id}, '${hotel.name}', ${hotel.price})" style="width: 100%; margin-top: 12px;">احجز الآن</button>
+            <button class="btn btn-gradient" onclick="openBooking(${hotel.id}, '${hotelNameEscaped}', ${hotel.price || 0})" style="width: 100%; margin-top: 12px;">احجز الآن</button>
           </article>
         `;
       }).join('');
+      
+      console.log('✅ HTML تم إنشاؤه، الطول:', html.length);
+      container.innerHTML = html;
+      console.log('✅ الفنادق تم عرضها بنجاح');
     }
 
     window.openBooking = (id, name, basePrice) => {
-      currentHotel = { id, name, basePrice };
-      hotelNameInput.value = name;
-      bookingForm.reset();
-      hotelNameInput.value = name;
-      successMessage.style.display = 'none';
-      bookingForm.style.display = 'block';
-      
-      // تعيين التواريخ من البحث
-      const checkin = document.getElementById('checkin').value;
-      const checkout = document.getElementById('checkout').value;
-      if (checkin) document.getElementById('checkin').setAttribute('value', checkin);
-      if (checkout) document.getElementById('checkout').setAttribute('value', checkout);
-      
-      // تحديث السعر المتوقع
-      updateEstimatedPrice();
-      
-      modal.style.display = 'flex';
+      try {
+        console.log('فتح نافذة الحجز:', { id, name, basePrice });
+        currentHotel = { id, name, basePrice: basePrice || 0 };
+        hotelNameInput.value = name;
+        bookingForm.reset();
+        hotelNameInput.value = name;
+        successMessage.style.display = 'none';
+        bookingForm.style.display = 'block';
+        
+        // تعيين التواريخ من البحث
+        const searchCheckin = document.getElementById('checkin').value;
+        const searchCheckout = document.getElementById('checkout').value;
+        const bookingCheckin = document.getElementById('bookingCheckin');
+        const bookingCheckout = document.getElementById('bookingCheckout');
+        
+        if (searchCheckin) {
+          bookingCheckin.value = searchCheckin;
+          bookingCheckin.setAttribute('min', searchCheckin);
+        }
+        if (searchCheckout) {
+          bookingCheckout.value = searchCheckout;
+          bookingCheckout.setAttribute('min', searchCheckout);
+        }
+        
+        // تعيين الحد الأدنى للتاريخ (اليوم)
+        const today = new Date().toISOString().split('T')[0];
+        if (!bookingCheckin.value) bookingCheckin.setAttribute('min', today);
+        if (!bookingCheckout.value) bookingCheckout.setAttribute('min', today);
+        
+        // تحديث السعر المتوقع
+        updateEstimatedPrice();
+        
+        // إظهار النافذة
+        modal.style.display = 'flex';
+        console.log('✅ تم فتح نافذة الحجز بنجاح');
+      } catch (error) {
+        console.error('❌ خطأ في فتح نافذة الحجز:', error);
+        alert('حدث خطأ في فتح نافذة الحجز. يرجى المحاولة مرة أخرى.');
+      }
     };
 
     function updateEstimatedPrice() {
-      const checkin = document.getElementById('checkin').value;
-      const checkout = document.getElementById('checkout').value;
+      const checkin = document.getElementById('bookingCheckin').value;
+      const checkout = document.getElementById('bookingCheckout').value;
       const rooms = parseInt(document.getElementById('rooms').value) || 1;
-      const guests = parseInt(document.getElementById('guests').value) || 2;
+      const guests = parseInt(document.getElementById('bookingGuests').value) || 2;
 
       if (checkin && checkout && currentHotel) {
         const price = bookingSystem.calculateHotelPrice(
@@ -359,12 +704,22 @@
       }
     }
 
-    ['checkin', 'checkout', 'rooms', 'guests'].forEach(id => {
+    ['bookingCheckin', 'bookingCheckout', 'rooms', 'bookingGuests'].forEach(id => {
       const el = document.getElementById(id);
       if (el) {
         el.addEventListener('change', updateEstimatedPrice);
         el.addEventListener('input', updateEstimatedPrice);
       }
+    });
+    
+    // تحديث تاريخ المغادرة عند تغيير تاريخ الوصول في نموذج الحجز
+    document.getElementById('bookingCheckin').addEventListener('change', function() {
+      const checkout = document.getElementById('bookingCheckout');
+      checkout.setAttribute('min', this.value);
+      if (checkout.value && checkout.value <= this.value) {
+        checkout.value = '';
+      }
+      updateEstimatedPrice();
     });
 
     closeModal.addEventListener('click', closeBookingModal);
@@ -380,16 +735,23 @@
       currentBooking = null;
     }
 
-    bookingForm.addEventListener('submit', (e) => {
+    bookingForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      const session_token = localStorage.getItem('session_token');
+      if (!session_token) {
+        alert('❌ يرجى تسجيل الدخول أولاً لحجز فندق');
+        window.location.href = 'login.html';
+        return;
+      }
       
       const userName = document.getElementById('userName').value.trim();
       const userEmail = document.getElementById('userEmail').value.trim();
       const userPhone = document.getElementById('userPhone').value.trim();
       const rooms = parseInt(document.getElementById('rooms').value);
-      const guests = parseInt(document.getElementById('guests').value);
-      const checkin = document.getElementById('checkin').value;
-      const checkout = document.getElementById('checkout').value;
+      const guests = parseInt(document.getElementById('bookingGuests').value);
+      const checkin = document.getElementById('bookingCheckin').value;
+      const checkout = document.getElementById('bookingCheckout').value;
       const payment = document.getElementById('payment').value;
       const notes = document.getElementById('notes').value.trim();
 
@@ -398,42 +760,97 @@
         return;
       }
 
-      // حساب السعر
-      const price = bookingSystem.calculateHotelPrice(
-        currentHotel.name,
-        rooms,
-        guests,
-        checkin,
-        checkout
-      );
+      // إظهار رسالة التحميل
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'جاري الحجز...';
 
-      // حفظ الحجز
-      const bookingData = {
-        hotelId: currentHotel.id,
-        hotelName: currentHotel.name,
-        userName,
-        userEmail,
-        userPhone,
-        rooms,
-        guests,
-        checkin,
-        checkout,
-        payment,
-        notes: notes || null,
-        price
-      };
+      try {
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
+        
+        const bookingData = {
+          session_token: session_token,
+          hotel_id: currentHotel.id,
+          check_in_date: checkin,
+          check_out_date: checkout,
+          guests: guests,
+          rooms: rooms,
+          special_requests: notes || ''
+        };
+        
+        console.log('📤 إرسال بيانات الحجز:', bookingData);
+        console.log('🌐 URL:', baseUrl + 'api/book_hotel.php');
+        
+        const response = await fetch(baseUrl + 'api/book_hotel.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bookingData)
+        });
 
-      currentBooking = bookingSystem.bookHotel(bookingData);
-      
-      // إظهار رسالة النجاح
-      document.getElementById('bookingIdDisplay').textContent = currentBooking.id;
-      successMessage.style.display = 'block';
-      bookingForm.style.display = 'none';
+        console.log('📥 حالة الاستجابة:', response.status, response.statusText);
+        
+        const result = await response.json();
+        console.log('📦 النتيجة:', result);
 
-      // محاولة إرسال للخادم (اختياري)
-      bookingSystem.sendToServer(currentBooking, 'http://localhost:3012/api/hotels/book').catch(() => {
-        // تم الحفظ محلياً فقط
-      });
+        if (result.success) {
+          console.log('✅ تم الحجز بنجاح! رقم الحجز:', result.booking_reference);
+          // حفظ محلياً أيضاً للنسخ الاحتياطي
+          const bookingData = {
+            hotelId: currentHotel.id,
+            hotelName: currentHotel.name,
+            userName,
+            userEmail,
+            userPhone,
+            rooms,
+            guests,
+            checkin,
+            checkout,
+            payment,
+            notes: notes || null,
+            price: result.total_price
+          };
+          currentBooking = bookingSystem.bookHotel(bookingData);
+          
+          // إظهار رسالة النجاح
+          document.getElementById('bookingIdDisplay').textContent = result.booking_reference;
+          successMessage.style.display = 'block';
+          bookingForm.style.display = 'none';
+
+          // إعادة تعيين النموذج بعد 3 ثواني
+          setTimeout(() => {
+            bookingForm.reset();
+            successMessage.style.display = 'none';
+            bookingForm.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            closeBookingModal();
+          }, 3000);
+        } else {
+          console.error('❌ فشل الحجز:', result);
+          throw new Error(result.error || 'فشل الحجز');
+        }
+      } catch (error) {
+        console.error('❌ خطأ في الحجز:', error);
+        console.error('تفاصيل الخطأ:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
+        
+        let errorMessage = 'حدث خطأ أثناء الحجز';
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (error instanceof TypeError && error.message.includes('fetch')) {
+          errorMessage = 'فشل الاتصال بالخادم. تأكد من أنك تستخدم http://localhost';
+        }
+        
+        alert('❌ ' + errorMessage + '\n\nافتح Console (F12) لمعرفة التفاصيل');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     });
 
     function printHotelBooking() {
@@ -442,8 +859,8 @@
       }
     }
 
-    // تحميل الفنادق عند فتح الصفحة
-    searchHotels('', '', '', '', '2');
+    // لا تحميل الفنادق تلقائياً - فقط عند البحث
+    // searchHotels('', '', '', '', '2'); // تم تعطيله
   </script>
 </body>
 </html>

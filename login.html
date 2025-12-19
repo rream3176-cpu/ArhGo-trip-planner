@@ -2,152 +2,308 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | تسجيل الدخول</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
+  <script src="assets/js/cosmic-animations.js" defer></script>
   <style>
     body {
-      background: linear-gradient(135deg, #0E1F33 0%, #163A5F 50%, #0E1F33 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
+      background: var(--bg-primary);
+      min-height: 100vh;
       position: relative;
       overflow-x: hidden;
-      overflow-y: auto;
-      min-height: 100vh;
     }
     
-    html {
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
-    
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    
-    .auth-shell {
+    .login-container {
       min-height: 100vh;
       display: grid;
-      place-items: center;
-      padding: 40px 16px;
+      grid-template-columns: 1fr 1fr;
       position: relative;
       z-index: 1;
     }
     
-    .auth-card {
-      width: min(420px, 96vw);
-      padding: 48px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: 
-        0 20px 60px rgba(14, 31, 51, 0.4),
-        0 0 40px rgba(55, 214, 192, 0.3);
+    /* Left Side - Login Form */
+    .login-form-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-xl);
+      position: relative;
+    }
+    
+    .login-form-wrapper {
+      width: 100%;
+      max-width: 450px;
+    }
+    
+    .login-glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      padding: var(--spacing-xl);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .login-glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-primary);
+      opacity: 0.6;
+    }
+    
+    .login-logo {
       text-align: center;
-      backdrop-filter: blur(20px) saturate(180%);
-      color: #F2F9FF;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: var(--spacing-lg);
     }
     
-    .auth-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 
-        0 30px 80px rgba(14, 31, 51, 0.5),
-        0 0 60px rgba(55, 214, 192, 0.4);
-      border-color: rgba(55, 214, 192, 0.6);
-    }
-    .auth-card h2 {
-      margin-bottom: 12px;
-      font-family: var(--font-elegant);
+    .login-logo h1 {
+      font-size: 2.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--spacing-xs);
       font-weight: 700;
-      font-size: 2rem;
-      color: var(--primary);
-      font-style: normal;
-    }
-    .auth-card p {
-      color: #B8D4F0;
-      margin-bottom: 28px;
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-    .auth-card input {
-      margin-bottom: 18px;
-    }
-    .auth-card .error {
-      min-height: 22px;
-      color: var(--danger);
-      margin-top: 12px;
-      font-weight: 500;
-    }
-    .auth-card .pill {
-      margin-bottom: 20px;
-      display: inline-block;
-    }
-    .auth-logo {
-      margin-bottom: 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      animation: float 3s ease-in-out infinite;
     }
     
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    .auth-logo img {
-      width: 140px;
-      height: auto;
-      max-width: 100%;
-    }
-    .auth-logo-text {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    .auth-logo-text .main-name {
-      font-family: var(--font-elegant);
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary);
+    .login-logo p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
       letter-spacing: 2px;
-    }
-    .auth-logo-text .tagline {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: #B8D4F0;
-      letter-spacing: 3px;
       text-transform: uppercase;
+    }
+    
+    .login-form-wrapper h2 {
+      font-size: 1.75rem;
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    
+    .login-form-wrapper .subtitle {
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-lg);
+      font-size: 1rem;
+    }
+    
+    .form-group {
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: var(--spacing-xs);
+      color: var(--neon-cyan);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .auth-form {
+      margin-top: var(--spacing-lg);
+    }
+    
+    .auth-form .btn {
+      width: 100%;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .error {
+      min-height: 24px;
+      color: #ff6b6b;
+      margin-top: var(--spacing-sm);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    /* Right Side - Welcome Message */
+    .welcome-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: var(--spacing-xl);
+      background: 
+        radial-gradient(circle at 30% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(0, 207, 200, 0.08) 0%, transparent 50%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .welcome-content {
+      max-width: 500px;
+      text-align: center;
+      z-index: 2;
+    }
+    
+    .welcome-content h1 {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-md);
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    
+    .welcome-content p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .welcome-features {
+      list-style: none;
+      text-align: right;
+      margin-top: var(--spacing-xl);
+    }
+    
+    .welcome-features li {
+      padding: var(--spacing-sm) 0;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .welcome-features li::before {
+      content: '✓';
+      color: var(--neon-cyan);
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-shadow: 0 0 10px var(--neon-cyan-glow);
+    }
+    
+    /* Geometric Shapes */
+    .geometric-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .shape {
+      position: absolute;
+      border: 1px solid rgba(0, 229, 255, 0.1);
+    }
+    
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: 10%;
+      border-radius: 50%;
+      animation: rotate 20s linear infinite;
+    }
+    
+    .shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: 20%;
+      right: 15%;
+      border-radius: 50%;
+      animation: rotate 15s linear infinite reverse;
+    }
+    
+    .shape-3 {
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      right: 20%;
+      transform: rotate(45deg);
+      border-radius: 8px;
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 968px) {
+      .login-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .welcome-panel {
+        display: none;
+      }
+      
+      .login-form-panel {
+        padding: var(--spacing-lg);
+      }
     }
   </style>
 </head>
 <body class="page-hidden">
-  <main class="auth-shell">
-    <section class="auth-card glass-card">
-      <div class="auth-logo">
-        <img src="assets/images/logo1.png" alt="ArhGo Logo" />
+  <div class="geometric-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  
+  <div class="login-container">
+    <!-- Left Side - Login Form -->
+    <div class="login-form-panel">
+      <div class="login-form-wrapper">
+        <div class="login-glass-card">
+          <div class="login-logo">
+            <h1>ArhGo</h1>
+            <p>Smart Travel Planner</p>
+          </div>
+          
+          <h2>مرحبًا بعودتك</h2>
+          <p class="subtitle">سجّل دخولك لحفظ خطط السفر ومزامنتها مع كل الأجهزة</p>
+          
+          <form class="auth-form" id="loginForm" onsubmit="event.preventDefault(); login();">
+            <div class="form-group">
+              <label for="email">البريد الإلكتروني</label>
+              <input class="arhgo-input" type="email" id="email" name="email" placeholder="email@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="password">كلمة المرور</label>
+              <input class="arhgo-input" type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-gradient" data-flight-sound>تسجيل الدخول</button>
+            <a class="btn btn-ghost" href="signup.html" data-flight-sound style="margin-top:12px; display:block; text-align:center;">إنشاء حساب جديد</a>
+            <div id="error" class="error"></div>
+          </form>
+        </div>
       </div>
-      <h2>مرحبًا بعودتك</h2>
-      <p>سجّل دخولك لحفظ خطط السفر ومزامنتها مع كل الأجهزة.</p>
-      
-      <form class="auth-form" id="loginForm" onsubmit="event.preventDefault(); login();">
-        <div class="form-group">
-          <label for="email">البريد الإلكتروني</label>
-          <input class="arhgo-input" type="email" id="email" name="email" placeholder="البريد الإلكتروني" required>
-        </div>
-        <div class="form-group">
-          <label for="password">كلمة المرور</label>
-          <input class="arhgo-input" type="password" id="password" name="password" placeholder="كلمة المرور" required>
-        </div>
-        <button type="submit" class="btn btn-gradient" data-flight-sound>تسجيل الدخول</button>
-        <a class="btn btn-ghost" href="signup.html" data-flight-sound style="margin-top:12px;">إنشاء حساب جديد</a>
-        <div id="error" class="error"></div>
-      </form>
-    </section>
-  </main>
+    </div>
+    
+    <!-- Right Side - Welcome Message -->
+    <div class="welcome-panel">
+      <div class="welcome-content">
+        <h1>Your Smart Travel Experience Starts Here</h1>
+        <p>منصة ذكية لتخطيط رحلاتك بكل سهولة وأناقة</p>
+        
+        <ul class="welcome-features">
+          <li>خطط سفر مخصصة في دقائق</li>
+          <li>حفظ ومزامنة على جميع الأجهزة</li>
+          <li>مشاركة فورية مع الأصدقاء</li>
+          <li>اقتراحات ذكية للوجهات</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <style>
     /* تأثير الغيوم المحسّن */
@@ -429,7 +585,7 @@
       }, 5000);
     }
     
-    function login() {
+    async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
       const password = document.getElementById('password').value.trim();
       const error = document.getElementById('error');
@@ -442,14 +598,35 @@
         return;
       }
 
-      // استخدام نظام المصادقة الجديد
-      if (typeof userAuth !== 'undefined') {
-        const result = userAuth.login(email, password);
+      try {
+        // تحديد URL الأساسي
+        let baseUrl = '';
+        if (window.location.protocol === 'file:') {
+          baseUrl = 'http://localhost/ArhGo-trip-planner/';
+        }
+        
+        const response = await fetch(baseUrl + 'api/login.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+        
+        const result = await response.json();
         
         if (result.success) {
-          // التأكد من حفظ البيانات
-          localStorage.setItem('arhgo_current_user', result.user.username);
-          localStorage.setItem('loggedIn', result.user.username);
+          // حفظ بيانات الجلسة والمستخدم
+          localStorage.setItem('session_token', result.session_token);
+          localStorage.setItem('user', JSON.stringify(result.user));
+          localStorage.setItem('arhgo_current_user', result.user.full_name);
+          localStorage.setItem('loggedIn', result.user.full_name);
+          
+          // إرسال event لتحديث الصفحات الأخرى
+          window.dispatchEvent(new Event('authStateChanged'));
           
           error.style.color = '#4DFFD1';
           error.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
@@ -460,45 +637,18 @@
           // إظهار الغيوم
           createClouds();
           
-          // الانتقال بعد 1.5 ثانية مع إضافة timestamp لمنع cache
+          // الانتقال بعد 1.5 ثانية
           setTimeout(() => {
             window.location.href = 'index.html?t=' + Date.now();
           }, 1500);
         } else {
           error.style.color = 'var(--danger)';
-          error.textContent = result.message;
+          error.textContent = result.error || 'حدث خطأ أثناء تسجيل الدخول';
         }
-      } else {
-        // طريقة احتياطية (للتوافق مع الكود القديم)
-        const userData = localStorage.getItem('user');
-
-        if (!userData) {
-          error.style.color = 'var(--danger)';
-          error.textContent = "لا يوجد حساب محفوظ، أنشئ حسابًا جديدًا.";
-          return;
-        }
-
-        const user = JSON.parse(userData);
-        const match = user.email.trim().toLowerCase() === email && user.password.trim() === password;
-
-        if (match) {
-          // حفظ البيانات في كلا المفاتيح
-          localStorage.setItem('arhgo_current_user', user.username);
-          localStorage.setItem('loggedIn', user.username);
-          
-          error.style.color = '#4DFFD1';
-          error.textContent = "تم تسجيل الدخول بنجاح! جاري التحويل...";
-          
-          playFlightSoundEffect();
-          createClouds();
-          
-          setTimeout(() => {
-            window.location.href = 'index.html?t=' + Date.now();
-          }, 1500);
-        } else {
-          error.style.color = 'var(--danger)';
-          error.textContent = "بيانات الدخول غير صحيحة.";
-        }
+      } catch (err) {
+        console.error('خطأ في تسجيل الدخول:', err);
+        error.style.color = 'var(--danger)';
+        error.textContent = 'حدث خطأ في الاتصال بالخادم. تأكد من أن WAMP/XAMPP يعمل.';
       }
     }
   </script>

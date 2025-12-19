@@ -4,83 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | إدارة الميزانية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Cinzel:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #0A1C2E 0%, #0F1722 30%, #8EA2B6 60%, #C9B27A 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
-    }
-    
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    
-    .budget-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-    
-    .budget-header {
-      text-align: center;
-      margin-bottom: 40px;
-      color: #fff;
-    }
-    
-    .budget-header h1 {
-      font-size: 3.5rem;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #C9B27A, #8EA2B6, #fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      background: var(--bg-primary);
+      padding-top: 80px;
     }
     
     .budget-overview {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
     }
     
     .overview-card {
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border-radius: 24px;
-      padding: 32px;
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
-      backdrop-filter: blur(20px);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
       position: relative;
       overflow: hidden;
+      pointer-events: auto;
     }
+    
+    
     
     .overview-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, #C9B27A, #8EA2B6);
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 229, 255, 0.6) 20%, 
+        rgba(0, 229, 255, 0.8) 50%, 
+        rgba(0, 229, 255, 0.6) 80%, 
+        transparent 100%);
     }
     
     .overview-card.warning::before {
-      background: linear-gradient(90deg, #EF4444, #F59E0B);
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(239, 68, 68, 0.6) 20%, 
+        rgba(239, 68, 68, 0.8) 50%, 
+        rgba(239, 68, 68, 0.6) 80%, 
+        transparent 100%);
     }
     
     .overview-card.success::before {
-      background: linear-gradient(90deg, #10B981, #059669);
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(16, 185, 129, 0.6) 20%, 
+        rgba(16, 185, 129, 0.8) 50%, 
+        rgba(16, 185, 129, 0.6) 80%, 
+        transparent 100%);
     }
     
     .budget-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 40px;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
     }
     
     @media (max-width: 968px) {
@@ -90,101 +88,264 @@
     }
     
     .budget-card {
-      background: linear-gradient(135deg, rgba(22, 58, 95, 0.9), rgba(14, 31, 51, 0.95));
-      border-radius: 24px;
-      padding: 32px;
-      border: 2px solid rgba(55, 214, 192, 0.4);
-      box-shadow: 0 20px 60px rgba(10, 28, 46, 0.3);
-      backdrop-filter: blur(20px);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      pointer-events: auto;
     }
     
     .expense-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px;
-      margin: 12px 0;
-      background: rgba(55, 214, 192, 0.15);
-      border-radius: 12px;
-      border-right: 4px solid #37D6C0;
+      padding: var(--spacing-sm);
+      margin: 6px 0;
+      background: rgba(0, 229, 255, 0.08);
+      border-radius: var(--radius-md);
+      border-right: 3px solid var(--neon-cyan);
     }
     
     .expense-category {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: var(--spacing-sm);
     }
     
     .category-icon {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #37D6C0, #4CA8FF);
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(0, 229, 255, 0.1));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.1rem;
+      border: 1px solid rgba(0, 229, 255, 0.3);
     }
     
-    .currency-converter {
-      background: rgba(55, 214, 192, 0.15);
-      padding: 24px;
-      border-radius: 12px;
-      margin-top: 24px;
+    .currency-converter,
+    .split-bill {
+      background: rgba(0, 229, 255, 0.05);
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-md);
+      margin-top: var(--spacing-sm);
+      border: 1px solid rgba(0, 229, 255, 0.15);
     }
     
     .split-bill {
-      background: rgba(16, 185, 129, 0.1);
-      padding: 24px;
-      border-radius: 12px;
-      margin-top: 24px;
-      border: 2px solid rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.2);
     }
     
     .alert-banner {
       background: rgba(239, 68, 68, 0.1);
-      border: 2px solid rgba(239, 68, 68, 0.3);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      margin: var(--spacing-md) 0;
       color: #EF4444;
       display: none;
     }
     
     .alert-banner.show {
       display: block;
-      animation: slideIn 0.3s ease;
     }
     
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
     
     .progress-bar {
       width: 100%;
-      height: 12px;
-      background: rgba(55, 214, 192, 0.2);
-      border-radius: 6px;
+      height: 8px;
+      background: rgba(0, 229, 255, 0.1);
+      border-radius: 4px;
       overflow: hidden;
-      margin: 12px 0;
+      margin: var(--spacing-sm) 0;
     }
     
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #C9B27A, #8EA2B6);
-      transition: width 0.3s ease;
-      border-radius: 6px;
+      background: linear-gradient(90deg, var(--neon-cyan), rgba(0, 229, 255, 0.6));
+      border-radius: 4px;
+      transition: none;
     }
     
     .progress-fill.warning {
       background: linear-gradient(90deg, #F59E0B, #EF4444);
+    }
+    
+    .glass-card {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .search-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .search-panel .field {
+      margin-bottom: 0;
+    }
+    
+    .search-panel .field label {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+    
+    .search-panel .arhgo-input,
+    /* إصلاح شامل للقائمة المنسدلة - منع التوسع تماماً */
+    .arhgo-select,
+    select.arhgo-select,
+    .field select,
+    select,
+    #expenseCategory,
+    #fromCurrency,
+    #toCurrency {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      padding: 10px 14px !important;
+      font-size: 0.9rem !important;
+      color: var(--text-primary) !important;
+      background: var(--glass-bg) !important;
+      border: 1px solid var(--glass-border) !important;
+      border-radius: var(--radius-md) !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+      resize: none !important;
+      position: relative !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    
+    .arhgo-select:hover,
+    select.arhgo-select:hover,
+    .field select:hover,
+    select:hover,
+    #expenseCategory:hover,
+    #fromCurrency:hover,
+    #toCurrency:hover {
+      width: 100% !important;
+      max-width: 100% !important;
+      transform: none !important;
+    }
+    
+    .arhgo-select:focus,
+    select.arhgo-select:focus,
+    .field select:focus,
+    select:focus,
+    #expenseCategory:focus,
+    #fromCurrency:focus,
+    #toCurrency:focus {
+      outline: 1px solid rgba(0, 229, 255, 0.4) !important;
+      outline-offset: -1px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      transform: none !important;
+    }
+    
+    .arhgo-select option,
+    select.arhgo-select option,
+    .field select option,
+    select option {
+      background: var(--bg-primary) !important;
+      color: var(--text-primary) !important;
+      padding: 8px !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+    
+    /* منع أي توسع في القائمة المنسدلة */
+    select {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    /* إصلاح القائمة المنسدلة في جميع المتصفحات */
+    select::-ms-expand {
+      display: none;
+    }
+    
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    
+    /* منع التوسع في الحاويات */
+    .field,
+    .budget-card,
+    .currency-converter,
+    .split-bill {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    
+    /* منع أي تأثيرات من arhgo.css */
+    .budget-manager .arhgo-select,
+    .budget-manager select {
+      transform: none !important;
+      transition: none !important;
+    }
+    
+    /* منع أي حركة في البطاقات من arhgo.css */
+    .glass-card:hover,
+    .glass-card:active,
+    .glass-card:focus {
+      transform: none !important;
+    }
+    
+    .overview-card *,
+    .budget-card * {
+      pointer-events: auto;
+    }
+    
+    /* منع أي تأثيرات من CSS العام */
+    .overview-card,
+    .budget-card,
+    .glass-card {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    
+    .animated-number {
+      transition: none;
+    }
+    
+    .field {
+      margin-bottom: 16px;
+    }
+    
+    .field label {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+    
+    .field input,
+    .field select {
+      font-size: 0.9rem;
+      padding: 10px 14px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
   </style>
 </head>
@@ -199,171 +360,239 @@
     </ul>
   </nav>
 
-  <main class="budget-container">
-    <div class="budget-header">
-      <h1>إدارة الميزانية المتقدمة</h1>
-      <p style="font-size: 1.3rem; color: rgba(255,255,255,0.9); margin-bottom: 20px;">
-        تتبع مصروفاتك، احسب العملات، واقسم الفواتير بسهولة
-      </p>
-    </div>
+  <main class="page-shell">
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">إدارة الميزانية</h2>
+        <p class="section-subtitle">تتبع مصروفاتك، احسب العملات، واقسم الفواتير بسهولة</p>
+      </div>
 
-    <div class="budget-overview">
-      <div class="overview-card" id="budgetCard">
-        <h3 style="color: #0A1C2E; margin-bottom: 16px;">💰 الميزانية المحددة</h3>
-        <div style="font-size: 2.5rem; font-weight: 800; color: #0A1C2E; margin-bottom: 8px;" id="totalBudget">$0</div>
-        <div style="color: #666;">الميزانية الإجمالية</div>
-      </div>
-      
-      <div class="overview-card" id="spentCard">
-        <h3 style="color: #0A1C2E; margin-bottom: 16px;">💸 المصروفات</h3>
-        <div style="font-size: 2.5rem; font-weight: 800; color: #0A1C2E; margin-bottom: 8px;" id="totalSpent">$0</div>
-        <div style="color: #666;">إجمالي ما تم إنفاقه</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="spentProgress" style="width: 0%;"></div>
+      <div class="budget-overview">
+        <div class="overview-card" id="budgetCard">
+          <h3 style="color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; font-weight: 600;">الميزانية المحددة</h3>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;" id="totalBudget" class="animated-number">$0</div>
+          <div style="color: var(--text-secondary); font-size: 0.7rem;">الميزانية الإجمالية</div>
+        </div>
+        
+        <div class="overview-card" id="spentCard">
+          <h3 style="color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; font-weight: 600;">المصروفات</h3>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;" id="totalSpent" class="animated-number">$0</div>
+          <div style="color: var(--text-secondary); font-size: 0.7rem; margin-bottom: 4px;">إجمالي ما تم إنفاقه</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="spentProgress" style="width: 0%;"></div>
+          </div>
+        </div>
+        
+        <div class="overview-card" id="remainingCard">
+          <h3 style="color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; font-weight: 600;">المتبقي</h3>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;" id="remainingBudget" class="animated-number">$0</div>
+          <div style="color: var(--text-secondary); font-size: 0.7rem;">المبلغ المتبقي</div>
+        </div>
+        
+        <div class="overview-card">
+          <h3 style="color: var(--text-primary); margin-bottom: 8px; font-size: 0.85rem; font-weight: 600;">متوسط اليومي</h3>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;" id="dailyAverage" class="animated-number">$0</div>
+          <div style="color: var(--text-secondary); font-size: 0.7rem;">متوسط الإنفاق اليومي</div>
         </div>
       </div>
-      
-      <div class="overview-card" id="remainingCard">
-        <h3 style="color: #0A1C2E; margin-bottom: 16px;">✅ المتبقي</h3>
-        <div style="font-size: 2.5rem; font-weight: 800; color: #0A1C2E; margin-bottom: 8px;" id="remainingBudget">$0</div>
-        <div style="color: #666;">المبلغ المتبقي</div>
-      </div>
-      
-      <div class="overview-card">
-        <h3 style="color: #0A1C2E; margin-bottom: 16px;">📊 متوسط اليومي</h3>
-        <div style="font-size: 2.5rem; font-weight: 800; color: #0A1C2E; margin-bottom: 8px;" id="dailyAverage">$0</div>
-        <div style="color: #666;">متوسط الإنفاق اليومي</div>
-      </div>
-    </div>
 
-    <div class="alert-banner" id="budgetAlert">
-      <strong>⚠️ تحذير!</strong> لقد تجاوزت <span id="alertPercent">0%</span> من ميزانيتك. يرجى مراجعة مصروفاتك.
-    </div>
-
-    <div class="budget-grid">
-      <div class="budget-card">
-        <h3 style="color: #0A1C2E; margin-bottom: 24px;">🎯 تحديد الميزانية</h3>
-        <div class="field" style="margin-bottom: 20px;">
-          <label for="budgetAmount">المبلغ الإجمالي ($)</label>
-          <input class="arhgo-input" type="number" id="budgetAmount" placeholder="مثال: 2000" min="0">
-        </div>
-        <div class="field" style="margin-bottom: 20px;">
-          <label for="tripDays">عدد أيام الرحلة</label>
-          <input class="arhgo-input" type="number" id="tripDays" placeholder="مثال: 7" min="1">
-        </div>
-        <button class="btn btn-gradient" onclick="setBudget()" style="width: 100%;">💾 حفظ الميزانية</button>
+      <div class="alert-banner" id="budgetAlert">
+        <strong>تحذير!</strong> لقد تجاوزت <span id="alertPercent">0%</span> من ميزانيتك. يرجى مراجعة مصروفاتك.
       </div>
-      
-      <div class="budget-card">
-        <h3 style="color: #0A1C2E; margin-bottom: 24px;">➕ إضافة مصروف</h3>
-        <div class="field" style="margin-bottom: 20px;">
-          <label for="expenseCategory">الفئة</label>
-          <select class="arhgo-select" id="expenseCategory">
-            <option value="إقامة">🏨 إقامة</option>
-            <option value="طعام">🍽️ طعام</option>
-            <option value="مواصلات">🚗 مواصلات</option>
-            <option value="تسوق">🛍️ تسوق</option>
-            <option value="ترفيه">🎮 ترفيه</option>
-            <option value="أخرى">📝 أخرى</option>
-          </select>
-        </div>
-        <div class="field" style="margin-bottom: 20px;">
-          <label for="expenseAmount">المبلغ ($)</label>
-          <input class="arhgo-input" type="number" id="expenseAmount" placeholder="مثال: 50" min="0" step="0.01">
-        </div>
-        <div class="field" style="margin-bottom: 20px;">
-          <label for="expenseDescription">الوصف</label>
-          <input class="arhgo-input" type="text" id="expenseDescription" placeholder="مثال: عشاء في مطعم">
-        </div>
-        <button class="btn btn-gradient" onclick="addExpense()" style="width: 100%;">➕ إضافة</button>
-      </div>
-    </div>
 
-    <div class="budget-card" style="margin-bottom: 40px;">
-      <h3 style="color: #0A1C2E; margin-bottom: 24px;">📋 سجل المصروفات</h3>
+      <div class="glass-card">
+        <div class="budget-grid">
+          <div class="budget-card">
+            <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 0.95rem; font-weight: 600;">تحديد الميزانية</h3>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="budgetAmount" style="font-size: 0.8rem;">المبلغ الإجمالي ($)</label>
+          <input class="arhgo-input" type="number" id="budgetAmount" placeholder="مثال: 2000" min="0" style="padding: 8px 12px; font-size: 0.85rem;">
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="tripDays" style="font-size: 0.8rem;">عدد أيام الرحلة</label>
+          <input class="arhgo-input" type="number" id="tripDays" placeholder="مثال: 7" min="1" style="padding: 8px 12px; font-size: 0.85rem;">
+        </div>
+            <button class="btn btn-gradient" onclick="setBudget()" style="width: 100%; padding: 10px; font-size: 0.85rem;">حفظ الميزانية</button>
+          </div>
+          
+          <div class="budget-card">
+            <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 0.95rem; font-weight: 600;">إضافة مصروف</h3>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="expenseCategory" style="font-size: 0.8rem;">الفئة</label>
+            <div class="select-wrapper">
+              <select class="arhgo-select" id="expenseCategory">
+              <option value="إقامة">إقامة</option>
+              <option value="طعام">طعام</option>
+              <option value="مواصلات">مواصلات</option>
+              <option value="تسوق">تسوق</option>
+              <option value="ترفيه">ترفيه</option>
+              <option value="أخرى">أخرى</option>
+              </select>
+            </div>
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="expenseAmount" style="font-size: 0.8rem;">المبلغ ($)</label>
+          <input class="arhgo-input" type="number" id="expenseAmount" placeholder="مثال: 50" min="0" step="0.01" style="padding: 8px 12px; font-size: 0.85rem;">
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label for="expenseDescription" style="font-size: 0.8rem;">الوصف</label>
+          <input class="arhgo-input" type="text" id="expenseDescription" placeholder="مثال: عشاء في مطعم" style="padding: 8px 12px; font-size: 0.85rem;">
+        </div>
+            <button class="btn btn-gradient" onclick="addExpense()" style="width: 100%; padding: 10px; font-size: 0.85rem;">إضافة</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card" style="margin-top: var(--spacing-md); padding: var(--spacing-md);">
+        <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 0.95rem; font-weight: 600;">سجل المصروفات</h3>
       <div id="expensesList">
         <!-- سيتم ملؤها بالبيانات -->
       </div>
-      <canvas id="expensesChart" style="max-height: 300px; margin-top: 24px;"></canvas>
-    </div>
+        <canvas id="expensesChart" style="max-height: 300px; margin-top: 24px;"></canvas>
+      </div>
 
-    <div class="budget-grid">
-      <div class="budget-card">
-        <h3 style="color: #0A1C2E; margin-bottom: 24px;">💱 حاسبة العملات</h3>
-        <div class="currency-converter">
-          <div class="field" style="margin-bottom: 16px;">
-            <label>من</label>
-            <select class="arhgo-select" id="fromCurrency">
-              <option value="USD">🇺🇸 USD - دولار أمريكي</option>
-              <option value="EUR">🇪🇺 EUR - يورو</option>
-              <option value="GBP">🇬🇧 GBP - جنيه إسترليني</option>
-              <option value="JPY">🇯🇵 JPY - ين ياباني</option>
-              <option value="AED">🇦🇪 AED - درهم إماراتي</option>
-              <option value="SAR">🇸🇦 SAR - ريال سعودي</option>
-              <option value="EGP">🇪🇬 EGP - جنيه مصري</option>
-            </select>
+      <div class="glass-card" style="margin-top: var(--spacing-md); padding: var(--spacing-md);">
+        <div class="budget-grid">
+          <div class="budget-card">
+            <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 0.95rem; font-weight: 600;">حاسبة العملات</h3>
+        <div class="currency-converter" style="padding: var(--spacing-sm);">
+          <div class="field" style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem;">من</label>
+              <div class="select-wrapper">
+                <select class="arhgo-select" id="fromCurrency">
+                <option value="USD">USD - دولار أمريكي</option>
+                <option value="SAR">SAR - ريال سعودي</option>
+                <option value="AED">AED - درهم إماراتي</option>
+                <option value="KWD">KWD - دينار كويتي</option>
+                <option value="QAR">QAR - ريال قطري</option>
+                <option value="BHD">BHD - دينار بحريني</option>
+                <option value="OMR">OMR - ريال عماني</option>
+                <option value="YER">YER - ريال يمني</option>
+                <option value="IQD">IQD - دينار عراقي</option>
+                <option value="SYP">SYP - ليرة سورية</option>
+                <option value="JOD">JOD - دينار أردني</option>
+                <option value="LBP">LBP - ليرة لبنانية</option>
+                <option value="ILS">ILS - شيكل إسرائيلي</option>
+                <option value="EUR">EUR - يورو</option>
+                <option value="GBP">GBP - جنيه إسترليني</option>
+                <option value="JPY">JPY - ين ياباني</option>
+                <option value="EGP">EGP - جنيه مصري</option>
+                </select>
+              </div>
           </div>
-          <div class="field" style="margin-bottom: 16px;">
-            <label>المبلغ</label>
-            <input class="arhgo-input" type="number" id="currencyAmount" placeholder="100" min="0">
+          <div class="field" style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem;">المبلغ</label>
+            <input class="arhgo-input" type="number" id="currencyAmount" placeholder="100" min="0" style="padding: 8px 12px; font-size: 0.85rem;">
           </div>
-          <div class="field" style="margin-bottom: 16px;">
-            <label>إلى</label>
-            <select class="arhgo-select" id="toCurrency">
-              <option value="USD">🇺🇸 USD - دولار أمريكي</option>
-              <option value="EUR">🇪🇺 EUR - يورو</option>
-              <option value="GBP">🇬🇧 GBP - جنيه إسترليني</option>
-              <option value="JPY">🇯🇵 JPY - ين ياباني</option>
-              <option value="AED">🇦🇪 AED - درهم إماراتي</option>
-              <option value="SAR">🇸🇦 SAR - ريال سعودي</option>
-              <option value="EGP">🇪🇬 EGP - جنيه مصري</option>
-            </select>
+          <div class="field" style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem;">إلى</label>
+              <div class="select-wrapper">
+                <select class="arhgo-select" id="toCurrency">
+                <option value="USD">USD - دولار أمريكي</option>
+                <option value="SAR">SAR - ريال سعودي</option>
+                <option value="AED">AED - درهم إماراتي</option>
+                <option value="KWD">KWD - دينار كويتي</option>
+                <option value="QAR">QAR - ريال قطري</option>
+                <option value="BHD">BHD - دينار بحريني</option>
+                <option value="OMR">OMR - ريال عماني</option>
+                <option value="YER">YER - ريال يمني</option>
+                <option value="IQD">IQD - دينار عراقي</option>
+                <option value="SYP">SYP - ليرة سورية</option>
+                <option value="JOD">JOD - دينار أردني</option>
+                <option value="LBP">LBP - ليرة لبنانية</option>
+                <option value="ILS">ILS - شيكل إسرائيلي</option>
+                <option value="EUR">EUR - يورو</option>
+                <option value="GBP">GBP - جنيه إسترليني</option>
+                <option value="JPY">JPY - ين ياباني</option>
+                <option value="EGP">EGP - جنيه مصري</option>
+                </select>
+              </div>
           </div>
-          <button class="btn btn-gradient" onclick="convertCurrency()" style="width: 100%;">🔄 تحويل</button>
-          <div style="margin-top: 20px; padding: 16px; background: rgba(201, 178, 122, 0.2); border-radius: 8px; text-align: center;">
-            <div style="font-size: 1.2rem; color: #666; margin-bottom: 8px;">النتيجة</div>
-            <div style="font-size: 2rem; font-weight: 800; color: #0A1C2E;" id="conversionResult">—</div>
+              <button class="btn btn-gradient" onclick="convertCurrency()" style="width: 100%; padding: 10px; font-size: 0.85rem;">تحويل</button>
+              <div style="margin-top: 12px; padding: 12px; background: rgba(0, 229, 255, 0.08); border-radius: var(--radius-md); text-align: center; border: 1px solid rgba(0, 229, 255, 0.2);">
+                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 6px;">النتيجة</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);" id="conversionResult">—</div>
+              </div>
+              <div style="margin-top: 8px; padding: 8px; background: rgba(0, 229, 255, 0.05); border-radius: var(--radius-sm); border: 1px solid rgba(0, 229, 255, 0.1);">
+                <div style="font-size: 0.7rem; color: var(--text-muted); text-align: center; line-height: 1.4;">
+                  <strong>ملاحظة:</strong> أسعار الصرف المعروضة تقريبية للاسترشاد فقط.
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="budget-card">
+            <h3 style="color: var(--text-primary); margin-bottom: 12px; font-size: 0.95rem; font-weight: 600;">تقسيم الفاتورة</h3>
+        <div class="split-bill" style="padding: var(--spacing-sm);">
+          <div class="field" style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem;">إجمالي الفاتورة ($)</label>
+            <input class="arhgo-input" type="number" id="billTotal" placeholder="100" min="0" step="0.01" style="padding: 8px 12px; font-size: 0.85rem;">
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem;">عدد الأشخاص</label>
+            <input class="arhgo-input" type="number" id="numPeople" placeholder="4" min="1" style="padding: 8px 12px; font-size: 0.85rem;">
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem;">نسبة البقشيش (%)</label>
+            <input class="arhgo-input" type="number" id="tipPercent" placeholder="15" min="0" step="0.1" style="padding: 8px 12px; font-size: 0.85rem;">
+          </div>
+              <button class="btn btn-gradient" onclick="splitBill()" style="width: 100%; padding: 10px; font-size: 0.85rem;">حساب</button>
+              <div style="margin-top: 12px; padding: 12px; background: rgba(16, 185, 129, 0.08); border-radius: var(--radius-md); border: 1px solid rgba(16, 185, 129, 0.2);">
+                <div style="color: var(--text-secondary); margin-bottom: 6px; font-size: 0.85rem;">لكل شخص:</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);" id="splitResult">—</div>
+                <div style="color: var(--text-secondary); margin-top: 6px; font-size: 0.8rem;" id="splitDetails"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      
-      <div class="budget-card">
-        <h3 style="color: #0A1C2E; margin-bottom: 24px;">👥 تقسيم الفاتورة</h3>
-        <div class="split-bill">
-          <div class="field" style="margin-bottom: 16px;">
-            <label>إجمالي الفاتورة ($)</label>
-            <input class="arhgo-input" type="number" id="billTotal" placeholder="100" min="0" step="0.01">
-          </div>
-          <div class="field" style="margin-bottom: 16px;">
-            <label>عدد الأشخاص</label>
-            <input class="arhgo-input" type="number" id="numPeople" placeholder="4" min="1">
-          </div>
-          <div class="field" style="margin-bottom: 16px;">
-            <label>نسبة البقشيش (%)</label>
-            <input class="arhgo-input" type="number" id="tipPercent" placeholder="15" min="0" step="0.1">
-          </div>
-          <button class="btn btn-gradient" onclick="splitBill()" style="width: 100%;">🧮 حساب</button>
-          <div style="margin-top: 20px; padding: 16px; background: rgba(16, 185, 129, 0.2); border-radius: 8px;">
-            <div style="color: #666; margin-bottom: 8px;">لكل شخص:</div>
-            <div style="font-size: 2rem; font-weight: 800; color: #0A1C2E;" id="splitResult">—</div>
-            <div style="color: #666; margin-top: 8px; font-size: 0.9rem;" id="splitDetails"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
   </main>
 
   <script>
-    // أسعار الصرف (مثال - في التطبيق الحقيقي استخدم API)
+    // ============================================
+    // محول العملات - أسعار صرف ثابتة تقريبية
+    // ============================================
+    
+    // أسعار الصرف الثابتة التقريبية (مقاربة)
     const exchangeRates = {
       USD: 1,
+      // الدول العربية في آسيا
+      SAR: 3.75,  // ريال سعودي
+      AED: 3.67,  // درهم إماراتي
+      KWD: 0.31,  // دينار كويتي
+      QAR: 3.64,  // ريال قطري
+      BHD: 0.38,  // دينار بحريني
+      OMR: 0.38,  // ريال عماني
+      YER: 250,   // ريال يمني
+      IQD: 1310,  // دينار عراقي
+      SYP: 13000, // ليرة سورية
+      JOD: 0.71,  // دينار أردني
+      LBP: 15000, // ليرة لبنانية
+      ILS: 3.65,  // شيكل إسرائيلي
+      // عملات أخرى
       EUR: 0.92,
       GBP: 0.79,
       JPY: 150,
-      AED: 3.67,
-      SAR: 3.75,
       EGP: 31
     };
+    
+    // تحديث الأرقام مع أنيميشن لطيف
+    function updateNumber(element, value) {
+      if (!element) return;
+      
+      // إضافة أنيميشن عند التحديث
+      element.classList.add('updating');
+      
+      setTimeout(() => {
+        if (typeof value === 'number') {
+          element.textContent = '$' + value.toFixed(2);
+        } else {
+          element.textContent = value;
+        }
+        element.classList.remove('updating');
+      }, 100);
+    }
 
     // تحميل البيانات
     function loadBudgetData() {
@@ -389,10 +618,11 @@
       const dailyAverage = days > 0 ? totalSpent / days : 0;
       const spentPercent = totalBudget > 0 ? (totalSpent / totalBudget) * 100 : 0;
       
-      document.getElementById('totalBudget').textContent = `$${totalBudget.toFixed(2)}`;
-      document.getElementById('totalSpent').textContent = `$${totalSpent.toFixed(2)}`;
-      document.getElementById('remainingBudget').textContent = `$${remaining.toFixed(2)}`;
-      document.getElementById('dailyAverage').textContent = `$${dailyAverage.toFixed(2)}`;
+      // تحديث الأرقام مباشرة
+      updateNumber(document.getElementById('totalBudget'), totalBudget);
+      updateNumber(document.getElementById('totalSpent'), totalSpent);
+      updateNumber(document.getElementById('remainingBudget'), remaining);
+      updateNumber(document.getElementById('dailyAverage'), dailyAverage);
       
       const progressBar = document.getElementById('spentProgress');
       progressBar.style.width = `${Math.min(spentPercent, 100)}%`;
@@ -431,7 +661,7 @@
       const list = document.getElementById('expensesList');
       
       if (expenses.length === 0) {
-        list.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">لا توجد مصروفات بعد. ابدأ بإضافة مصروف جديد!</div>';
+        list.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">لا توجد مصروفات بعد. ابدأ بإضافة مصروف جديد!</div>';
         return;
       }
       
@@ -444,16 +674,16 @@
         'أخرى': '📝'
       };
       
-      list.innerHTML = expenses.slice().reverse().map(expense => `
-        <div class="expense-item">
+      list.innerHTML = expenses.slice().reverse().map((expense, index) => `
+        <div class="expense-item" style="--index: ${index};">
           <div class="expense-category">
             <div class="category-icon">${categoryIcons[expense.category] || '📝'}</div>
             <div>
-              <strong style="color: #0A1C2E;">${expense.description || expense.category}</strong>
-              <div style="color: #666; font-size: 0.9rem; margin-top: 4px;">${expense.category} • ${new Date(expense.date).toLocaleDateString('ar')}</div>
+              <strong style="color: var(--text-primary);">${expense.description || expense.category}</strong>
+              <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">${expense.category} • ${new Date(expense.date).toLocaleDateString('ar')}</div>
             </div>
           </div>
-          <div style="font-size: 1.5rem; font-weight: 700; color: #0A1C2E;">
+          <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">
             $${expense.amount.toFixed(2)}
           </div>
         </div>
@@ -540,19 +770,41 @@
       updateDisplay();
     }
 
+    // ============================================
     // تحويل العملة
+    // ============================================
     function convertCurrency() {
       const from = document.getElementById('fromCurrency').value;
       const to = document.getElementById('toCurrency').value;
       const amount = parseFloat(document.getElementById('currencyAmount').value);
       
+      // التحقق من صحة المدخلات
       if (!amount || amount <= 0) {
-        alert('يرجى إدخال مبلغ صحيح');
+        const resultEl = document.getElementById('conversionResult');
+        if (resultEl) {
+          resultEl.textContent = '—';
+        }
         return;
       }
       
-      const result = (amount / exchangeRates[from]) * exchangeRates[to];
-      document.getElementById('conversionResult').textContent = `${result.toFixed(2)} ${to}`;
+      // التحقق من وجود أسعار الصرف
+      if (!exchangeRates[from] || !exchangeRates[to]) {
+        const resultEl = document.getElementById('conversionResult');
+        if (resultEl) {
+          resultEl.textContent = '—';
+        }
+        return;
+      }
+      
+      // حساب التحويل: تحويل من العملة المصدر إلى USD ثم إلى العملة الهدف
+      const amountInUSD = amount / exchangeRates[from];
+      const result = amountInUSD * exchangeRates[to];
+      
+      // عرض النتيجة
+      const resultEl = document.getElementById('conversionResult');
+      if (resultEl) {
+        resultEl.textContent = `${result.toFixed(2)} ${to}`;
+      }
     }
 
     // تقسيم الفاتورة
@@ -575,14 +827,57 @@
       const totalWithTip = total + tipAmount;
       const perPerson = totalWithTip / people;
       
-      document.getElementById('splitResult').textContent = `$${perPerson.toFixed(2)}`;
-      document.getElementById('splitDetails').textContent = 
+      const splitResultEl = document.getElementById('splitResult');
+      const splitDetailsEl = document.getElementById('splitDetails');
+      
+      splitResultEl.textContent = `$${perPerson.toFixed(2)}`;
+      splitDetailsEl.textContent = 
         `إجمالي: $${totalWithTip.toFixed(2)} (${total.toFixed(2)} + ${tipAmount.toFixed(2)} بقشيش)`;
     }
 
+    // ============================================
     // تهيئة الصفحة
+    // ============================================
     document.addEventListener('DOMContentLoaded', () => {
+      // تحديث عرض الميزانية
       updateDisplay();
+      
+      // إضافة مستمعي الأحداث للتحويل التلقائي عند تغيير القيم
+      const fromCurrency = document.getElementById('fromCurrency');
+      const toCurrency = document.getElementById('toCurrency');
+      const currencyAmount = document.getElementById('currencyAmount');
+      
+      if (fromCurrency) {
+        fromCurrency.addEventListener('change', () => {
+          const amount = parseFloat(currencyAmount?.value);
+          if (amount && amount > 0) {
+            convertCurrency();
+          }
+        });
+      }
+      
+      if (toCurrency) {
+        toCurrency.addEventListener('change', () => {
+          const amount = parseFloat(currencyAmount?.value);
+          if (amount && amount > 0) {
+            convertCurrency();
+          }
+        });
+      }
+      
+      if (currencyAmount) {
+        currencyAmount.addEventListener('input', () => {
+          const amount = parseFloat(currencyAmount.value);
+          if (amount && amount > 0) {
+            convertCurrency();
+          } else {
+            const resultEl = document.getElementById('conversionResult');
+            if (resultEl) {
+              resultEl.textContent = '—';
+            }
+          }
+        });
+      }
     });
   </script>
 </body>

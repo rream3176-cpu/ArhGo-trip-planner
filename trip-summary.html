@@ -4,36 +4,231 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | ملخص الرحلة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="assets/js/arhgo.js" defer></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <style>
-    #map {
-      height: 420px;
-      width: 100%;
-      border-radius: var(--radius-lg);
-      border: 2px solid rgba(74, 144, 226, 0.2);
-      box-shadow: var(--shadow-soft);
+    body {
+      background: var(--bg-primary);
+      padding-top: 80px;
+      font-family: 'Cairo', sans-serif;
     }
+    
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--spacing-xl) var(--spacing-lg);
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .section-header h2 {
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .section-header p {
+      font-family: 'Cairo', sans-serif;
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+    
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
     }
+    
     .summary-card {
-      padding: 22px;
+      padding: var(--spacing-md);
       border-radius: var(--radius-md);
-      background: #ffffff;
-      border: 1px solid rgba(74, 144, 226, 0.2);
-      box-shadow: var(--shadow-soft);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
       text-align: center;
+      color: var(--text-primary);
+      font-family: 'Cairo', sans-serif;
+      transform: none !important;
+      transition: none !important;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .summary-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 229, 255, 0.6) 20%, 
+        rgba(0, 229, 255, 0.8) 50%, 
+        rgba(0, 229, 255, 0.6) 80%, 
+        transparent 100%);
+    }
+    
+    .summary-card:hover {
+      transform: none !important;
+      border-color: rgba(0, 229, 255, 0.3);
+    }
+    
+    .summary-card p {
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
     .summary-card span {
       display: block;
-      font-size: 2rem;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--neon-cyan);
+      font-family: 'Cairo', sans-serif;
+      margin-top: var(--spacing-xs);
+    }
+    
+    .summary-card .cost-value {
+      font-size: 1.8rem;
+      color: var(--neon-cyan);
+      font-weight: 900;
+    }
+    
+    #map {
+      height: 100%;
+      width: 100%;
+      border-radius: var(--radius-md);
+    }
+    
+    .map-container {
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border-radius: var(--radius-md);
+      padding: 0;
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      margin: var(--spacing-xl) auto;
+      transform: none !important;
+      transition: none !important;
+      height: 400px;
+      max-width: 1400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    .map-container:hover {
+      transform: none !important;
+    }
+    
+    .map-container h3 {
+      color: var(--text-primary);
+      font-size: 0.85rem;
       font-weight: 700;
-      color: var(--primary);
+      margin: 0;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(20, 27, 45, 0.95) 0%, rgba(20, 27, 45, 0.8) 50%, transparent 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .map-wrapper {
+      flex: 1;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      min-height: 0;
+      height: 100%;
+      width: 100%;
+    }
+    
+    .actions-section {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    @media (max-width: 968px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+      }
+      
+      .map-container {
+        max-width: 100%;
+        height: 400px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+      }
+      
+      .summary-card {
+        padding: var(--spacing-sm);
+      }
+      
+      .summary-card span {
+        font-size: 1.2rem;
+      }
+      
+      .summary-card .cost-value {
+        font-size: 1.5rem;
+      }
+      
+      .map-container {
+        height: 350px;
+        padding: var(--spacing-sm);
+      }
+      
+      .actions-section {
+        flex-direction: column;
+      }
+      
+      .actions-section .btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -58,8 +253,9 @@
     <section class="section">
       <div class="section-header">
         <h2 class="section-title">ملخص خطتك</h2>
-        <p class="section-subtitle">اكتشف التكلفة، عدد الأيام، نوع الرحلة، وحرّك الخريطة للتعرّف على المسار التفاعلي.</p>
+        <p class="section-subtitle">اكتشف التكلفة، عدد الأيام، نوع الرحلة، وحرّك الخريطة للتعرّف على المسار التفاعلي</p>
       </div>
+      
       <div class="summary-grid">
         <div class="summary-card">
           <p>الوجهة</p>
@@ -75,74 +271,146 @@
         </div>
         <div class="summary-card">
           <p>التكلفة التقديرية</p>
-          <span id="show-cost">$0</span>
+          <span class="cost-value" id="show-cost">$0</span>
         </div>
       </div>
-      <div style="margin-top:30px" class="glass-card">
-        <div id="map"></div>
+      
+      <div class="map-container">
+        <h3>موقع الوجهة على الخريطة</h3>
+        <div class="map-wrapper">
+          <div id="map"></div>
+        </div>
       </div>
-      <div class="stack" style="margin-top:24px;justify-content:flex-end;">
+      
+      <div class="actions-section">
         <a class="btn btn-gradient" href="weather.html" id="weather-btn" data-flight-sound>حالة الطقس</a>
-        <a class="btn btn-ghost" href="test.html" data-flight-sound>العودة للرئيسية</a>
+        <a class="btn btn-ghost" href="index.html" data-flight-sound>العودة للرئيسية</a>
       </div>
     </section>
   </main>
 
-  <audio id="flight-sound" src="https://www.soundjay.com/transport/airplane-flyby-01.mp3"></audio>
-
   <script>
+    // قاعدة بيانات التكاليف اليومية لكل دولة (بالدولار)
+    const countryDailyCosts = {
+      'السعودية': 90,
+      'الإمارات': 150,
+      'الكويت': 120,
+      'البحرين': 100,
+      'قطر': 140,
+      'عُمان': 85,
+      'اليمن': 40,
+      'الأردن': 70,
+      'لبنان': 75,
+      'سوريا': 35,
+      'العراق': 45,
+      'فلسطين': 60
+    };
+    
+    // حساب التكلفة التقديرية حسب الدولة وعدد الأيام
+    function calculateEstimatedCost(country, days) {
+      if (!country || country === 'غير محدد') {
+        return days * 80; // افتراضي 80 دولار يومياً
+      }
+      const dailyCost = countryDailyCosts[country] || 80;
+      return Math.round(dailyCost * days);
+    }
+    
     const params = new URLSearchParams(window.location.search);
     const country = params.get('country') || 'غير محدد';
     const days = parseInt(params.get('days'), 10) || 1;
     const type = params.get('type') || 'متوسطة';
-    const costParam = parseInt(params.get('cost'), 10) || 0;
 
     document.getElementById('show-country').textContent = country;
     document.getElementById('show-days').textContent = days;
     document.getElementById('show-type').textContent = type;
 
+    // حساب التكلفة التقديرية حسب الدولة وعدد الأيام (دائماً حسب الدولة المختارة)
+    const estimatedCost = calculateEstimatedCost(country, days);
+    
     const counter = document.getElementById('show-cost');
     let current = 0;
-    const target = costParam || Math.round(days * 120);
-    const step = Math.ceil(target / 80);
+    const target = estimatedCost;
+    const step = Math.max(1, Math.ceil(target / 100));
+    
     function countUp() {
       if (current < target) {
-        current += step;
-        counter.textContent = `$${current}`;
+        current = Math.min(current + step, target);
+        counter.textContent = `$${current.toLocaleString()}`;
         requestAnimationFrame(countUp);
       } else {
-        counter.textContent = `$${target}`;
+        counter.textContent = `$${target.toLocaleString()}`;
       }
     }
     countUp();
 
     document.getElementById('weather-btn').href = `weather.html?country=${encodeURIComponent(country)}`;
 
-    const flightAudio = document.getElementById('flight-sound');
-    flightAudio.play().catch(() => {});
-
-    const map = L.map('map').setView([30, 0], 2);
+    // إحداثيات الدول العربية في آسيا
+    const countryCoordinates = {
+      'السعودية': [23.8859, 45.0792],
+      'الإمارات': [23.4241, 53.8478],
+      'الكويت': [29.3117, 47.4818],
+      'البحرين': [26.0667, 50.5577],
+      'قطر': [25.3548, 51.1839],
+      'عُمان': [21.4735, 55.9754],
+      'عمان': [21.4735, 55.9754],
+      'اليمن': [15.5527, 48.5164],
+      'الأردن': [30.5852, 36.2384],
+      'لبنان': [33.8547, 35.8623],
+      'سوريا': [34.8021, 38.9968],
+      'العراق': [33.2232, 43.6793],
+      'فلسطين': [31.9522, 35.2332]
+    };
+    
+    const map = L.map('map').setView([25, 45], 3);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    async function showCountryOnMap(name) {
-      try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?country=${encodeURIComponent(name)}&format=json&limit=1`);
-        const data = await res.json();
-        if (data.length > 0) {
-          const lat = parseFloat(data[0].lat);
-          const lon = parseFloat(data[0].lon);
-          map.setView([lat, lon], 6);
-          L.marker([lat, lon]).addTo(map).bindPopup(`<b>${name}</b><br>موقع وجهتك.`).openPopup();
-        }
-      } catch (e) {
-        console.error(e);
+    function showCountryOnMap(name) {
+      // استخدام الإحداثيات المحلية أولاً
+      if (countryCoordinates[name]) {
+        const [lat, lon] = countryCoordinates[name];
+        map.setView([lat, lon], 7);
+        L.marker([lat, lon], {
+          icon: L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
+          })
+        }).addTo(map).bindPopup(`<b style="font-family: 'Cairo', sans-serif;">${name}</b><br>موقع وجهتك`).openPopup();
+        return;
       }
+      
+      // إذا لم تكن الإحداثيات موجودة، استخدم API
+      fetch(`https://nominatim.openstreetmap.org/search?country=${encodeURIComponent(name)}&format=json&limit=1`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.length > 0) {
+            const lat = parseFloat(data[0].lat);
+            const lon = parseFloat(data[0].lon);
+            map.setView([lat, lon], 7);
+            L.marker([lat, lon], {
+              icon: L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34]
+              })
+            }).addTo(map).bindPopup(`<b style="font-family: 'Cairo', sans-serif;">${name}</b><br>موقع وجهتك`).openPopup();
+          }
+        })
+        .catch(e => {
+          console.error('خطأ في جلب موقع الدولة:', e);
+        });
     }
-    if (country !== 'غير محدد') showCountryOnMap(country);
+    
+    // عرض الدولة على الخريطة
+    if (country && country !== 'غير محدد') {
+      showCountryOnMap(country);
+    }
   </script>
 </body>
 </html>
-

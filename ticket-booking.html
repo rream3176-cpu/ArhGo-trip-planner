@@ -4,55 +4,206 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArhGo | حجز الرحلات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
   <script src="assets/js/arhgo.js" defer></script>
   <script src="assets/js/booking-system.js" defer></script>
   <style>
+    body {
+      background: var(--bg-primary);
+      padding-top: 80px;
+    }
+    
     .wrapper {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
+      grid-template-columns: 1fr 400px;
+      gap: var(--spacing-xl);
+      margin-top: var(--spacing-lg);
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
     }
+    
+    .booking-form,
+    .summary-card {
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(0, 229, 255, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .booking-form::before,
+    .summary-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 229, 255, 0.6) 20%, 
+        rgba(0, 207, 200, 0.6) 50%, 
+        rgba(0, 229, 255, 0.6) 80%, 
+        transparent 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    .booking-form:hover::before,
+    .summary-card:hover::before {
+      opacity: 1;
+    }
+    
+    .booking-form:hover,
+    .summary-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(0, 229, 255, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      border-color: rgba(0, 229, 255, 0.5);
+    }
+    
+    @media (max-width: 1024px) {
+      .wrapper {
+        grid-template-columns: 1fr;
+      }
+      .summary-card {
+        position: relative !important;
+        top: 0 !important;
+        max-height: none !important;
+      }
+    }
+    
     .booking-form {
       display: grid;
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-sm);
     }
+    
+    .booking-form .field {
+      margin-bottom: 0;
+    }
+    
+    .booking-form .field label {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+    
+    .booking-form .arhgo-input,
+    .booking-form .arhgo-select,
+    .booking-form .arhgo-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      color: var(--text-primary) !important;
+      background: linear-gradient(135deg, rgba(11, 15, 26, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%) !important;
+    }
+    
+    .booking-form .arhgo-select:focus,
+    .booking-form .arhgo-input:focus {
+      background: linear-gradient(135deg, rgba(30, 40, 60, 0.95) 0%, rgba(35, 45, 70, 1) 100%) !important;
+      border-color: rgba(0, 229, 255, 0.4) !important;
+    }
+    
+    .booking-form .arhgo-select option {
+      background: rgba(30, 40, 60, 0.95) !important;
+      color: var(--text-primary) !important;
+      padding: 12px;
+    }
+    
+    .booking-form .arhgo-select option:checked,
+    .booking-form .arhgo-select option:hover {
+      background: rgba(0, 229, 255, 0.3) !important;
+      color: var(--neon-cyan) !important;
+    }
+    
+    /* حقول full-width */
+    .booking-form .field.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    /* زر الإرسال */
+    .booking-form .btn {
+      grid-column: 1 / -1;
+      margin-top: var(--spacing-sm);
+      padding: 14px 24px;
+      font-weight: 600;
+    }
+    
     .summary-card {
       position: sticky;
       top: 100px;
       height: fit-content;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
     }
+    
+    .summary-card h3 {
+      margin: 0 0 var(--spacing-md) 0;
+      color: var(--neon-cyan);
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
     .summary-card .summary-item {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(55, 214, 192, 0.3);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
     }
+    
     .summary-item:last-child {
       border-bottom: none;
       font-weight: 700;
-      font-size: 1.1rem;
-      color: #37D6C0;
-      margin-top: 10px;
-      padding-top: 15px;
-      border-top: 2px solid rgba(55, 214, 192, 0.4);
+      font-size: 1.2rem;
+      color: var(--neon-cyan);
+      margin-top: var(--spacing-sm);
+      padding-top: var(--spacing-sm);
+      border-top: 1px solid rgba(0, 229, 255, 0.2);
     }
+    
     .success-message {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-      border: 2px solid rgba(16, 185, 129, 0.3);
-      padding: 20px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: var(--spacing-md);
       border-radius: var(--radius-md);
-      margin-top: 20px;
+      margin-top: var(--spacing-md);
       text-align: center;
+      color: var(--text-primary);
     }
+    
     .booking-id {
       font-family: 'Courier New', monospace;
-      background: rgba(55, 214, 192, 0.2);
+      background: rgba(0, 229, 255, 0.1);
       padding: 8px 12px;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       margin-top: 10px;
       display: inline-block;
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.25);
     }
+    
     .action-buttons {
       display: flex;
       gap: 10px;
@@ -71,10 +222,11 @@
       <li><a data-nav href="hotel.html">الفنادق</a></li>
       <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html">حجز المطاعم</a></li>
+      <li><a data-nav href="my-bookings.html">حجوزاتي</a></li>
     </ul>
     <div class="stack">
-      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
-      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
+      <a class="btn btn-ghost" href="login.html" data-flight-sound id="loginBtn">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound id="signupBtn">إنشاء حساب</a>
     </div>
   </nav>
   <main class="page-shell">
@@ -84,7 +236,7 @@
         <p class="section-subtitle">احجز رحلتك بسهولة وأمان. جميع الحجوزات تُحفظ تلقائياً ويمكنك طباعتها.</p>
       </div>
       <div class="wrapper">
-        <form id="bookingForm" class="glass-card booking-form">
+        <form id="bookingForm" class="booking-form">
           <div class="field">
             <label>نوع الرحلة *</label>
             <select class="arhgo-select" id="tripType" required>
@@ -95,11 +247,12 @@
             </select>
           </div>
           <div class="field">
-            <label>من / إلى *</label>
-            <div class="stack">
-              <input class="arhgo-input" type="text" id="from" placeholder="من (مثال: بغداد)" required>
-              <input class="arhgo-input" type="text" id="to" placeholder="إلى (مثال: دبي)" required>
-            </div>
+            <label>من *</label>
+            <input class="arhgo-input" type="text" id="from" placeholder="مثال: بغداد" required>
+          </div>
+          <div class="field">
+            <label>إلى *</label>
+            <input class="arhgo-input" type="text" id="to" placeholder="مثال: دبي" required>
           </div>
           <div class="field">
             <label>تاريخ المغادرة *</label>
@@ -121,15 +274,17 @@
           <div class="field">
             <label>عدد المسافرين *</label>
             <div class="stack" style="gap:8px;">
-              <button type="button" class="btn btn-ghost" onclick="changeCount(-1)">−</button>
+              <button type="button" class="btn btn-ghost" onclick="changeCount(-1)" style="min-width: 40px; padding: 10px;">−</button>
               <input class="arhgo-input" type="number" id="pcount" value="1" min="1" max="9" required style="text-align:center;">
-              <button type="button" class="btn btn-ghost" onclick="changeCount(1)">+</button>
+              <button type="button" class="btn btn-ghost" onclick="changeCount(1)" style="min-width: 40px; padding: 10px;">+</button>
             </div>
           </div>
-          <label class="field" style="align-items:center;flex-direction:row;gap:10px;">
-            <input type="checkbox" id="nonstop">
-            <span>أفضل الرحلات بدون توقف</span>
-          </label>
+          <div class="field full-width">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+              <input type="checkbox" id="nonstop" style="width: auto;">
+              <span style="text-transform: none; opacity: 1;">أفضل الرحلات بدون توقف</span>
+            </label>
+          </div>
           <div class="field">
             <label>الاسم الكامل *</label>
             <input class="arhgo-input" type="text" id="fullname" placeholder="اسمك الكامل" required>
@@ -151,14 +306,14 @@
               <option value="دفع إلكتروني">دفع إلكتروني</option>
             </select>
           </div>
-          <div class="field">
+          <div class="field full-width">
             <label>ملاحظات إضافية</label>
-            <textarea class="arhgo-textarea" id="notes" placeholder="طلبات خاصة أو تعليمات إضافية"></textarea>
+            <textarea class="arhgo-textarea" id="notes" placeholder="طلبات خاصة أو تعليمات إضافية" style="min-height: 80px;"></textarea>
           </div>
           <button class="btn btn-gradient" type="submit">تأكيد الحجز</button>
         </form>
 
-        <article class="glass-card summary-card">
+        <article class="summary-card">
           <h3>ملخص الحجز</h3>
           <div id="summaryContent">
             <div class="summary-item"><span>الرحلة</span><span id="sumTrip">—</span></div>
@@ -184,6 +339,83 @@
   </main>
 
   <script>
+    // التحقق من حالة تسجيل الدخول وتحديث الأزرار
+    function updateAuthButtons() {
+      console.log('🔄 تحديث الأزرار...');
+      const session_token = localStorage.getItem('session_token');
+      const userStr = localStorage.getItem('user');
+      const user = userStr ? JSON.parse(userStr) : {};
+      const loginBtn = document.getElementById('loginBtn');
+      const signupBtn = document.getElementById('signupBtn');
+      
+      console.log('Session token:', session_token ? 'موجود' : 'غير موجود');
+      console.log('User data:', user);
+      console.log('Login button:', loginBtn ? 'موجود' : 'غير موجود');
+      console.log('Signup button:', signupBtn ? 'موجود' : 'غير موجود');
+      
+      if (!loginBtn || !signupBtn) {
+        console.warn('⚠️ الأزرار غير موجودة بعد');
+        setTimeout(updateAuthButtons, 500);
+        return;
+      }
+      
+      if (session_token && user.full_name) {
+        // المستخدم مسجل دخول
+        loginBtn.textContent = user.full_name;
+        loginBtn.href = 'my-bookings.html';
+        loginBtn.style.color = '#37D6C0';
+        signupBtn.textContent = 'تسجيل الخروج';
+        signupBtn.href = '#';
+        signupBtn.onclick = (e) => {
+          e.preventDefault();
+          if (confirm('هل تريد تسجيل الخروج؟')) {
+            localStorage.removeItem('session_token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('arhgo_current_user');
+            localStorage.removeItem('loggedIn');
+            window.location.href = 'login.html';
+          }
+        };
+        console.log('✅ تم تحديث الأزرار - المستخدم مسجل دخول:', user.full_name);
+      } else {
+        // المستخدم غير مسجل دخول
+        loginBtn.textContent = 'تسجيل الدخول';
+        loginBtn.href = 'login.html';
+        loginBtn.style.color = '';
+        signupBtn.textContent = 'إنشاء حساب';
+        signupBtn.href = 'signup.html';
+        signupBtn.onclick = null;
+        console.log('ℹ️ المستخدم غير مسجل دخول');
+      }
+    }
+    
+    // تحديث الأزرار عند تحميل الصفحة
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', updateAuthButtons);
+    } else {
+      updateAuthButtons();
+    }
+    
+    // تحديث الأزرار عند تغيير حالة المصادقة
+    window.addEventListener('authStateChanged', updateAuthButtons);
+    window.addEventListener('storage', updateAuthButtons);
+    
+    // تحديث الأزرار عند العودة للصفحة
+    window.addEventListener('focus', updateAuthButtons);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        updateAuthButtons();
+      }
+    });
+    
+    // تحديث الأزرار عند النقر في أي مكان (للتأكد من التحديث)
+    document.addEventListener('click', () => {
+      setTimeout(updateAuthButtons, 100);
+    });
+    
+    // تحديث الأزرار كل 2 ثانية للتأكد
+    setInterval(updateAuthButtons, 2000);
+    
     let currentBooking = null;
 
     // تعيين الحد الأدنى للتاريخ (اليوم)
@@ -251,6 +483,13 @@
     document.getElementById('bookingForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const session_token = localStorage.getItem('session_token');
+      if (!session_token) {
+        alert('❌ يرجى تسجيل الدخول أولاً لحجز رحلة');
+        window.location.href = 'login.html';
+        return;
+      }
+
       const formData = {
         trip: document.getElementById('tripType').value,
         from: document.getElementById('from').value,
@@ -267,38 +506,111 @@
         notes: document.getElementById('notes').value
       };
 
-      // حساب السعر
-      const price = bookingSystem.calculateFlightPrice(
-        formData.trip,
-        formData.classType,
-        formData.pcount,
-        formData.from,
-        formData.to
-      );
-      formData.price = price;
+      // التحقق من الحقول المطلوبة
+      if (!formData.from || !formData.to || !formData.depart || !formData.classType) {
+        alert('❌ يرجى تعبئة جميع الحقول المطلوبة');
+        return;
+      }
 
-      // حفظ الحجز
+      // تحويل classType إلى التنسيق المطلوب من API
+      let class_type = formData.classType;
+      if (class_type === 'درجة رجال الأعمال') {
+        class_type = 'رجال أعمال';
+      } else if (class_type === 'الأولى') {
+        class_type = 'أولى';
+      } else if (class_type === 'اقتصادية') {
+        class_type = 'اقتصادية';
+      }
+
+      // إعداد البيانات للإرسال إلى API
+      const bookingPayload = {
+        session_token: session_token,
+        from_city: formData.from,
+        to_city: formData.to,
+        departure_date: formData.depart,
+        return_date: formData.return,
+        passengers: formData.pcount,
+        class_type: class_type,
+        special_requests: formData.notes || ''
+      };
+
+      // إظهار رسالة التحميل
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'جاري الحجز...';
+
       try {
-        currentBooking = bookingSystem.bookFlight(formData);
+        const baseUrl = window.location.protocol === 'file:' ? 'http://localhost/ArhGo-trip-planner/' : './';
         
-        // إظهار رسالة النجاح
-        document.getElementById('bookingIdDisplay').textContent = currentBooking.id;
-        document.getElementById('successMessage').style.display = 'block';
-        document.getElementById('summaryContent').style.opacity = '0.6';
-
-        // محاولة إرسال للخادم (اختياري)
-        bookingSystem.sendToServer(currentBooking, 'http://localhost:4002/api/book').catch(() => {
-          // تم الحفظ محلياً فقط
+        console.log('📤 إرسال بيانات حجز الرحلة:', bookingPayload);
+        console.log('🌐 URL:', baseUrl + 'api/book_flight.php');
+        
+        const response = await fetch(baseUrl + 'api/book_flight.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bookingPayload)
         });
 
-        // إعادة تعيين النموذج بعد 3 ثواني
-        setTimeout(() => {
-          document.getElementById('bookingForm').reset();
-          updateSummary();
-        }, 3000);
+        console.log('📥 حالة الاستجابة:', response.status, response.statusText);
+        
+        const result = await response.json();
+        console.log('📦 النتيجة:', result);
+
+        if (result.success) {
+          console.log('✅ تم الحجز بنجاح! رقم الحجز:', result.booking_reference);
+          
+          // حفظ محلياً أيضاً للنسخ الاحتياطي
+          currentBooking = {
+            id: result.booking_reference,
+            type: 'flight',
+            ...formData,
+            price: result.total_price,
+            createdAt: new Date().toISOString(),
+            status: 'confirmed'
+          };
+          bookingSystem.bookFlight(currentBooking);
+          
+          // إظهار رسالة النجاح
+          document.getElementById('bookingIdDisplay').textContent = result.booking_reference;
+          document.getElementById('successMessage').style.display = 'block';
+          document.getElementById('summaryContent').style.opacity = '0.6';
+
+          // تحديث السعر في الملخص
+          document.getElementById('sumPrice').textContent = `$${result.total_price}`;
+
+          // إعادة تعيين النموذج بعد 3 ثواني
+          setTimeout(() => {
+            document.getElementById('bookingForm').reset();
+            updateSummary();
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }, 3000);
+        } else {
+          console.error('❌ فشل الحجز:', result);
+          throw new Error(result.error || 'فشل الحجز');
+        }
 
       } catch (error) {
-        alert('❌ حدث خطأ أثناء الحجز: ' + error.message);
+        console.error('❌ خطأ في حجز الرحلة:', error);
+        console.error('تفاصيل الخطأ:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
+        
+        let errorMessage = 'حدث خطأ أثناء الحجز';
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (error instanceof TypeError && error.message.includes('fetch')) {
+          errorMessage = 'فشل الاتصال بالخادم. تأكد من أنك تستخدم http://localhost';
+        }
+        
+        alert('❌ ' + errorMessage + '\n\nافتح Console (F12) لمعرفة التفاصيل');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
       }
     });
 
