@@ -8,6 +8,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/arhgo.css">
+  <style>
+    .landmark-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: rgba(0, 229, 255, 0.4);
+      box-shadow: 0 25px 80px rgba(0, 229, 255, 0.3), 0 0 0 1px rgba(0, 229, 255, 0.2);
+    }
+    .landmark-card img {
+      transition: transform 0.3s ease;
+    }
+    .landmark-card:hover img {
+      transform: scale(1.1);
+    }
+    @media (max-width: 1024px) {
+      .landmarks-gallery {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+    }
+    @media (max-width: 768px) {
+      .landmarks-gallery {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+  </style>
   <script src="assets/js/user-auth.js" defer></script>
   <script src="assets/js/arhgo.js" defer></script>
   <script src="assets/js/countries-database.js" defer></script>
@@ -23,9 +46,7 @@
       <li><a data-nav href="ticket-booking.html" data-translate="nav.flights">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html" data-translate="nav.restaurants">مطاعم</a></li>
       <li><a data-nav href="my-bookings.html">حجوزاتي</a></li>
-      <li><a data-nav href="analytics.html">التحليلات</a></li>
       <li><a data-nav href="budget-manager.html">إدارة الميزانية</a></li>
-      <li><a data-nav href="price-comparison.html">مقارنة الأسعار</a></li>
       <li><a data-nav href="smart-alerts.html">التنبيهات</a></li>
   </ul>
     <div class="stack" id="authButtons">
@@ -55,7 +76,6 @@
           <div class="hero-actions">
             <button class="btn btn-gradient" id="hero-cta" data-flight-sound data-translate="hero.cta">ابدأ التخطيط الآن</button>
             <a class="btn btn-ghost" href="smart-planner.html" data-flight-sound data-translate="hero.ai">مولد خطط ذكي</a>
-            <a class="btn btn-ghost" href="analytics.html" data-flight-sound>لوحة التحليلات</a>
           </div>
         </div>
           <div class="hero-visual">
@@ -248,9 +268,99 @@
         <div id="destinations-tabs" class="stack"></div>
         <div id="destinations-content" class="timeline" style="margin-top:18px;"></div>
       </div>
-      <div class="map-preview">
-        <iframe title="ArhGo world map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8582251.092659855!2d16.2795226!3d46.32532945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b45bbb4694c1f1%3A0x8d26ab9dd98ec605!2sMediterranean%20Sea!5e0!3m2!1sen!2siq!4v1731812222000!5m2!1sen!2siq" loading="lazy" style="will-change: auto;"></iframe>
-  </div>
+      <div class="landmarks-carousel" style="position: relative; border-radius: var(--radius-md); overflow: hidden; background: linear-gradient(135deg, rgba(20, 27, 45, 0.8) 0%, rgba(15, 22, 36, 0.9) 100%); border: 1px solid rgba(0, 229, 255, 0.2); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); height: 100%; min-height: 500px;">
+        <div class="carousel-container" style="position: relative; width: 100%; height: 100%; overflow: hidden;">
+          <div class="carousel-slides" id="landmarksSlides" style="display: flex; width: 1200%; height: 100%; transition: transform 0.6s ease-in-out;">
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&h=800&fit=crop" alt="السعودية - الكعبة المشرفة" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">الكعبة المشرفة</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">السعودية</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=800&fit=crop" alt="الإمارات - برج خليفة" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">برج خليفة</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">الإمارات</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=800&fit=crop" alt="الأردن - البتراء" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">البتراء</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">الأردن</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&h=800&fit=crop" alt="لبنان - جونيه" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">جونيه</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">لبنان</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&h=800&fit=crop" alt="قطر - الدوحة" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">الدوحة</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">قطر</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&h=800&fit=crop" alt="البحرين - المنامة" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">المنامة</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">البحرين</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1200&h=800&fit=crop" alt="الكويت - أبراج الكويت" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">أبراج الكويت</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">الكويت</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&h=800&fit=crop" alt="عُمان - مسقط" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">مسقط</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">عُمان</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&h=800&fit=crop" alt="اليمن - صنعاء" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">صنعاء القديمة</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">اليمن</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=800&fit=crop" alt="سوريا - دمشق" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">دمشق</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">سوريا</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=800&fit=crop" alt="العراق - بغداد" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">بغداد</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">العراق</p>
+              </div>
+            </div>
+            <div class="carousel-slide" style="min-width: 8.333%; height: 100%; position: relative;">
+              <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=800&fit=crop" alt="فلسطين - القدس" style="width: 100%; height: 100%; object-fit: cover;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: var(--spacing-md); text-align: center;">
+                <h4 style="color: var(--neon-cyan); font-size: 1.2rem; margin: 0; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);">القدس</h4>
+                <p style="color: #fff; font-size: 0.9rem; margin: 4px 0 0 0;">فلسطين</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-prev" onclick="changeSlide(-1)" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); background: rgba(0, 229, 255, 0.3); border: 2px solid rgba(0, 229, 255, 0.5); color: var(--neon-cyan); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10;">‹</button>
+        <button class="carousel-btn carousel-next" onclick="changeSlide(1)" style="position: absolute; top: 50%; left: 20px; transform: translateY(-50%); background: rgba(0, 229, 255, 0.3); border: 2px solid rgba(0, 229, 255, 0.5); color: var(--neon-cyan); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10;">›</button>
+        <div class="carousel-dots" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;"></div>
+      </div>
 </section>
 
   </main>
@@ -878,6 +988,59 @@
     if (performance.navigation.type === 1) {
       setTimeout(updateAuthUI, 100);
     }
+    
+    // Carousel للصور
+    let currentSlide = 0;
+    const totalSlides = 12;
+    const slidesContainer = document.getElementById('landmarksSlides');
+    const dotsContainer = document.querySelector('.carousel-dots');
+    
+    // إنشاء النقاط (dots)
+    if (dotsContainer) {
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot';
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+      }
+    }
+    
+    function goToSlide(index) {
+      currentSlide = index;
+      if (slidesContainer) {
+        slidesContainer.style.transform = `translateX(-${currentSlide * (100 / totalSlides)}%)`;
+      }
+      updateDots();
+    }
+    
+    window.changeSlide = function(direction) {
+      currentSlide += direction;
+      if (currentSlide < 0) {
+        currentSlide = totalSlides - 1;
+      } else if (currentSlide >= totalSlides) {
+        currentSlide = 0;
+      }
+      goToSlide(currentSlide);
+    };
+    
+    function updateDots() {
+      const dots = document.querySelectorAll('.carousel-dot');
+      dots.forEach((dot, index) => {
+        if (index === currentSlide) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    }
+    
+    // تغيير تلقائي كل 5 ثوان
+    setInterval(() => {
+      if (slidesContainer) {
+        window.changeSlide(1);
+      }
+    }, 5000);
   </script>
 </body>
 </html>

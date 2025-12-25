@@ -61,10 +61,6 @@
       <li><a data-nav href="ticket-booking.html">حجز الرحلات</a></li>
       <li><a data-nav href="Restuarnt.html">مطاعم</a></li>
     </ul>
-    <div class="stack">
-      <a class="btn btn-ghost" href="login.html" data-flight-sound>تسجيل الدخول</a>
-      <a class="btn btn-gradient" href="signup.html" data-flight-sound>إنشاء حساب</a>
-    </div>
   </nav>
   <main class="page-shell">
     <section class="section">
@@ -99,6 +95,55 @@
       document.getElementById('city-input').value = defaultCountry;
     }
 
+    // خريطة تحويل الأسماء العربية للدول إلى المدن الرئيسية أو الأسماء الإنجليزية
+    const countryToCityMap = {
+      'السعودية': 'Riyadh, Saudi Arabia',
+      'المملكة العربية السعودية': 'Riyadh, Saudi Arabia',
+      'الإمارات': 'Dubai, UAE',
+      'الإمارات العربية المتحدة': 'Dubai, UAE',
+      'الكويت': 'Kuwait City, Kuwait',
+      'البحرين': 'Manama, Bahrain',
+      'قطر': 'Doha, Qatar',
+      'عُمان': 'Muscat, Oman',
+      'عمان': 'Muscat, Oman',
+      'اليمن': 'Sanaa, Yemen',
+      'الأردن': 'Amman, Jordan',
+      'لبنان': 'Beirut, Lebanon',
+      'سوريا': 'Damascus, Syria',
+      'سورية': 'Damascus, Syria',
+      'العراق': 'Baghdad, Iraq',
+      'فلسطين': 'Jerusalem, Palestine'
+    };
+
+    // دالة لتطبيع اسم الدولة
+    function normalizeCountryName(name) {
+      if (!name) return '';
+      let normalized = name.trim().replace(/\s+/g, '');
+      normalized = normalized.replace(/عُمان/g, 'عمان');
+      normalized = normalized.replace(/[\u200B-\u200D\uFEFF]/g, '');
+      return normalized;
+    }
+
+    // دالة للعثور على المدينة الصحيحة للدولة
+    function getCityForCountry(countryName) {
+      const normalized = normalizeCountryName(countryName);
+      
+      // البحث المباشر
+      if (countryToCityMap[countryName]) {
+        return countryToCityMap[countryName];
+      }
+      
+      // البحث في الأسماء المطابقة
+      for (const [key, value] of Object.entries(countryToCityMap)) {
+        if (normalizeCountryName(key) === normalized) {
+          return value;
+        }
+      }
+      
+      // إذا لم يتم العثور، إرجاع الاسم الأصلي
+      return countryName;
+    }
+
     document.getElementById('get-weather-btn').addEventListener('click', fetchWeather);
 
     async function fetchWeather() {
@@ -107,24 +152,35 @@
         alert('الرجاء إدخال اسم المدينة.');
         return;
       }
+      
       summary.textContent = 'جارٍ جلب البيانات...';
       cards.innerHTML = '';
+      
+      // تحويل اسم الدولة إلى المدينة الصحيحة
+      const searchQuery = getCityForCountry(city);
+      console.log('البحث عن:', city, '->', searchQuery);
+      
       try {
-        const res = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(city)}&lang=ar`);
+        const res = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(searchQuery)}&lang=ar`);
         const data = await res.json();
         if (data.error) {
           summary.textContent = data.error.message;
           return;
         }
-        renderWeather(data);
+        renderWeather(data, city);
       } catch (err) {
         summary.textContent = 'حدث خطأ أثناء جلب البيانات.';
         console.error(err);
       }
     }
 
-    function renderWeather(data) {
-      summary.textContent = `${data.location.name}, ${data.location.country} — ${data.current.condition.text}`;
+    function renderWeather(data, originalQuery) {
+      // عرض اسم الدولة الأصلية إذا كانت مختلفة
+      const displayLocation = originalQuery && originalQuery !== data.location.name 
+        ? `${originalQuery} (${data.location.name}, ${data.location.country})`
+        : `${data.location.name}, ${data.location.country}`;
+      
+      summary.textContent = `${displayLocation} — ${data.current.condition.text}`;
       cards.innerHTML = `
         <div class="weather-card">
           <h3>الحرارة</h3>
@@ -146,7 +202,10 @@
     }
 
     if (defaultCountry) {
-      fetchWeather();
+      // انتظار تحميل الصفحة بالكامل قبل جلب الطقس
+      setTimeout(() => {
+        fetchWeather();
+      }, 300);
     }
   </script>
 </body>

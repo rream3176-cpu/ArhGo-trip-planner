@@ -346,9 +346,13 @@
       <li><a data-nav href="Restuarnt.html">حجز المطاعم</a></li>
       <li><a data-nav href="my-bookings.html">حجوزاتي</a></li>
     </ul>
-    <div class="stack">
+    <div class="stack" id="authButtons">
       <a class="btn btn-ghost" href="login.html" data-flight-sound id="loginBtn">تسجيل الدخول</a>
       <a class="btn btn-gradient" href="signup.html" data-flight-sound id="signupBtn">إنشاء حساب</a>
+    </div>
+    <div class="stack" id="userProfile" style="display: none; align-items: center; gap: var(--spacing-sm);">
+      <span class="user-name" id="userNameDisplay" style="color: var(--neon-cyan); font-weight: 700; font-size: 1rem; white-space: nowrap; text-shadow: 0 0 10px var(--neon-cyan-glow);">المستخدم</span>
+      <button class="btn btn-ghost" onclick="logoutUser(); location.reload();" style="padding: 8px 16px; font-size: 0.85rem; white-space: nowrap;">تسجيل الخروج</button>
     </div>
   </nav>
   <main class="page-shell">
@@ -1088,6 +1092,67 @@
 
     // لا تحميل المطاعم تلقائياً - فقط عند البحث
     // applyFilters(); // تم تعطيله
+
+    // دالة تسجيل الخروج
+    function logoutUser() {
+      localStorage.removeItem('arhgo_current_user');
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('session_token');
+      if (typeof userAuth !== 'undefined' && userAuth.logout) {
+        userAuth.logout();
+      }
+    }
+
+    // التحقق من حالة تسجيل الدخول وعرض اسم المستخدم
+    function updateAuthUI() {
+      const currentUser = localStorage.getItem('arhgo_current_user');
+      const loggedIn = localStorage.getItem('loggedIn');
+      
+      const authButtons = document.getElementById('authButtons');
+      const userProfile = document.getElementById('userProfile');
+      const userNameDisplay = document.getElementById('userNameDisplay');
+      
+      if (currentUser || loggedIn) {
+        if (typeof userAuth !== 'undefined') {
+          try {
+            const isLoggedIn = userAuth.isLoggedIn();
+            if (isLoggedIn) {
+              const user = userAuth.getCurrentUser();
+              if (user) {
+                if (authButtons) authButtons.style.display = 'none';
+                if (userProfile) {
+                  userProfile.style.display = 'flex';
+                  if (userNameDisplay) {
+                    userNameDisplay.textContent = `👤 ${user.fullname || user.username || currentUser || loggedIn}`;
+                  }
+                }
+                return;
+              }
+            }
+          } catch (error) {
+            console.error('Error with userAuth:', error);
+          }
+        }
+        
+        if (authButtons) authButtons.style.display = 'none';
+        if (userProfile) {
+          userProfile.style.display = 'flex';
+          if (userNameDisplay) {
+            const allUsers = JSON.parse(localStorage.getItem('arhgo_users') || '[]');
+            const user = allUsers.find(u => u.username === (currentUser || loggedIn));
+            const displayName = user ? (user.fullname || user.username) : (currentUser || loggedIn);
+            userNameDisplay.textContent = `👤 ${displayName}`;
+          }
+        }
+      } else {
+        if (authButtons) authButtons.style.display = 'flex';
+        if (userProfile) userProfile.style.display = 'none';
+      }
+    }
+
+    updateAuthUI();
+    window.addEventListener('storage', updateAuthUI);
+    setInterval(updateAuthUI, 1000);
   </script>
 </body>
 </html>

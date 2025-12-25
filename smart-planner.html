@@ -23,11 +23,35 @@
       max-width: 900px;
       margin: 0 auto;
       padding: var(--spacing-md) var(--spacing-lg);
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .page-header {
       text-align: center;
       margin-bottom: var(--spacing-md);
+      animation: fadeInDown 0.6s ease-out 0.2s both;
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .page-header h1 {
@@ -36,12 +60,19 @@
       color: var(--text-primary);
       margin-bottom: 4px;
       font-family: 'Cairo', sans-serif;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .page-header h1:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
     }
     
     .page-header p {
       font-size: 0.9rem;
       color: var(--text-secondary);
       font-family: 'Cairo', sans-serif;
+      transition: color 0.3s ease;
     }
     
     .plan-card {
@@ -56,6 +87,28 @@
         0 0 0 1px rgba(0, 229, 255, 0.1),
         inset 0 1px 1px rgba(255, 255, 255, 0.1);
       margin-bottom: var(--spacing-md);
+      animation: slideInFade 0.8s ease-out 0.3s both;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    @keyframes slideInFade {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .plan-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(0, 229, 255, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      border-color: rgba(0, 229, 255, 0.4);
     }
     
     .plan-header {
@@ -88,12 +141,36 @@
       margin-bottom: var(--spacing-md);
       padding-bottom: var(--spacing-md);
       border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+      animation: fadeInLeft 0.6s ease-out both;
+      transition: all 0.3s ease;
+    }
+    
+    .day-section:nth-child(1) { animation-delay: 0.1s; }
+    .day-section:nth-child(2) { animation-delay: 0.2s; }
+    .day-section:nth-child(3) { animation-delay: 0.3s; }
+    .day-section:nth-child(4) { animation-delay: 0.4s; }
+    .day-section:nth-child(5) { animation-delay: 0.5s; }
+    
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
     
     .day-section:last-child {
       border-bottom: none;
       margin-bottom: 0;
       padding-bottom: 0;
+    }
+    
+    .day-section:hover {
+      transform: translateX(5px);
+      border-color: rgba(0, 229, 255, 0.3);
     }
     
     .day-title {
@@ -104,14 +181,25 @@
       padding-bottom: var(--spacing-xs);
       border-bottom: 1px solid rgba(0, 229, 255, 0.2);
       font-family: 'Cairo', sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    .day-title:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
     }
     
     .time-slot {
       margin-bottom: var(--spacing-sm);
+      transition: all 0.3s ease;
     }
     
     .time-slot:last-child {
       margin-bottom: 0;
+    }
+    
+    .time-slot:hover {
+      transform: translateX(5px);
     }
     
     .time-slot-title {
@@ -120,6 +208,12 @@
       color: var(--neon-cyan);
       margin-bottom: 6px;
       font-family: 'Cairo', sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    .time-slot-title:hover {
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+      transform: translateX(3px);
     }
     
     .time-slot-activities {
@@ -133,6 +227,30 @@
       margin-bottom: 6px;
       border-right: 2px solid rgba(0, 229, 255, 0.3);
       font-family: 'Cairo', sans-serif;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: fadeInScale 0.4s ease-out both;
+    }
+    
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .activity-item:nth-child(1) { animation-delay: 0.1s; }
+    .activity-item:nth-child(2) { animation-delay: 0.2s; }
+    .activity-item:nth-child(3) { animation-delay: 0.3s; }
+    
+    .activity-item:hover {
+      transform: translateX(5px) scale(1.02);
+      background: rgba(0, 229, 255, 0.15);
+      border-color: rgba(0, 229, 255, 0.5);
+      box-shadow: 0 5px 15px rgba(0, 229, 255, 0.2);
     }
     
     .activity-item:last-child {
@@ -158,6 +276,7 @@
       justify-content: center;
       margin-top: var(--spacing-md);
       flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease-out 0.5s both;
     }
     
     .actions .btn {
@@ -165,6 +284,36 @@
       font-weight: 600;
       padding: 8px 16px;
       font-size: 0.9rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .actions .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .actions .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .actions .btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 229, 255, 0.4);
+    }
+    
+    .actions .btn:active {
+      transform: translateY(-1px) scale(1.02);
     }
     
     
@@ -174,6 +323,19 @@
       min-height: 20px;
       font-size: 0.85rem;
       font-family: 'Cairo', sans-serif;
+      transition: all 0.3s ease;
+      animation: slideInMessage 0.4s ease-out;
+    }
+    
+    @keyframes slideInMessage {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     @media (max-width: 768px) {
@@ -193,6 +355,75 @@
         grid-template-columns: 1fr;
       }
     }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    @keyframes modalSlideOut {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+      }
+    }
+    
+    #shareModal input,
+    #shareModal button {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    #shareModal input:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+      transform: scale(1.02);
+    }
+    
+    #shareModal button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 229, 255, 0.4);
+    }
+    
+    #shareModal button:active {
+      transform: translateY(0);
+    }
+    
+    .plan-info-item {
+      transition: all 0.3s ease;
+    }
+    
+    .plan-info-item:hover {
+      transform: translateY(-3px);
+    }
+    
+    .plan-info-value {
+      transition: color 0.3s ease;
+    }
+    
+    .plan-info-item:hover .plan-info-value {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
   </style>
 </head>
 <body class="page-hidden">
@@ -200,11 +431,17 @@
     <div class="arhgo-logo">ArhGo</div>
     <ul>
       <li><a data-nav href="index.html">الرئيسية</a></li>
-      <li><a data-nav href="analytics.html">التحليلات</a></li>
       <li><a data-nav href="budget-manager.html">إدارة الميزانية</a></li>
-      <li><a data-nav href="price-comparison.html">مقارنة الأسعار</a></li>
       <li><a data-nav href="smart-alerts.html">التنبيهات</a></li>
     </ul>
+    <div class="stack" id="authButtons">
+      <a class="btn btn-ghost" href="login.html" data-flight-sound id="loginBtn">تسجيل الدخول</a>
+      <a class="btn btn-gradient" href="signup.html" data-flight-sound id="signupBtn">إنشاء حساب</a>
+    </div>
+    <div class="stack" id="userProfile" style="display: none; align-items: center; gap: var(--spacing-sm);">
+      <span class="user-name" id="userNameDisplay" style="color: var(--neon-cyan); font-weight: 700; font-size: 1rem; white-space: nowrap; text-shadow: 0 0 10px var(--neon-cyan-glow);">المستخدم</span>
+      <button class="btn btn-ghost" onclick="logoutUser(); location.reload();" style="padding: 8px 16px; font-size: 0.85rem; white-space: nowrap;">تسجيل الخروج</button>
+    </div>
   </nav>
 
   <main class="planner-container">
@@ -224,11 +461,40 @@
     </div>
 
     <div class="message" id="planMessage"></div>
+    
+    <!-- Modal لعرض رابط المشاركة -->
+    <div id="shareModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 10000; align-items: center; justify-content: center;">
+      <div style="background: linear-gradient(135deg, rgba(20, 27, 45, 0.95) 0%, rgba(15, 22, 36, 0.98) 100%); padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; border: 2px solid rgba(0, 229, 255, 0.3); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
+        <h2 style="color: var(--neon-cyan); margin-bottom: 20px; text-align: center; font-size: 1.5rem;">🔗 رابط مشاركة الخطة</h2>
+        <div style="margin-bottom: 20px;">
+          <label style="color: var(--text-secondary); display: block; margin-bottom: 8px; font-size: 0.9rem;">انسخ الرابط وشاركه:</label>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="shareLinkInput" readonly style="flex: 1; padding: 12px; background: rgba(0, 229, 255, 0.1); border: 2px solid rgba(0, 229, 255, 0.3); border-radius: 8px; color: var(--text-primary); font-size: 0.9rem; font-family: 'Cairo', sans-serif;">
+            <button id="copyLinkBtn" style="padding: 12px 20px; background: var(--neon-cyan); color: #0E1F33; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-family: 'Cairo', sans-serif; white-space: nowrap;">نسخ</button>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <button id="closeShareModal" style="padding: 10px 30px; background: transparent; color: var(--neon-cyan); border: 2px solid var(--neon-cyan); border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Cairo', sans-serif;">إغلاق</button>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script>
     // الدول العربية في آسيا فقط
     const arabCountriesAsia = ['السعودية', 'الإمارات', 'الكويت', 'قطر', 'البحرين', 'عُمان', 'عمان', 'اليمن', 'العراق', 'سوريا', 'الأردن', 'لبنان', 'فلسطين'];
+    
+    // دالة لتطبيع اسم الدولة للمقارنة
+    function normalizeCountryName(name) {
+      if (!name) return '';
+      // إزالة المسافات الزائدة
+      let normalized = name.trim().replace(/\s+/g, '');
+      // معالجة حالات خاصة: عُمان و عمان
+      normalized = normalized.replace(/عُمان/g, 'عمان');
+      // إزالة أي أحرف غير مرئية
+      normalized = normalized.replace(/[\u200B-\u200D\uFEFF]/g, '');
+      return normalized;
+    }
     
     // دالة للحصول على بيانات دولة معينة من MySQL
     let countryDataCache = {};
@@ -242,200 +508,49 @@
         return countryDataCache[countryName];
       }
       
-      // استخدام البيانات الافتراضية مباشرة (أسرع)
-      const defaultData = {
-        'السعودية': {
-          cities: ['الرياض', 'جدة', 'الدمام', 'المدينة المنورة', 'مكة المكرمة'],
-          attractions: {
-            cultural: ['قصر المصمك', 'متحف الملك عبدالعزيز', 'قلعة الرياض', 'متحف قصر المربع'],
-            nature: ['وادي حنيفة', 'منتزه الملك عبدالله', 'وادي نمار', 'حديقة الملك فهد'],
-            adventure: ['رحلة صحراوية', 'تسلق الجبال', 'رياضات مائية'],
-            food: ['مطعم النخيل', 'مطعم الشرق', 'مطعم البيك']
-          },
-          budget: { low: 30, medium: 60, high: 120 },
-          timeSlots: { morning: '08:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'الإمارات': {
-          cities: ['دبي', 'أبوظبي', 'الشارقة', 'عجمان'],
-          attractions: {
-            cultural: ['برج خليفة', 'متحف اللوفر أبوظبي', 'مسجد الشيخ زايد', 'قصر الإمارات'],
-            nature: ['شاطئ جميرا', 'حديقة دبي', 'وادي المغامرات', 'الصحراء'],
-            adventure: ['قفز بالمظلة', 'رياضات مائية', 'رحلة صحراوية'],
-            food: ['مطعم At.mosphere', 'مطعم Zuma', 'مطعم Nobu']
-          },
-          budget: { low: 80, medium: 160, high: 320 },
-          timeSlots: { morning: '09:00-12:00', afternoon: '15:00-18:00', evening: '20:00-23:00' },
-          optimalRoute: true
-        },
-        'الكويت': {
-          cities: ['الكويت', 'السالمية', 'الجهراء'],
-          attractions: {
-            cultural: ['أبراج الكويت', 'متحف الكويت الوطني', 'قصر السيف', 'المتحف العلمي'],
-            nature: ['شاطئ الكويت', 'حديقة الشهيد', 'جزيرة فيلكا'],
-            adventure: ['رياضات مائية', 'رحلة بحرية'],
-            food: ['مطعم الكويت', 'مطعم الشاطئ', 'مطعم السفن']
-          },
-          budget: { low: 40, medium: 80, high: 160 },
-          timeSlots: { morning: '09:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'قطر': {
-          cities: ['الدوحة', 'الريان', 'الخور'],
-          attractions: {
-            cultural: ['متحف قطر الوطني', 'متحف الفن الإسلامي', 'سوق واقف', 'قصر الدوحة'],
-            nature: ['شاطئ الخور', 'حديقة أسباير', 'الصحراء'],
-            adventure: ['رياضات مائية', 'رحلة صحراوية'],
-            food: ['مطعم قطر', 'مطعم السوق', 'مطعم الخليج']
-          },
-          budget: { low: 70, medium: 140, high: 280 },
-          timeSlots: { morning: '09:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'البحرين': {
-          cities: ['المنامة', 'المحرق', 'سترة'],
-          attractions: {
-            cultural: ['قلعة البحرين', 'متحف البحرين الوطني', 'مسجد الفاتح', 'بيت القرآن'],
-            nature: ['شاطئ البحرين', 'حديقة العرين', 'جزيرة أمواج'],
-            adventure: ['رياضات مائية', 'رحلة بحرية'],
-            food: ['مطعم البحرين', 'مطعم الخليج', 'مطعم السوق']
-          },
-          budget: { low: 35, medium: 70, high: 140 },
-          timeSlots: { morning: '09:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'عُمان': {
-          cities: ['مسقط', 'صلالة', 'نزوى', 'صور'],
-          attractions: {
-            cultural: ['قصر السلطان', 'متحف عمان الوطني', 'قلعة نزوى', 'سوق مطرح'],
-            nature: ['وادي شاب', 'جبل شمس', 'شاطئ مسقط', 'وادي بني خالد'],
-            adventure: ['تسلق الجبال', 'رحلة صحراوية', 'رياضات مائية'],
-            food: ['مطعم عمان', 'مطعم الجبل', 'مطعم الساحل']
-          },
-          budget: { low: 35, medium: 70, high: 140 },
-          timeSlots: { morning: '08:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'عمان': {
-          cities: ['مسقط', 'صلالة', 'نزوى', 'صور'],
-          attractions: {
-            cultural: ['قصر السلطان', 'متحف عمان الوطني', 'قلعة نزوى', 'سوق مطرح'],
-            nature: ['وادي شاب', 'جبل شمس', 'شاطئ مسقط', 'وادي بني خالد'],
-            adventure: ['تسلق الجبال', 'رحلة صحراوية', 'رياضات مائية'],
-            food: ['مطعم عمان', 'مطعم الجبل', 'مطعم الساحل']
-          },
-          budget: { low: 35, medium: 70, high: 140 },
-          timeSlots: { morning: '08:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'اليمن': {
-          cities: ['صنعاء', 'عدن', 'تعز', 'حضرموت'],
-          attractions: {
-            cultural: ['صنعاء القديمة', 'قصر غمدان', 'متحف اليمن الوطني', 'سوق صنعاء'],
-            nature: ['جبل صبر', 'وادي حضرموت', 'شاطئ عدن'],
-            adventure: ['تسلق الجبال', 'رحلة صحراوية'],
-            food: ['مطعم اليمن', 'مطعم الحضرمي', 'مطعم السوق']
-          },
-          budget: { low: 20, medium: 40, high: 80 },
-          timeSlots: { morning: '08:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'العراق': {
-          cities: ['بغداد', 'البصرة', 'الموصل', 'أربيل', 'كربلاء'],
-          attractions: {
-            cultural: ['المتحف العراقي', 'أطلال بابل', 'المسجد الذهبي', 'قصر العاشق'],
-            nature: ['نهر دجلة', 'نهر الفرات', 'جبال كردستان'],
-            adventure: ['رحلة نهرية', 'تسلق الجبال'],
-            food: ['مطعم بغداد', 'مطعم الشط', 'مطعم الرافدين']
-          },
-          budget: { low: 25, medium: 50, high: 100 },
-          timeSlots: { morning: '08:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'سوريا': {
-          cities: ['دمشق', 'حلب', 'اللاذقية', 'طرطوس'],
-          attractions: {
-            cultural: ['قلعة حلب', 'تدمر', 'المتحف الوطني', 'مسجد الأموي'],
-            nature: ['جبال اللاذقية', 'وادي النهر', 'شاطئ اللاذقية'],
-            adventure: ['تسلق الجبال', 'رحلة صحراوية'],
-            food: ['مطعم سوريا', 'مطعم الشام', 'مطعم الساحل']
-          },
-          budget: { low: 20, medium: 40, high: 80 },
-          timeSlots: { morning: '08:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'الأردن': {
-          cities: ['عمان', 'البتراء', 'العقبة', 'إربد'],
-          attractions: {
-            cultural: ['البتراء', 'قلعة عمان', 'متحف الأردن', 'جبل نيبو'],
-            nature: ['البحر الميت', 'وادي رم', 'جبال عجلون'],
-            adventure: ['تسلق الجبال', 'رحلة صحراوية', 'رياضات مائية'],
-            food: ['مطعم الأردن', 'مطعم البتراء', 'مطعم البحر الميت']
-          },
-          budget: { low: 30, medium: 60, high: 120 },
-          timeSlots: { morning: '08:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'لبنان': {
-          cities: ['بيروت', 'طرابلس', 'صيدا', 'جبيل'],
-          attractions: {
-            cultural: ['متحف بيروت', 'قلعة بعلبك', 'متحف جبيل', 'قصر بيت الدين'],
-            nature: ['جبال لبنان', 'شاطئ بيروت', 'وادي قاديشا'],
-            adventure: ['تسلق الجبال', 'رياضات مائية'],
-            food: ['مطعم لبنان', 'مطعم بيروت', 'مطعم الساحل']
-          },
-          budget: { low: 40, medium: 80, high: 160 },
-          timeSlots: { morning: '09:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
-        },
-        'فلسطين': {
-          cities: ['القدس', 'رام الله', 'بيت لحم', 'نابلس'],
-          attractions: {
-            cultural: ['المسجد الأقصى', 'كنيسة القيامة', 'متحف فلسطين', 'قصر هشام'],
-            nature: ['البحر الميت', 'جبل الزيتون', 'وادي الأردن'],
-            adventure: ['تسلق الجبال', 'رحلة صحراوية'],
-            food: ['مطعم فلسطين', 'مطعم القدس', 'مطعم بيت لحم']
-          },
-          budget: { low: 30, medium: 60, high: 120 },
-          timeSlots: { morning: '08:00-12:00', afternoon: '14:00-17:00', evening: '19:00-22:00' },
-          optimalRoute: true
+      // محاولة جلب البيانات من قاعدة البيانات عبر API
+      try {
+        console.log('محاولة جلب البيانات من قاعدة البيانات للدولة:', countryName);
+        const response = await fetch(`api/get_country_data.php?country=${encodeURIComponent(countryName)}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      };
-      
-      // البحث في البيانات الافتراضية (مع مراعاة المسافات)
-      const cleanName = countryName.trim();
-      console.log('البحث عن الدولة:', cleanName);
-      console.log('الدول المتاحة في البيانات الافتراضية:', Object.keys(defaultData));
-      
-      if (defaultData[cleanName]) {
-        countryDataCache[countryName] = defaultData[cleanName];
-        console.log('تم العثور على بيانات الدولة:', cleanName);
-        return defaultData[cleanName];
-      }
-      
-      // محاولة البحث بدون همزة
-      const nameWithoutHamza = cleanName.replace('عُمان', 'عمان').replace('عمان', 'عُمان');
-      if (defaultData[nameWithoutHamza]) {
-        countryDataCache[countryName] = defaultData[nameWithoutHamza];
-        console.log('تم العثور على بيانات الدولة (بدون همزة):', nameWithoutHamza);
-        return defaultData[nameWithoutHamza];
-      }
-      
-      // البحث في جميع المفاتيح
-      for (const key in defaultData) {
-        const cleanKey = key.trim();
-        if (cleanKey === cleanName || 
-            cleanKey.replace('عُمان', 'عمان') === cleanName.replace('عُمان', 'عمان')) {
-          countryDataCache[countryName] = defaultData[key];
-          console.log('تم العثور على بيانات الدولة (مطابقة):', key);
-          return defaultData[key];
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          // تحويل البيانات من API إلى الشكل المطلوب
+          const countryData = {
+            cities: result.data.cities || [],
+            attractions: {
+              cultural: result.data.attractions?.cultural || [],
+              nature: result.data.attractions?.nature || [],
+              adventure: result.data.attractions?.adventure || [],
+              food: result.data.attractions?.food || []
+            },
+            budget: result.data.budget || { low: 30, medium: 60, high: 120 },
+            timeSlots: result.data.timeSlots || {
+              morning: '08:00-12:00',
+              afternoon: '14:00-17:00',
+              evening: '19:00-22:00'
+            },
+            optimalRoute: result.data.optimalRoute !== undefined ? result.data.optimalRoute : true
+          };
+          
+          // حفظ في الكاش
+          countryDataCache[countryName] = countryData;
+          console.log('تم جلب البيانات بنجاح من قاعدة البيانات:', countryName);
+          return countryData;
+        } else {
+          throw new Error(result.error || 'فشل في جلب البيانات من قاعدة البيانات');
         }
+      } catch (error) {
+        console.error('خطأ في جلب البيانات من قاعدة البيانات:', error);
+        console.error('تفاصيل الخطأ:', error.message);
+        // إرجاع null في حالة فشل الاتصال - البيانات يجب أن تأتي فقط من قاعدة البيانات
+        return null;
       }
-      
-      // إذا فشل كل شيء، أرجع null
-      console.error('الدولة غير موجودة في البيانات الافتراضية:', countryName);
-      console.error('الدول المتاحة:', Object.keys(defaultData));
-      return null;
     }
     
     // قاعدة بيانات تفصيلية للأماكن السياحية
@@ -568,18 +683,25 @@
       console.log('الدولة المحددة:', country);
       console.log('قائمة الدول العربية:', arabCountriesAsia);
       
-      // التحقق من أن الدولة عربية في آسيا (مع مراعاة المسافات والهمزة)
-      const cleanCountry = country.replace(/\s+/g, '');
+      // تطبيع اسم الدولة
+      const normalizedCountry = normalizeCountryName(country);
+      console.log('الدولة بعد التطبيع:', normalizedCountry);
+      
+      // التحقق من أن الدولة عربية في آسيا (مع مراعاة جميع الاختلافات)
       const isArabCountry = arabCountriesAsia.some(c => {
-        const cleanC = c.replace(/\s+/g, '');
-        return cleanC === cleanCountry || 
-               cleanC.replace('عُمان', 'عمان') === cleanCountry.replace('عُمان', 'عمان');
+        const normalizedC = normalizeCountryName(c);
+        const matches = normalizedC === normalizedCountry;
+        if (matches) {
+          console.log(`تمت المطابقة: "${c}" مع "${country}"`);
+        }
+        return matches;
       });
       
       console.log('هل الدولة عربية في آسيا؟', isArabCountry);
       
       if (!isArabCountry) {
-        console.error('الدولة غير صحيحة:', country, 'قائمة الدول:', arabCountriesAsia);
+        console.error('الدولة غير صحيحة:', country, 'بعد التطبيع:', normalizedCountry);
+        console.error('قائمة الدول بعد التطبيع:', arabCountriesAsia.map(c => normalizeCountryName(c)));
         showMessage('يرجى اختيار دولة عربية في قارة آسيا فقط', 'error');
         return [];
       }
@@ -594,7 +716,7 @@
       }
       
       // التحقق من وجود البيانات المطلوبة
-      if (!countryData.attractions || !countryData.attractions.budget) {
+      if (!countryData.attractions || !countryData.budget) {
         console.error('بيانات الدولة غير مكتملة:', countryData);
         showMessage('بيانات الدولة غير مكتملة. يرجى المحاولة مرة أخرى.', 'error');
         return [];
@@ -602,7 +724,7 @@
       
       const budgetLevel = budget.toLowerCase().includes('منخفض') || budget === 'low' ? 'low' : 
                          budget.toLowerCase().includes('فاخر') || budget === 'high' ? 'high' : 'medium';
-      const dailyBudget = countryData.attractions.budget[budgetLevel] || countryData.attractions.budget.medium || 60;
+      const dailyBudget = countryData.budget[budgetLevel] || countryData.budget.medium || 60;
       
       const interestsList = interests ? interests.split(',').map(i => i.trim().toLowerCase()).filter(i => i) : [];
       const isCultural = interestsList.length === 0 || interestsList.some(i => ['ثقافة', 'تاريخ', 'متحف', 'cultural'].includes(i));
@@ -938,13 +1060,78 @@
         return;
       }
 
-      const result = planManager.sharePlan(Date.now().toString());
+      try {
+        // إنشاء معرف فريد للخطة
+        const planId = planManager.generatePlanId();
+        
+        // حفظ الخطة في localStorage للمشاركة
+        const plan = {
+          id: planId,
+          ...window.currentPlanData,
+          sharedAt: new Date().toISOString(),
+          isShared: true
+        };
+
+        // حفظ في قائمة الخطط المشتركة
+        const sharedPlans = JSON.parse(localStorage.getItem('arhgo_shared_plans') || '[]');
+        sharedPlans.push(plan);
+        localStorage.setItem('arhgo_shared_plans', JSON.stringify(sharedPlans));
+
+        // إنشاء رابط المشاركة
+        const baseUrl = window.location.origin + window.location.pathname.replace('smart-planner.html', '');
+        const shareLink = `${baseUrl}share-plan.html?id=${planId}`;
+
+        // عرض الرابط في Modal مع animation
+        document.getElementById('shareLinkInput').value = shareLink;
+        const modal = document.getElementById('shareModal');
+        const modalContent = document.getElementById('shareModalContent');
+        modal.style.display = 'flex';
+        // Reset animation
+        modalContent.style.animation = 'none';
+        setTimeout(() => {
+          modalContent.style.animation = 'modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        }, 10);
+      } catch (error) {
+        console.error('خطأ في مشاركة الخطة:', error);
+        showMessage('حدث خطأ أثناء مشاركة الخطة: ' + error.message, 'error');
+      }
+    });
+
+    // نسخ الرابط عند الضغط على زر النسخ
+    document.getElementById('copyLinkBtn').addEventListener('click', async function() {
+      const shareLink = document.getElementById('shareLinkInput').value;
+      const copyResult = await planManager.copyToClipboard(shareLink);
       
-      if (result.success) {
-        const copyResult = await planManager.copyToClipboard(result.link);
-        showMessage(copyResult.message, 'success');
+      if (copyResult.success) {
+        this.textContent = 'تم النسخ!';
+        this.style.background = '#4CAF50';
+        setTimeout(() => {
+          this.textContent = 'نسخ';
+          this.style.background = 'var(--neon-cyan)';
+        }, 2000);
       } else {
-        showMessage(result.message, 'error');
+        showMessage('فشل نسخ الرابط. يرجى نسخه يدوياً', 'error');
+      }
+    });
+
+    // إغلاق Modal مع animation
+    document.getElementById('closeShareModal').addEventListener('click', function() {
+      const modal = document.getElementById('shareModal');
+      const modalContent = document.getElementById('shareModalContent');
+      modalContent.style.animation = 'modalSlideOut 0.3s ease-in';
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
+    });
+
+    // إغلاق Modal عند الضغط خارج الصندوق
+    document.getElementById('shareModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        const modalContent = document.getElementById('shareModalContent');
+        modalContent.style.animation = 'modalSlideOut 0.3s ease-in';
+        setTimeout(() => {
+          this.style.display = 'none';
+        }, 300);
       }
     });
 
@@ -962,6 +1149,74 @@
           messageDiv.innerHTML = '';
       }, 5000);
     }
+
+    // دالة تسجيل الخروج
+    function logoutUser() {
+      localStorage.removeItem('arhgo_current_user');
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('session_token');
+      if (typeof userAuth !== 'undefined' && userAuth.logout) {
+        userAuth.logout();
+      }
+    }
+
+    // التحقق من حالة تسجيل الدخول وعرض اسم المستخدم
+    function updateAuthUI() {
+      const currentUser = localStorage.getItem('arhgo_current_user');
+      const loggedIn = localStorage.getItem('loggedIn');
+      
+      const authButtons = document.getElementById('authButtons');
+      const userProfile = document.getElementById('userProfile');
+      const userNameDisplay = document.getElementById('userNameDisplay');
+      
+      if (currentUser || loggedIn) {
+        // محاولة استخدام userAuth إذا كان متاحاً
+        if (typeof userAuth !== 'undefined') {
+          try {
+            const isLoggedIn = userAuth.isLoggedIn();
+            if (isLoggedIn) {
+              const user = userAuth.getCurrentUser();
+              if (user) {
+                if (authButtons) authButtons.style.display = 'none';
+                if (userProfile) {
+                  userProfile.style.display = 'flex';
+                  if (userNameDisplay) {
+                    userNameDisplay.textContent = `👤 ${user.fullname || user.username || currentUser || loggedIn}`;
+                  }
+                }
+                return;
+              }
+            }
+          } catch (error) {
+            console.error('Error with userAuth:', error);
+          }
+        }
+        
+        // إذا لم يكن userAuth متاحاً، استخدام البيانات من localStorage مباشرة
+        if (authButtons) authButtons.style.display = 'none';
+        if (userProfile) {
+          userProfile.style.display = 'flex';
+          if (userNameDisplay) {
+            const allUsers = JSON.parse(localStorage.getItem('arhgo_users') || '[]');
+            const user = allUsers.find(u => u.username === (currentUser || loggedIn));
+            const displayName = user ? (user.fullname || user.username) : (currentUser || loggedIn);
+            userNameDisplay.textContent = `👤 ${displayName}`;
+          }
+        }
+      } else {
+        if (authButtons) authButtons.style.display = 'flex';
+        if (userProfile) userProfile.style.display = 'none';
+      }
+    }
+
+    // تحديث فوري عند تحميل الصفحة
+    updateAuthUI();
+    
+    // تحديث عند تغيير localStorage (من نافذة أخرى)
+    window.addEventListener('storage', updateAuthUI);
+    
+    // تحديث كل ثانية للتأكد من التزامن
+    setInterval(updateAuthUI, 1000);
   </script>
 </body>
 </html>

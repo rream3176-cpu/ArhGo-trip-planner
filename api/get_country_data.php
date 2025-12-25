@@ -139,7 +139,23 @@ try {
     }
     
     // تحديد الميزانية حسب الدولة
-    $budget = [
+    $budgetMap = [
+        'السعودية' => ['low' => 30, 'medium' => 60, 'high' => 120],
+        'الإمارات' => ['low' => 80, 'medium' => 160, 'high' => 320],
+        'الكويت' => ['low' => 40, 'medium' => 80, 'high' => 160],
+        'قطر' => ['low' => 70, 'medium' => 140, 'high' => 280],
+        'البحرين' => ['low' => 35, 'medium' => 70, 'high' => 140],
+        'عُمان' => ['low' => 35, 'medium' => 70, 'high' => 140],
+        'عمان' => ['low' => 35, 'medium' => 70, 'high' => 140],
+        'اليمن' => ['low' => 20, 'medium' => 40, 'high' => 80],
+        'العراق' => ['low' => 25, 'medium' => 50, 'high' => 100],
+        'سوريا' => ['low' => 20, 'medium' => 40, 'high' => 80],
+        'الأردن' => ['low' => 30, 'medium' => 60, 'high' => 120],
+        'لبنان' => ['low' => 40, 'medium' => 80, 'high' => 160],
+        'فلسطين' => ['low' => 30, 'medium' => 60, 'high' => 120]
+    ];
+    
+    $budget = isset($budgetMap[$country_name]) ? $budgetMap[$country_name] : [
         'low' => 30,
         'medium' => 60,
         'high' => 120

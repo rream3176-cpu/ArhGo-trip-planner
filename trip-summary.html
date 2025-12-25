@@ -345,7 +345,16 @@
 
     document.getElementById('weather-btn').href = `weather.html?country=${encodeURIComponent(country)}`;
 
-    // إحداثيات الدول العربية في آسيا
+    // دالة لتطبيع اسم الدولة (مثل ما في smart-planner)
+    function normalizeCountryName(name) {
+      if (!name) return '';
+      let normalized = name.trim().replace(/\s+/g, '');
+      normalized = normalized.replace(/عُمان/g, 'عمان');
+      normalized = normalized.replace(/[\u200B-\u200D\uFEFF]/g, '');
+      return normalized;
+    }
+
+    // إحداثيات الدول العربية في آسيا (إحداثيات دقيقة للمراكز الجغرافية)
     const countryCoordinates = {
       'السعودية': [23.8859, 45.0792],
       'الإمارات': [23.4241, 53.8478],
@@ -361,6 +370,47 @@
       'العراق': [33.2232, 43.6793],
       'فلسطين': [31.9522, 35.2332]
     };
+
+    // خريطة أسماء الدول البديلة
+    const countryNameMap = {
+      'السعودية': ['السعودية', 'المملكة العربية السعودية', 'Saudi Arabia'],
+      'الإمارات': ['الإمارات', 'الإمارات العربية المتحدة', 'United Arab Emirates', 'UAE'],
+      'الكويت': ['الكويت', 'Kuwait'],
+      'البحرين': ['البحرين', 'Bahrain'],
+      'قطر': ['قطر', 'Qatar'],
+      'عُمان': ['عُمان', 'عمان', 'Oman'],
+      'عمان': ['عُمان', 'عمان', 'Oman'],
+      'اليمن': ['اليمن', 'Yemen'],
+      'الأردن': ['الأردن', 'Jordan'],
+      'لبنان': ['لبنان', 'Lebanon'],
+      'سوريا': ['سوريا', 'سورية', 'Syria'],
+      'العراق': ['العراق', 'Iraq'],
+      'فلسطين': ['فلسطين', 'Palestine']
+    };
+
+    // دالة للعثور على اسم الدولة الصحيح
+    function findCountryKey(countryName) {
+      const normalized = normalizeCountryName(countryName);
+      
+      // البحث المباشر أولاً
+      if (countryCoordinates[countryName]) {
+        return countryName;
+      }
+      
+      // البحث في الأسماء البديلة
+      for (const [key, aliases] of Object.entries(countryNameMap)) {
+        if (normalizeCountryName(key) === normalized) {
+          return key;
+        }
+        for (const alias of aliases) {
+          if (normalizeCountryName(alias) === normalized) {
+            return key;
+          }
+        }
+      }
+      
+      return null;
+    }
     
     const map = L.map('map').setView([25, 45], 3);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -369,37 +419,70 @@
     }).addTo(map);
 
     function showCountryOnMap(name) {
-      // استخدام الإحداثيات المحلية أولاً
-      if (countryCoordinates[name]) {
-        const [lat, lon] = countryCoordinates[name];
+      console.log('محاولة عرض الدولة على الخريطة:', name);
+      
+      // البحث عن المفتاح الصحيح للدولة
+      const countryKey = findCountryKey(name);
+      
+      if (countryKey && countryCoordinates[countryKey]) {
+        const [lat, lon] = countryCoordinates[countryKey];
+        console.log('تم العثور على إحداثيات الدولة:', countryKey, lat, lon);
+        
+        // إزالة أي markers سابقة
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
+          }
+        });
+        
+        // تعيين عرض الخريطة مع zoom مناسب
         map.setView([lat, lon], 7);
-        L.marker([lat, lon], {
+        
+        // إضافة marker
+        const marker = L.marker([lat, lon], {
           icon: L.icon({
             iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
             iconSize: [25, 41],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34]
           })
-        }).addTo(map).bindPopup(`<b style="font-family: 'Cairo', sans-serif;">${name}</b><br>موقع وجهتك`).openPopup();
+        }).addTo(map);
+        
+        marker.bindPopup(`<b style="font-family: 'Cairo', sans-serif;">${countryKey}</b><br>موقع وجهتك`).openPopup();
         return;
       }
       
       // إذا لم تكن الإحداثيات موجودة، استخدم API
-      fetch(`https://nominatim.openstreetmap.org/search?country=${encodeURIComponent(name)}&format=json&limit=1`)
+      console.log('استخدام API للبحث عن الدولة:', name);
+      const searchQuery = name.replace(/[^\w\s]/g, '').trim();
+      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchQuery)}&format=json&limit=1&accept-language=ar`)
         .then(res => res.json())
         .then(data => {
           if (data.length > 0) {
             const lat = parseFloat(data[0].lat);
             const lon = parseFloat(data[0].lon);
+            console.log('تم العثور على إحداثيات من API:', lat, lon);
+            
+            // إزالة أي markers سابقة
+            map.eachLayer(function(layer) {
+              if (layer instanceof L.Marker) {
+                map.removeLayer(layer);
+              }
+            });
+            
             map.setView([lat, lon], 7);
-            L.marker([lat, lon], {
+            const marker = L.marker([lat, lon], {
               icon: L.icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34]
               })
-            }).addTo(map).bindPopup(`<b style="font-family: 'Cairo', sans-serif;">${name}</b><br>موقع وجهتك`).openPopup();
+            }).addTo(map);
+            
+            marker.bindPopup(`<b style="font-family: 'Cairo', sans-serif;">${name}</b><br>موقع وجهتك`).openPopup();
+          } else {
+            console.error('لم يتم العثور على الدولة في API');
           }
         })
         .catch(e => {
@@ -409,7 +492,12 @@
     
     // عرض الدولة على الخريطة
     if (country && country !== 'غير محدد') {
-      showCountryOnMap(country);
+      // انتظار تحميل الخريطة بالكامل
+      map.whenReady(function() {
+        setTimeout(() => {
+          showCountryOnMap(country);
+        }, 500);
+      });
     }
   </script>
 </body>
